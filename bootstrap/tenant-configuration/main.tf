@@ -104,9 +104,9 @@ data "azurerm_role_definition" "contributor" {
 
 # Grant the Power Platfom Admin Service SContributor role on the Azure Subscription
 resource "azurerm_role_assignment" "ppadmin_subscription_role_assignment" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_id   = data.azurerm_role_definition.contributor.id
-  principal_id         = azuread_service_principal.ppadmin_principal.object_id
+  scope              = data.azurerm_subscription.current.id
+  role_definition_id = data.azurerm_role_definition.contributor.id
+  principal_id       = azuread_service_principal.ppadmin_principal.object_id
 }
 
 # Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs

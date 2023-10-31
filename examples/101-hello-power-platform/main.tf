@@ -32,5 +32,5 @@ terraform {
 
 
 module "powerplatform" {
-  source    = "./powerplatform"
+  source = "./powerplatform"
 }
