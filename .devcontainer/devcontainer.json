@@ -1,0 +1,34 @@
+{
+  "name": "Terraform",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/terraform": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/azure-cli": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers-contrib/features/gh-cli:1.0.12": {}
+    // "ghcr.io/devcontainers/features/powershell": {
+    //   "version": "latest",
+    //   "modules": "Microsoft.PowerApps.Administration.PowerShell,Microsoft.PowerApps.PowerShell"
+    // }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform", 
+        "github.copilot", 
+        "github.copilot-chat", 
+        "ms-azuretools.vscode-bicep", 
+//        "ms-vscode.powershell"
+      ],
+      "settings": {
+        "terraform.languageServer": {
+          "enabled": true,
+          "args": []
+        }
+      }
+    }
+  }
+}

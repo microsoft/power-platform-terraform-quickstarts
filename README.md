@@ -1,33 +1,36 @@
-# Project
+# Power Platform Terraform Quickstarts
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This repository contains example terraform modules that can be used to quickly deploy Power Platform environments and other Azure resources.  The modules are intended to demonstrate some common scenarios where managing Power Platform resources along side Azure, Entra, or other resources can be facilitated with the [Terraform Provider for Power Platform](https://github.com/microsoft/terraform-provider-power-platform).  The modules are examples and are not intended to be used in production environments without modification.
 
-As the maintainer of this project, please make a few updates:
+This repository contains scripts quickly build out a new tenant and configure it to allow you to deploy and manage Power Platform environments along side other Azure resources. The scripts assume that you are starting with a completely new tenant with an empty Azure subscription.  This is a template repository that is intended to let you fork and customize the Power Platform/Azure resources to accomodate your own needs.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## Prerequisites
 
-## Contributing
+* Microsoft Tenant that you have `global admin` or `user administrator` permissions in
+* Azure subscription in the tenant that you have `owner` permissions in
+* A fork of this GitHub repository that you have `admin` permissions in
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+### Tooling
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+The following tooling is pre-installed in the Dev Container and it is highly recommended that you use the Dev Container to run the scripts and terraform modules in this repository:
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+* [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
+* [Terraform CLI](https://developer.hashicorp.com/terraform/cli)
+* [GitHub CLI](https://cli.github.com/)
 
-## Trademarks
+### Terraform Providers
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+The following terraform providers are used in this repository:
+* [PowerPlatform](https://github.com/microsoft/terraform-provider-power-platform)
+* [AzureRM](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
+* [AzureAD](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
+* [GitHub](https://registry.terraform.io/providers/integrations/github/latest/docs)
+* [Random](https://registry.terraform.io/providers/hashicorp/random/latest/docs)
+* [Null](https://registry.terraform.io/providers/hashicorp/null/latest/docs)
+
+## Getting Started
+
+The example terraform modules are intended to be run by GitHub Actions, however there are several steps that need to be run locally by an administrator in order to create the resources the terraform modules need to use.  The following steps should be run in order:
+
+1. [Bootstrap](bootstrap/README.md) this will create and configure the prerequisites that are needed to run the quickstart examples.
+2. **Run a Quickstart** this will create a Power Platform environment and deploy a sample app to it.
