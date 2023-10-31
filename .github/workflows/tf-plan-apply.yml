@@ -19,6 +19,7 @@ env:
   ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+  TARGET_DIR: ${{ github.workspace }}/examples/101-hello-power-platform
 
 jobs:
   terraform-plan:
@@ -54,7 +55,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=./src init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME" -backend-config="subscription_id=$PPADMIN_SUBSCRIPTION_ID" -backend-config="tenant_id=$PPADMIN_TENANT_ID" -backend-config="client_id=$PPADMIN_CLIENT_ID" -backend-config="client_secret=$PPADMIN_CLIENT_SECRET"
+      run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME" -backend-config="subscription_id=$PPADMIN_SUBSCRIPTION_ID" -backend-config="tenant_id=$PPADMIN_TENANT_ID" -backend-config="client_id=$PPADMIN_CLIENT_ID" -backend-config="client_secret=$PPADMIN_CLIENT_SECRET"
       env: 
         TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
         TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
@@ -66,7 +67,7 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      run: terraform -chdir=./src fmt -check
+      run: terraform -chdir=$TARGET_DIR fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -74,7 +75,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=./src plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform -chdir=$TARGET_DIR plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -151,7 +152,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=./src init
+      run: terraform -chdir=$TARGET_DIR init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -161,4 +162,4 @@ jobs:
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform -chdir=./src apply -auto-approve tfplan
+      run: terraform -chdir=$TARGET_DIR apply -auto-approve tfplan
