@@ -21,12 +21,15 @@
         "github.copilot", 
         "github.copilot-chat", 
         "ms-azuretools.vscode-bicep", 
+        "github.vscode-github-actions"
 //        "ms-vscode.powershell"
       ],
       "settings": {
         "terraform.languageServer": {
           "enabled": true,
-          "args": []
+          "args": [
+            "serve"
+          ]
         }
       }
     }
