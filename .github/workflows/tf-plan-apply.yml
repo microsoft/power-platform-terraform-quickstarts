@@ -73,6 +73,10 @@ jobs:
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
       id: tf-plan
+      env:
+        PPADMIN_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
+        PPADMIN_CLIENT_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
+        PPADMIN_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
       run: |
         export exitcode=0
         terraform -chdir=$TARGET_DIR plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
@@ -140,6 +144,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: [terraform-plan]
+    env: 
+      TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
+      TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
+      PPADMIN_SUBSCRIPTION_ID: ${{ vars.PPADMIN_SUBSCRIPTION_ID }}
+      PPADMIN_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
+      PPADMIN_CLIENT_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
+      PPADMIN_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
     
     steps:
     # Checkout the repository to the GitHub Actions runner
