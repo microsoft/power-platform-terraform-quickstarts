@@ -16,9 +16,10 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  AZURE_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
-  AZURE_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
-  AZURE_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+  ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
+  ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
   TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
   TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
   POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
