@@ -162,7 +162,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=$TARGET_DIR init
+      run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
