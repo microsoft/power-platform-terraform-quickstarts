@@ -1,0 +1,6 @@
+inventory:
+- source: DirectOwners
+  items:
+  - id: mdotson@microsoft.com
+  - id: leightami@microsoft.com
+  isProduction: false
