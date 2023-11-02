@@ -150,6 +150,16 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
+    - name: Download Terraform GitHub Provider
+      env: 
+        GITHUB_TOKEN: ${{ secrets.PROVIDER_GITHUB_TOKEN }}
+        PROVIDER_VERSION: v0.3.0-preview
+        PROVIDER_REPO: microsoft/terraform-provider-power-platform
+        DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
+      run: |
+        gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
+        ls -la "$DOWNLOAD_DIR"
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform -chdir=$TARGET_DIR init
