@@ -20,7 +20,7 @@ terraform {
 
   backend "azurerm" {
     container_name = "tfstate"
-    key            = "terraform.tfstate"
+    key            = "101-hello-power-platform.terraform.tfstate"
   }
 }
 
