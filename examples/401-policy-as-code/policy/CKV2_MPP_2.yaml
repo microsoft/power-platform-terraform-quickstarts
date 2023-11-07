@@ -1,0 +1,23 @@
+---
+metadata:
+  name: "Check that all production Power Platform Environments are managed environments"
+  id: "CKV2_MPP_2"
+  category: "MONITORING"
+definition:
+  and: 
+    - cond_type: "filter"
+      value: 
+      - "powerplatform_environment"
+      operator: "within"
+    - cond_type: "attribute"
+      resource_types: 
+      - "powerplatform_environment"
+      attribute: "environment_type"
+      operator: "equals"
+      value: "production"
+    - cond_type: "connection"
+      resource_types:
+      - "powerplatform_managed_environment"
+      connected_resource_types:
+      - "powerplatform_environment"
+      operator: "exists"

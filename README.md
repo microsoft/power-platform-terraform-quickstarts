@@ -30,7 +30,24 @@ The following terraform providers are used in this repository:
 
 ## Getting Started
 
-The example terraform modules are intended to be run by GitHub Actions, however there are several steps that need to be run locally by an administrator in order to create the resources the terraform modules need to use.  The following steps should be run in order:
+The example terraform modules in this repo can be run by GitHub Actions or locally using the terraform CLI in the provided dev container.  Before you are able to run the examples there are several prerequisites that need to be completed.  The [bootstrap](bootstrap/README.md) scripts provided will create and configure the prerequisites that are needed to run the quickstart examples automatically.  You can also manually create and configure the prerequisites if you prefer.
 
-1. [Bootstrap](bootstrap/README.md) this will create and configure the prerequisites that are needed to run the quickstart examples.
-2. **Run a Quickstart** this will create a Power Platform environment and deploy a sample app to it.
+## Running a Quickstart
+
+The "Hello Power Platform" quickstart is a simple example that deploys a Power Platform environment. The quickstart is intended to demonstrate how to use the Power Platform terraform provider to deploy a Power Platform resources. You can edit the `examples/101-hello-power-platform/main.tf` file to change the attributes of the Power Platform environment that is deployed.
+
+``` bash
+cd examples/101-hello-power-platform
+
+# initialize terraform (backend.tfvars is created by the bootstrap script)
+terraform init -backend-config=../../backend.tfvars
+
+# plan the deployment and show the changes that will be made
+terraform plan -out=tfplan
+
+# apply the changes
+terraform apply tfplan
+
+# destroy the resources
+terraform destroy
+```

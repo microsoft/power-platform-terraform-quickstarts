@@ -1,0 +1,13 @@
+---
+metadata:
+  name: "Check that all Power Platform Environments have a security group assigned"
+  id: "CKV2_MPP_1"
+  category: "security"
+definition:
+  and: 
+    - cond_type: "attribute"
+      resource_types: 
+      - "powerplatform_environment"
+      attribute: "security_group_id"
+      operator: "not_equals"
+      value: "00000000-0000-0000-0000-000000000000"
