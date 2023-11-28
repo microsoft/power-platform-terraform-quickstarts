@@ -130,39 +130,39 @@ data "github_repository" "quickstarts" {
 }
 
 # Save the service principal information in GitHub Actions secrets/variables
-resource "github_actions_secret" "client_secret" {
-  repository      = data.github_repository.quickstarts.name
-  secret_name     = "PPADMIN_CLIENT_SECRET"
-  plaintext_value = azuread_application_password.ppadmin_secret.value
-}
+# resource "github_actions_secret" "client_secret" {
+#   repository      = data.github_repository.quickstarts.name
+#   secret_name     = "PPADMIN_CLIENT_SECRET"
+#   plaintext_value = azuread_application_password.ppadmin_secret.value
+# }
 
-resource "github_actions_variable" "client_id" {
-  repository    = data.github_repository.quickstarts.name
-  variable_name = "PPADMIN_CLIENT_ID"
-  value         = azuread_application.ppadmin_application.application_id
-}
+# resource "github_actions_variable" "client_id" {
+#   repository    = data.github_repository.quickstarts.name
+#   variable_name = "PPADMIN_CLIENT_ID"
+#   value         = azuread_application.ppadmin_application.application_id
+# }
 
-resource "github_actions_variable" "subscription_id" {
-  repository    = data.github_repository.quickstarts.name
-  variable_name = "PPADMIN_SUBSCRIPTION_ID"
-  value         = data.azurerm_subscription.current.subscription_id
-}
+# resource "github_actions_variable" "subscription_id" {
+#   repository    = data.github_repository.quickstarts.name
+#   variable_name = "PPADMIN_SUBSCRIPTION_ID"
+#   value         = data.azurerm_subscription.current.subscription_id
+# }
 
-resource "github_actions_variable" "tenant_id" {
-  repository    = data.github_repository.quickstarts.name
-  variable_name = "PPADMIN_TENANT_ID"
-  value         = data.azuread_client_config.current.tenant_id
-}
+# resource "github_actions_variable" "tenant_id" {
+#   repository    = data.github_repository.quickstarts.name
+#   variable_name = "PPADMIN_TENANT_ID"
+#   value         = data.azuread_client_config.current.tenant_id
+# }
 
-# Save the terraform state storage account name in GitHub Actions variables
-resource "github_actions_variable" "tf_state_storage_account_name" {
-  repository    = data.github_repository.quickstarts.name
-  variable_name = "TF_STATE_STORAGE_ACCOUNT_NAME"
-  value         = var.storage_account_name
-}
+# # Save the terraform state storage account name in GitHub Actions variables
+# resource "github_actions_variable" "tf_state_storage_account_name" {
+#   repository    = data.github_repository.quickstarts.name
+#   variable_name = "TF_STATE_STORAGE_ACCOUNT_NAME"
+#   value         = var.storage_account_name
+# }
 
-resource "github_actions_variable" "tf_state_resource_group_name" {
-  repository    = data.github_repository.quickstarts.name
-  variable_name = "TF_STATE_RESOURCE_GROUP_NAME"
-  value         = var.resource_group_name
-}
+# resource "github_actions_variable" "tf_state_resource_group_name" {
+#   repository    = data.github_repository.quickstarts.name
+#   variable_name = "TF_STATE_RESOURCE_GROUP_NAME"
+#   value         = var.resource_group_name
+# }

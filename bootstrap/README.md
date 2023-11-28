@@ -15,7 +15,7 @@ The following resources are created by the `bootstrap.sh` script:
 
 ### Identity and Access Management
 
-* An app registration and service principal for managaing Power Platform resources
+* An app registration and service principal for managing Power Platform resources
 * Permissions for the service principal
   * Licensing.BillingPolicies.ReadWrite
   * Licensing.BillingPolicies.Read
@@ -44,9 +44,11 @@ It is highly recommended that you use the Dev Container to run the bootstrap scr
 This script is intended to be run locally by a user with `Owner` permissions in the Azure subscription, `Global Administrator` or `User Administrator` permissions in the Azure AD tenant, and `Admin` permissions in the GitHub repository.
 
 ```bash
-./bootstrap.sh --subscription_id 6bcd4321-fcba-0987-6543-210fedcba987 --location eastus
+./bootstrap.sh --subscription_id <GUID> --location eastus --github_repo commercial-software-engineering/power-platform-tenant-quickstart --github_pat_token <TOKEN>
 ```
 
 ## Outputs
 
-The `bootstrap.sh` writes its outputs to a `backend.tfvars` file in the `tenent-configuration` directory.  The `backend.tfvars` file is used by the `tenant-configuration` terraform configuration to configure the backend for the terraform state.
+The `bootstrap.sh` [bootstrap.sh](/bootstrap/bootstrap.sh) writes its outputs to a `backend.tfvars` file in the [tenant-configuration](/bootstrap/tenant-configuration/) directory.  The `backend.tfvars` file is used by the [tenant-configuration](/bootstrap/tenant-configuration/) terraform configuration to configure the backend for the terraform state.
+
+After excuting [bootstrap.sh](/bootstrap/bootstrap.sh) you can follow instructions in the [tenant-configuration/README.md](/bootstrap/tenant-configuration/README.md) to configure the tenant settings.

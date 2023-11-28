@@ -22,3 +22,7 @@ output "storage_account_name" {
 output "resource_group_name" {
   value = var.resource_group_name
 }
+
+output "github_repo_name" {
+  value = data.github_repository.quickstarts.name
+}

@@ -20,6 +20,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --github_pat_token)
+    github_pat_token="$2"
+    shift # past argument
+    shift # past value
+    ;;
     *)    # unknown option
     echo "Unknown option: $key"
     exit 1
@@ -45,6 +50,13 @@ then
     exit 1
 fi
 
+#This is needed as long as quickstarts repo is private
+if [ -z "$github_pat_token" ]
+then
+    echo "GitHub PAT token is required. Please pass it in the form of --github_pat_token <token>"
+    exit 1
+fi
+
 
 
 az login
@@ -66,11 +78,17 @@ cat ../backend.tfvars
 
 pushd ./tenant-configuration
 
+echo "Terraform init..."
 # Call terraform init with backend.tfvars as backend config file
-TF_IN_AUTOMATION=1 terraform init -backend-config=../../backend.tfvars 
+TF_IN_AUTOMATION=1 terraform init -backend-config=../../backend.tfvars
 
+#This is needed as long as quickstarts repo is private
+export GITHUB_TOKEN=$github_pat_token
+#---------------------------------------------
+
+echo "Terraform apply..."
 # Run terraform apply and get the output values into variables
-TF_IN_AUTOMATION=1 terraform apply -var-file=../../backend.tfvars -var="github_repo=$github_repo"
+TF_IN_AUTOMATION=1 terraform apply --auto-approve -var-file=../../backend.tfvars -var="github_repo=$github_repo"
 
 export POWER_PLATFORM_CLIENT_ID=$(terraform show -json | jq -r '.values.outputs.client_id.value')
 export POWER_PLATFORM_SECRET=$(terraform show -json | jq -r '.values.outputs.client_secret.value')

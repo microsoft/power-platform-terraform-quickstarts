@@ -12,15 +12,17 @@ This repository contains scripts quickly build out a new tenant and configure it
 
 ### Tooling
 
-The following tooling is pre-installed in the Dev Container and it is highly recommended that you use the Dev Container to run the scripts and terraform modules in this repository:
+The following tooling is pre-installed in the [VS Code Dev Container](https://code.visualstudio.com/docs/devcontainers/containers) and it is highly recommended that you use the Dev Container to run the scripts and terraform modules in this repository:
 
 * [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
 * [Terraform CLI](https://developer.hashicorp.com/terraform/cli)
 * [GitHub CLI](https://cli.github.com/)
+* [Docker](https://www.docker.com/)
 
 ### Terraform Providers
 
 The following terraform providers are used in this repository:
+
 * [PowerPlatform](https://github.com/microsoft/terraform-provider-power-platform)
 * [AzureRM](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 * [AzureAD](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)

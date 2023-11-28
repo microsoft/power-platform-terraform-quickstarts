@@ -14,14 +14,14 @@ terraform {
     }
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.3.0-preview"
+      version = "0.4.0-preview"
     }
   }
 
-  backend "azurerm" {
-    container_name = "tfstate"
-    key            = "101-hello-power-platform.terraform.tfstate"
-  }
+  # backend "azurerm" {
+  #   container_name = "tfstate"
+  #   key            = "101-hello-power-platform.terraform.tfstate"
+  # }
 }
 
 
