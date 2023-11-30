@@ -1,11 +1,12 @@
+#Currently licensing requries username/password authentication (internal icm: 437373148)
 
 # resource "powerplatform_billing_policy" "pay_as_you_go" {
-#   name     = "${powerplatform_environment.foo.name}-pay-as-you-go"
+#   name     = "BillingPolicyPayAsYouGo"
 #   location = "unitedstates"
 #   status   = "Enabled"
 #   billing_instrument = {
-#     resource_group  = "resource_group_name"
-#     subscription_id = "00000000-0000-0000-0000-000000000000"
+#     resource_group  = var.billing_policy_resource_group
+#     subscription_id = var.billing_policy_subscription_id
 #   }
 # }
 

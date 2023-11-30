@@ -78,9 +78,9 @@ provider "registry.terraform.io/hashicorp/random" {
 }
 
 provider "registry.terraform.io/microsoft/power-platform" {
-  version     = "0.4.0-preview"
-  constraints = "0.3.0-preview, 0.4.0-preview"
+  version     = "0.5.0-preview"
+  constraints = "0.5.0-preview"
   hashes = [
-    "h1:oE7brox/7WsPd8fbI+B2M22WFW+pdrreI/aF3d/+L/8=",
+    "h1:athR9R/y46BTo5MpbbzXppLSS2d4G5TNgmt6uCW0/TY=",
   ]
 }

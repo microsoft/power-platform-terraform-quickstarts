@@ -19,7 +19,7 @@
 
 # Set the repository and release information
 repo="microsoft/terraform-provider-power-platform"
-release="v0.4.0-preview"
+release="v0.5.0-preview"
 
 # Set the download directory
 download_dir="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform"

@@ -53,7 +53,7 @@ jobs:
     - name: Download Terraform GitHub Provider
       env: 
         GITHUB_TOKEN: ${{ secrets.PROVIDER_GITHUB_TOKEN }}
-        PROVIDER_VERSION: v0.3.0-preview
+        PROVIDER_VERSION: v0.5.0-preview
         PROVIDER_REPO: microsoft/terraform-provider-power-platform
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |
@@ -153,7 +153,7 @@ jobs:
     - name: Download Terraform GitHub Provider
       env: 
         GITHUB_TOKEN: ${{ secrets.PROVIDER_GITHUB_TOKEN }}
-        PROVIDER_VERSION: v0.3.0-preview
+        PROVIDER_VERSION: v0.5.0-preview
         PROVIDER_REPO: microsoft/terraform-provider-power-platform
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |

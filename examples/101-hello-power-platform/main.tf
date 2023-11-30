@@ -14,7 +14,7 @@ terraform {
     }
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.4.0-preview"
+      version = "0.5.0-preview"
     }
   }
 
@@ -33,4 +33,6 @@ terraform {
 
 module "powerplatform" {
   source = "./powerplatform"
+  billing_policy_resource_group = var.billing_policy_resource_group
+  billing_policy_subscription_id = var.billing_policy_subscription_id
 }

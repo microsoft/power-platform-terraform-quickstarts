@@ -3,13 +3,16 @@ data "powerplatform_connectors" "all_connectors" {}
 
 resource "powerplatform_data_loss_prevention_policy" "my_policy" {
 
-  depends_on = [ powerplatform_environment.foo ]
+  depends_on = [powerplatform_environment.foo]
 
   display_name                      = "${powerplatform_environment.foo.display_name} DLP Policy"
   default_connectors_classification = "Blocked"
   environment_type                  = "OnlyEnvironments"
-  environments                      = toset([ powerplatform_environment.foo.id ])
-
+  environments = [
+    {
+      name : powerplatform_environment.foo.id
+    }
+  ]
   business_connectors     = local.business_connectors
   non_business_connectors = local.non_business_connectors
   blocked_connectors      = local.blocked_connectors
