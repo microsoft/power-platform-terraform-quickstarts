@@ -103,6 +103,8 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   patch_assessment_mode                                  = "ImageDefault"
   patch_mode                                             = "AutomaticByOS"
 
+#checkov:skip=CKV_AZURE_50:Gateway Windows VMs should be deployed with extensions 
+
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
