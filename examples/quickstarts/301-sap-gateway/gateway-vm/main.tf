@@ -117,6 +117,8 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
     version   = "latest"
   }
 
+  encryption_at_host_enabled=true
+
   # Setup PowerShell 7
   gallery_application {
     version_id = module.ps7-setup.powershell_version_id
