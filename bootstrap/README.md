@@ -1,6 +1,7 @@
 # Initial Bootstrap Configuration
 
-This directory contains scripts to bootstrap the initial configuration of the Entra tenant, Azure subscription, and GitHub workflows.  Once this initial configuration is complete, the rest of the resources can be deployed using GitHub Actions workflows.  While this configuration has been automated to ease the process of getting started, it is not recommended to use this configuration as-is in existing production environments.  Review the scripts and modify them to meet your own needs.
+This directory contains scripts to bootstrap the initial configuration of the [Entra tenant](https://learn.microsoft.com/microsoft-365/education/deploy/intro-azure-active-directory#what-is-a-microsoft-entra-tenant), [Azure subscription](https://learn.microsoft.com/microsoft-365/enterprise/subscriptions-licenses-accounts-and-tenants-for-microsoft-cloud-offerings?view=o365-worldwide#subscriptions), and [GitHub workflows](https://docs.github.com/get-started/getting-started-with-git/git-workflows).
+Once this initial configuration is complete, the rest of the resources can be deployed using [GitHub Actions workflows](https://docs.github.com/en/actions).  While this configuration has been automated to ease the process of getting started, it is not recommended to use this configuration as-is in existing production environments.  Review the scripts and modify them to meet your own needs.
 
 ## Resources Created
 
@@ -15,7 +16,7 @@ The following resources are created by the `bootstrap.sh` script:
 
 ### Identity and Access Management
 
-* An app registration and service principal for managaing Power Platform resources
+* An app registration and service principal for managing Power Platform resources
 * Permissions for the service principal
   * Licensing.BillingPolicies.ReadWrite
   * Licensing.BillingPolicies.Read
@@ -49,4 +50,4 @@ This script is intended to be run locally by a user with `Owner` permissions in 
 
 ## Outputs
 
-The `bootstrap.sh` writes its outputs to a `backend.tfvars` file in the `tenent-configuration` directory.  The `backend.tfvars` file is used by the `tenant-configuration` terraform configuration to configure the backend for the terraform state.
+The `bootstrap.sh` writes its outputs to a `backend.tfvars` file in the `tenant-configuration` directory.  The `backend.tfvars` file is used by the `tenant-configuration` terraform configuration to configure the backend for the terraform state.
