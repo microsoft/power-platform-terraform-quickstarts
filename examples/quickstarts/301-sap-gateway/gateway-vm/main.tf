@@ -103,7 +103,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   patch_assessment_mode                                  = "ImageDefault"
   patch_mode                                             = "AutomaticByOS"
 
-#checkov:skip=CKV_AZURE_50:Gateway Windows VMs should be deployed with extensions 
+  #checkov:skip=CKV_AZURE_50:Gateway Windows VMs should be deployed with extensions 
 
   os_disk {
     caching              = "ReadWrite"
@@ -119,7 +119,9 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
     version   = "latest"
   }
 
-  encryption_at_host_enabled=true
+  # testing encryption at host
+  encryption_at_host_enabled = alltrue
+
 
   # Setup PowerShell 7
   gallery_application {
@@ -166,4 +168,100 @@ SETTINGS
     create = "60m"
     delete = "60m"
   }
+}
+
+# Create KV and more resources for the Disk Encryption at Host DES
+
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_resource_group" "des" {
+  name     = "des-resources"
+  location = var.region
+}
+
+
+resource "azurerm_key_vault" "des" {
+  name                        = "des-gateway-vn-keyvault"
+  location                    = var.region
+  resource_group_name         = azurerm_resource_group.des.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = "premium"
+  enabled_for_disk_encryption = true
+  purge_protection_enabled    = true
+}
+
+resource "azurerm_key_vault_key" "des" {
+  name         = "des-key"
+  key_vault_id = azurerm_key_vault.des.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  depends_on = [
+    azurerm_key_vault_access_policy.des-user
+  ]
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
+
+resource "azurerm_disk_encryption_set" "des" {
+  name                = "des"
+  resource_group_name = azurerm_resource_group.des.name
+  location            = azurerm_resource_group.des.location
+  key_vault_key_id    = azurerm_key_vault_key.des.id
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azurerm_key_vault_access_policy" "des-disk" {
+  key_vault_id = azurerm_key_vault.des.id
+
+  tenant_id = azurerm_disk_encryption_set.des.identity.0.tenant_id
+  object_id = azurerm_disk_encryption_set.des.identity.0.principal_id
+
+  key_permissions = [
+    "Create",
+    "Delete",
+    "Get",
+    "Purge",
+    "Recover",
+    "Update",
+    "List",
+    "Decrypt",
+    "Sign",
+  ]
+}
+
+resource "azurerm_key_vault_access_policy" "des-user" {
+  key_vault_id = azurerm_key_vault.des.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+
+  key_permissions = [
+    "Create",
+    "Delete",
+    "Get",
+    "Purge",
+    "Recover",
+    "Update",
+    "List",
+    "Decrypt",
+    "Sign",
+    "GetRotationPolicy",
+  ]
+}
+
+resource "azurerm_role_assignment" "des-disk" {
+  scope                = azurerm_key_vault.des.id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = azurerm_disk_encryption_set.des.identity.0.principal_id
 }
