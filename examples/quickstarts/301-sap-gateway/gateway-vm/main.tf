@@ -110,6 +110,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
     storage_account_type = "Standard_LRS"
     disk_size_gb         = 128
     name                 = "myosdisk1"
+    disk_encryption_set_id = azurerm_disk_encryption_set.des.id
   }
 
   source_image_reference {
