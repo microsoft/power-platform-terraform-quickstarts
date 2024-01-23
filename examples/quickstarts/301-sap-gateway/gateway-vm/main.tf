@@ -121,7 +121,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   }
 
   # testing encryption at host
-  encryption_at_host_enabled = alltrue
+  encryption_at_host_enabled = true
 
 
   # Setup PowerShell 7
@@ -189,14 +189,21 @@ resource "azurerm_key_vault" "des" {
   sku_name                    = "premium"
   enabled_for_disk_encryption = true
   purge_protection_enabled    = true
+  soft_delete_retention_days = 7
+  public_network_access_enabled = false
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices"
+  }
+
 }
 
 resource "azurerm_key_vault_key" "des" {
   name         = "des-key"
   key_vault_id = azurerm_key_vault.des.id
-  key_type     = "RSA"
+  key_type     = "RSA-HSM"
   key_size     = 2048
-
+  expiration_date = "2024-12-30T20:00:00Z"
   depends_on = [
     azurerm_key_vault_access_policy.des-user
   ]

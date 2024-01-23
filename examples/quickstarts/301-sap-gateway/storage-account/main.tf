@@ -25,6 +25,7 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = var.region
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
@@ -65,4 +66,12 @@ resource "azurerm_storage_blob" "storage_blob_runtime_setup" {
   source                 = "/workspaces/terraform-provider-power-platform/examples/quickstarts/301-sap-gateway/storage-account/scripts/runtime-setup.ps1"
 }
 
+resource "azurerm_storage_account_network_rules" "storage_account_network_rules" {
+  storage_account_id = azurerm_storage_account.storage_account.id
+
+  default_action             = "Deny"
+  bypass                     = ["AzureServices"]
+  ip_rules                   = ["*"]
+  virtual_network_subnet_ids = [var.sap_subnet_id]
+}
 

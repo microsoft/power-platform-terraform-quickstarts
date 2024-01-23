@@ -169,11 +169,19 @@ resource "azurecaf_name" "key_vault" {
 }
 
 resource "azurerm_key_vault" "key_vault" {
-  name                = azurecaf_name.key_vault.result
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  tenant_id           = var.tenant_id_gw
-  sku_name            = "standard"
+  name                          = azurecaf_name.key_vault.result
+  location                      = azurerm_resource_group.rg.location
+  resource_group_name           = azurerm_resource_group.rg.name
+  tenant_id                     = var.tenant_id_gw
+  sku_name                      = "standard"
+  purge_protection_enabled      = true
+  soft_delete_retention_days    = 7
+  public_network_access_enabled = false
+
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices"
+  }
 
   access_policy {
     tenant_id = var.tenant_id_gw
@@ -198,9 +206,11 @@ resource "azurecaf_name" "key_vault_secret_pp" {
 }
 
 resource "azurerm_key_vault_secret" "key_vault_secret_pp" {
-  name         = azurecaf_name.key_vault_secret_pp.result
-  value        = var.secret_pp
-  key_vault_id = azurerm_key_vault.key_vault.id
+  name            = azurecaf_name.key_vault_secret_pp.result
+  value           = var.secret_pp
+  key_vault_id    = azurerm_key_vault.key_vault.id
+  expiration_date = "2024-12-30T20:00:00Z"
+  content_type    = "text/plain"
 }
 
 resource "azurecaf_name" "key_vault_secret_irkey" {
@@ -212,9 +222,11 @@ resource "azurecaf_name" "key_vault_secret_irkey" {
 }
 
 resource "azurerm_key_vault_secret" "key_vault_secret_irkey" {
-  name         = azurecaf_name.key_vault_secret_irkey.result
-  value        = var.ir_key
-  key_vault_id = azurerm_key_vault.key_vault.id
+  name            = azurecaf_name.key_vault_secret_irkey.result
+  value           = var.ir_key
+  key_vault_id    = azurerm_key_vault.key_vault.id
+  expiration_date = "2024-12-30T20:00:00Z"
+  content_type    = "text/plain"
 }
 
 resource "azurecaf_name" "key_vault_secret_recover_key" {
@@ -223,12 +235,15 @@ resource "azurecaf_name" "key_vault_secret_recover_key" {
   prefixes      = [var.prefix]
   random_length = 3
   clean_input   = true
+
 }
 
 resource "azurerm_key_vault_secret" "key_vault_secret_recover_key" {
-  name         = azurecaf_name.key_vault_secret_recover_key.result
-  value        = var.recover_key_gw
-  key_vault_id = azurerm_key_vault.key_vault.id
+  name            = azurecaf_name.key_vault_secret_recover_key.result
+  value           = var.recover_key_gw
+  key_vault_id    = azurerm_key_vault.key_vault.id
+  expiration_date = "2024-12-30T20:00:00Z"
+  content_type    = "text/plain"
 }
 
 resource "random_string" "vm_pwd" {
@@ -246,9 +261,11 @@ resource "azurecaf_name" "key_vault_secret_vm_pwd" {
 }
 
 resource "azurerm_key_vault_secret" "key_vault_secret_vm_pwd" {
-  name         = azurecaf_name.key_vault_secret_vm_pwd.result
-  value        = random_string.vm_pwd.result
-  key_vault_id = azurerm_key_vault.key_vault.id
+  name            = azurecaf_name.key_vault_secret_vm_pwd.result
+  value           = random_string.vm_pwd.result
+  key_vault_id    = azurerm_key_vault.key_vault.id
+  expiration_date = "2024-12-30T20:00:00Z"
+  content_type    = "text/plain"
 }
 
 module "storage_account" {
@@ -257,6 +274,7 @@ module "storage_account" {
   base_name           = var.base_name
   resource_group_name = azurerm_resource_group.rg.name
   region              = var.region_gw
+  # subnet_id           = azurerm_subnet.subnet.id
 }
 
 module "gateway_vm" {
