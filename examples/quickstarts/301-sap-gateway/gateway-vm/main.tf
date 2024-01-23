@@ -106,10 +106,10 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   #checkov:skip=CKV_AZURE_50:Gateway Windows VMs should be deployed with extensions 
 
   os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-    disk_size_gb         = 128
-    name                 = "myosdisk1"
+    caching                = "ReadWrite"
+    storage_account_type   = "Standard_LRS"
+    disk_size_gb           = 128
+    name                   = "myosdisk1"
     disk_encryption_set_id = azurerm_disk_encryption_set.des.id
   }
 
@@ -182,14 +182,14 @@ resource "azurerm_resource_group" "des" {
 
 
 resource "azurerm_key_vault" "des" {
-  name                        = "des-gateway-vn-keyvault"
-  location                    = var.region
-  resource_group_name         = azurerm_resource_group.des.name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name                    = "premium"
-  enabled_for_disk_encryption = true
-  purge_protection_enabled    = true
-  soft_delete_retention_days = 7
+  name                          = "des-gateway-vn-keyvault"
+  location                      = var.region
+  resource_group_name           = azurerm_resource_group.des.name
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  sku_name                      = "premium"
+  enabled_for_disk_encryption   = true
+  purge_protection_enabled      = true
+  soft_delete_retention_days    = 7
   public_network_access_enabled = false
   network_acls {
     default_action = "Deny"
@@ -199,10 +199,10 @@ resource "azurerm_key_vault" "des" {
 }
 
 resource "azurerm_key_vault_key" "des" {
-  name         = "des-key"
-  key_vault_id = azurerm_key_vault.des.id
-  key_type     = "RSA-HSM"
-  key_size     = 2048
+  name            = "des-key"
+  key_vault_id    = azurerm_key_vault.des.id
+  key_type        = "RSA-HSM"
+  key_size        = 2048
   expiration_date = "2024-12-30T20:00:00Z"
   depends_on = [
     azurerm_key_vault_access_policy.des-user

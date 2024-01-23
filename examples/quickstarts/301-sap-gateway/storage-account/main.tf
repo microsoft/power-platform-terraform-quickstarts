@@ -69,9 +69,9 @@ resource "azurerm_storage_blob" "storage_blob_runtime_setup" {
 resource "azurerm_storage_account_network_rules" "storage_account_network_rules" {
   storage_account_id = azurerm_storage_account.storage_account.id
 
-  default_action             = "Deny"
-  bypass                     = ["AzureServices"]
-  ip_rules                   = ["*"]
+  default_action = "Deny"
+  bypass         = ["AzureServices"]
+  # ip_rules                   = ["127.0.0.1"] # ip range needs to match your sap subnet range.
   virtual_network_subnet_ids = [var.sap_subnet_id]
 }
 

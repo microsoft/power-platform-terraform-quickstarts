@@ -19,3 +19,8 @@ variable "region" {
   description = "The Azure region where the resources in this example should be created"
   type        = string
 }
+
+variable "sap_subnet_id" {
+  description = "The SAP system subnet ID"
+  type        = string
+}

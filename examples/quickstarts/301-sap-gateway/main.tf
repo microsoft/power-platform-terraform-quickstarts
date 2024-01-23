@@ -274,7 +274,7 @@ module "storage_account" {
   base_name           = var.base_name
   resource_group_name = azurerm_resource_group.rg.name
   region              = var.region_gw
-  # subnet_id           = azurerm_subnet.subnet.id
+  sap_subnet_id       = var.sap_subnet_id
 }
 
 module "gateway_vm" {
