@@ -287,33 +287,3 @@ resource "azurerm_role_assignment" "des-disk" {
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = azurerm_disk_encryption_set.des.identity.0.principal_id
 }
-
-
-#####
-/*
-resource "azurerm_private_endpoint" "keyvault_private_endpoint_compute" {
-  name                = var.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  subnet_id           = var.subnet_id
-  tags                = var.tags
-  lifecycle {
-    ignore_changes = [
-      tags
-    ]
-  }
-
-  private_service_connection {
-    name                           = "keyvault_connection_compute"
-    private_connection_resource_id = var.keyvault_id
-    is_manual_connection           = false
-    subresource_names              = ["vault"]
-  }
-  private_dns_zone_group {
-    name                 = var.private_dns_zone_group_name
-    private_dns_zone_ids = var.private_dns_zone_group_ids
-  }
-}
-
-*/
-#####
