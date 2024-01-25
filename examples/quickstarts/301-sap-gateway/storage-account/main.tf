@@ -1,24 +1,3 @@
-terraform {
-  required_version = ">= 1.5"
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-    }
-    azurecaf = {
-      source  = "aztfmod/azurecaf"
-      version = ">=1.2.26"
-    }
-  }
-}
-
-resource "azurecaf_name" "storage_account_name" {
-  name          = var.base_name
-  resource_type = "azurerm_storage_account"
-  prefixes      = [var.prefix]
-  random_length = 3
-  clean_input   = true
-}
-
 resource "azurerm_storage_account" "storage_account" {
   name                     = azurecaf_name.storage_account_name.result
   resource_group_name      = var.resource_group_name
@@ -26,12 +5,17 @@ resource "azurerm_storage_account" "storage_account" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
+
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+  }
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
   name                  = "installs"
   storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "blob"
+  container_access_type = "private"
 }
 
 resource "azurerm_storage_blob" "storage_blob_ps7_setup" {

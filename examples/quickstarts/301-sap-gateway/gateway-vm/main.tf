@@ -102,7 +102,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   bypass_platform_safety_checks_on_user_schedule_enabled = false
   patch_assessment_mode                                  = "ImageDefault"
   patch_mode                                             = "AutomaticByOS"
-
+  allow_extension_operations = false  # This may stop the runtime-setup.ps1 from running and other scripts
   #checkov:skip=CKV_AZURE_50:Gateway Windows VMs should be deployed with extensions 
 
   os_disk {
@@ -181,23 +181,37 @@ resource "azurerm_resource_group" "des" {
 }
 
 
-resource "azurerm_key_vault" "des" {
-  name                          = "des-gateway-vn-keyvault"
-  location                      = var.region
-  resource_group_name           = azurerm_resource_group.des.name
-  tenant_id                     = data.azurerm_client_config.current.tenant_id
-  sku_name                      = "premium"
-  enabled_for_disk_encryption   = true
-  purge_protection_enabled      = true
-  soft_delete_retention_days    = 7
-  public_network_access_enabled = false
-  network_acls {
-    default_action = "Deny"
-    bypass         = "AzureServices"
+# Create the private endpoint
+resource "azurerm_private_endpoint" "key_vault" {
+  name                = "key-vault-private-endpoint"
+  location            = var.region
+  resource_group_name = azurerm_resource_group.des.name
+  subnet_id           = azurerm_subnet.subnet.id
+
+  private_service_connection {
+    name                           = "key-vault-connection"
+    private_connection_resource_id = azurerm_key_vault.des.id
+    subresource_names              = ["vault"]
+    is_manual_connection = false
+  }
+  private_dns_zone_group {
+    name                 = var.private_dns_zone_group_name
+    private_dns_zone_ids = var.private_dns_zone_group_ids
   }
 
 }
 
+
+
+# Link the private DNS zone to the private endpoint
+resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
+  name                  = "key-vault-dns-link"
+  resource_group_name   = azurerm_resource_group.des.name
+  private_dns_zone_name = azurerm_private_dns_zone.key_vault.name
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+}
+
+# key vault for the disc encryption set
 resource "azurerm_key_vault_key" "des" {
   name            = "des-key"
   key_vault_id    = azurerm_key_vault.des.id
@@ -273,3 +287,33 @@ resource "azurerm_role_assignment" "des-disk" {
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = azurerm_disk_encryption_set.des.identity.0.principal_id
 }
+
+
+#####
+/*
+resource "azurerm_private_endpoint" "keyvault_private_endpoint_compute" {
+  name                = var.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.subnet_id
+  tags                = var.tags
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+
+  private_service_connection {
+    name                           = "keyvault_connection_compute"
+    private_connection_resource_id = var.keyvault_id
+    is_manual_connection           = false
+    subresource_names              = ["vault"]
+  }
+  private_dns_zone_group {
+    name                 = var.private_dns_zone_group_name
+    private_dns_zone_ids = var.private_dns_zone_group_ids
+  }
+}
+
+*/
+#####

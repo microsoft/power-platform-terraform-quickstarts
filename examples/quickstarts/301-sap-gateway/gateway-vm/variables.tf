@@ -90,3 +90,13 @@ variable "secret_name_recover_key_gw" {
   description = "Value of the secret name for the recovery key of the gateway"
   type        = string
 }
+
+variable "private_dns_zone_group_name" {
+  description = "Specifies the Name of the Private DNS Zone Group"
+  type        = string
+}
+
+variable "private_dns_zone_group_ids" {
+  description = "Specifies the list of Private DNS Zones to include within the private_dns_zone_group"
+  type        = list(string)
+}

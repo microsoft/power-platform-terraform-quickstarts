@@ -296,6 +296,8 @@ module "gateway_vm" {
   runtime_setup_link         = module.storage_account.storage_blob_runtime_setup_link
   gateway_name               = var.gateway_name
   secret_name_recover_key_gw = azurerm_key_vault_secret.key_vault_secret_recover_key.name
+  private_dns_zone_group_ids = var.private_dns_zone_group_ids
+  private_dns_zone_group_name = var.private_dns_zone_group_name
 }
 
 resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {

@@ -75,3 +75,13 @@ variable "recover_key_gw" {
   description = "The recovery key of the gateway"
   type        = string
 }
+
+variable "private_dns_zone_group_name" {
+  description = "Specifies the Name of the Private DNS Zone Group"
+  type        = string
+}
+
+variable "private_dns_zone_group_ids" {
+  description = "Specifies the list of Private DNS Zones to include within the private_dns_zone_group"
+  type        = list(string)
+}
