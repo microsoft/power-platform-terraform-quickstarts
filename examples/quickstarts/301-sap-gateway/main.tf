@@ -42,6 +42,8 @@ resource "azurerm_resource_group" "rg" {
   location = var.region_gw
 }
 
+# Network resources
+
 resource "azurecaf_name" "vnet" {
   name          = var.base_name
   resource_type = "azurerm_virtual_network"
@@ -68,9 +70,11 @@ resource "azurecaf_name" "subnet" {
 resource "azurerm_subnet" "subnet" {
   name                 = azurecaf_name.subnet.result
   resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name #
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
+
+###  Network Security Group
 
 resource "azurecaf_name" "nsg" {
   name          = var.base_name
@@ -235,7 +239,6 @@ resource "azurecaf_name" "key_vault_secret_recover_key" {
   prefixes      = [var.prefix]
   random_length = 3
   clean_input   = true
-
 }
 
 resource "azurerm_key_vault_secret" "key_vault_secret_recover_key" {

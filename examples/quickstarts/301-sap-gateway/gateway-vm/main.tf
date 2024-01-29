@@ -187,6 +187,7 @@ resource "azurerm_private_endpoint" "key_vault" {
   location            = var.region
   resource_group_name = azurerm_resource_group.des.name
   subnet_id           = azurerm_subnet.subnet.id
+  #depends_on = [ azurerm_subnet.subnet ]
 
   private_service_connection {
     name                           = "key-vault-connection"
@@ -200,7 +201,6 @@ resource "azurerm_private_endpoint" "key_vault" {
   }
 
 }
-
 
 
 # Link the private DNS zone to the private endpoint
