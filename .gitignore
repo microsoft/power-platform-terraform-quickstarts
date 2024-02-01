@@ -40,3 +40,6 @@ tf.json
 tf.plan
 *.plan
 *.tfplan
+
+# Checov Scripts
+tfchecov.sh
