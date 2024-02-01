@@ -146,7 +146,6 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = var.sap_subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip.id
   }
 
 }
@@ -281,25 +280,25 @@ module "storage_account" {
 }
 
 module "gateway_vm" {
-  source                     = "./gateway-vm"
-  resource_group_name        = azurerm_resource_group.rg.name
-  base_name                  = var.base_name
-  region                     = var.region_gw
-  vm_pwd                     = random_string.vm_pwd.result
-  nic_id                     = azurerm_network_interface.nic.id
-  client_id_pp               = var.client_id_pp
-  tenant_id_pp               = var.tenant_id_pp
-  key_vault_uri              = azurerm_key_vault.key_vault.vault_uri
-  secret_pp_name             = azurerm_key_vault_secret.key_vault_secret_pp.name
-  secret_name_irkey          = azurerm_key_vault_secret.key_vault_secret_irkey.name
-  user_id_admin_pp           = var.user_id_admin_pp
-  ps7_setup_link             = module.storage_account.storage_blob_ps7_setup_link
-  java_setup_link            = module.storage_account.storage_blob_java_runtime_link
-  sapnco_install_link        = module.storage_account.storage_blob_sapnco_install_link
-  runtime_setup_link         = module.storage_account.storage_blob_runtime_setup_link
-  gateway_name               = var.gateway_name
-  secret_name_recover_key_gw = azurerm_key_vault_secret.key_vault_secret_recover_key.name
-  private_dns_zone_group_ids = var.private_dns_zone_group_ids
+  source                      = "./gateway-vm"
+  resource_group_name         = azurerm_resource_group.rg.name
+  base_name                   = var.base_name
+  region                      = var.region_gw
+  vm_pwd                      = random_string.vm_pwd.result
+  nic_id                      = azurerm_network_interface.nic.id
+  client_id_pp                = var.client_id_pp
+  tenant_id_pp                = var.tenant_id_pp
+  key_vault_uri               = azurerm_key_vault.key_vault.vault_uri
+  secret_pp_name              = azurerm_key_vault_secret.key_vault_secret_pp.name
+  secret_name_irkey           = azurerm_key_vault_secret.key_vault_secret_irkey.name
+  user_id_admin_pp            = var.user_id_admin_pp
+  ps7_setup_link              = module.storage_account.storage_blob_ps7_setup_link
+  java_setup_link             = module.storage_account.storage_blob_java_runtime_link
+  sapnco_install_link         = module.storage_account.storage_blob_sapnco_install_link
+  runtime_setup_link          = module.storage_account.storage_blob_runtime_setup_link
+  gateway_name                = var.gateway_name
+  secret_name_recover_key_gw  = azurerm_key_vault_secret.key_vault_secret_recover_key.name
+  private_dns_zone_group_ids  = var.private_dns_zone_group_ids
   private_dns_zone_group_name = var.private_dns_zone_group_name
 }
 

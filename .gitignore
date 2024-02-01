@@ -45,3 +45,4 @@ terraform.rc
 
 # checkov json files
 tf.json
+tf.plan
