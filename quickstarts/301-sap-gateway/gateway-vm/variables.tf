@@ -90,3 +90,8 @@ variable "secret_name_recover_key_gw" {
   description = "Value of the secret name for the recovery key of the gateway"
   type        = string
 }
+variable "allow_extension_operations" {
+  description = "Allow the VM to install extensions"
+  default     = false
+  type        = bool
+}

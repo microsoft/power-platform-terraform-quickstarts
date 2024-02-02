@@ -102,7 +102,8 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   bypass_platform_safety_checks_on_user_schedule_enabled = false
   patch_assessment_mode                                  = "ImageDefault"
   patch_mode                                             = "AutomaticByOS"
-
+  encryption_at_host_enabled = true # Enable encryption at host we need to configure the disk encryption set
+  allow_extension_operations = var.allow_extension_operations # This feature needs to be turn to true to allow the VM to install extensions
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
