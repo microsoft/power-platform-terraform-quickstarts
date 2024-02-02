@@ -95,3 +95,8 @@ variable "allow_extension_operations" {
   default     = false
   type        = bool
 }
+variable "encryption_at_host_enabled" {
+  description = "Enable encryption at host"
+  default     = true
+  type        = bool
+}
