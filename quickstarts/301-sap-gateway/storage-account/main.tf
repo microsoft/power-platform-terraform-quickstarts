@@ -20,17 +20,47 @@ resource "azurecaf_name" "storage_account_name" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
+  #checkov:skip=CKV_AZURE_33:The Storage Account dont use Queue service and is bloqued by the following network_rules block
   name                     = azurecaf_name.storage_account_name.result
   resource_group_name      = var.resource_group_name
   location                 = var.region
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = "GRS"
+  min_tls_version          = "TLS1_2"
+  public_network_access_enabled = false
+  allow_nested_items_to_be_public = false
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices", "Logging", "Metrics"]
+  }
+  queue_properties {
+    logging {
+      read   = true
+      write  = true
+      delete = true
+      version = "1.0"
+      retention_policy_days = 1
+    }
+    hour_metrics {
+      enabled = true
+      include_apis = true
+      retention_policy_days = 1
+      version = "1.0"
+    }
+    minute_metrics {
+      enabled = true
+      include_apis = true
+      retention_policy_days = 1
+      version = "1.0"
+    }
+  }
 }
+
 
 resource "azurerm_storage_container" "storage_container_installs" {
   name                  = "installs"
   storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "blob"
+  container_access_type = "private"
 }
 
 resource "azurerm_storage_blob" "storage_blob_ps7_setup" {
