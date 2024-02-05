@@ -29,9 +29,11 @@ resource "azurerm_storage_account" "storage_account" {
   min_tls_version          = "TLS1_2"
   public_network_access_enabled = false
   allow_nested_items_to_be_public = false
-  network_rules {
-    default_action = "Deny"
-    bypass         = ["AzureServices", "Logging", "Metrics"]
+  shared_access_key_enabled = false
+  blob_properties {
+    delete_retention_policy {
+      days = 7
+    }
   }
   queue_properties {
     logging {
@@ -53,7 +55,15 @@ resource "azurerm_storage_account" "storage_account" {
       retention_policy_days = 1
       version = "1.0"
     }
+    }
+  identity {
+    type = "SystemAssigned"
   }
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices", "Logging", "Metrics"]
+  }
+
 }
 
 
