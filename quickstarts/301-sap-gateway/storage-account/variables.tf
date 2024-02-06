@@ -19,3 +19,12 @@ variable "region" {
   description = "The Azure region where the resources in this example should be created"
   type        = string
 }
+variable "subnet_id" {
+  description = "The ID of the subnet where the resources in this example should be created"
+  type        = string
+}
+variable "private_dns_zone_blob_id" {
+  description = "The IDs of the private DNS zones which should be used for the private endpoint in this example"
+  type        = list(string)
+  
+}

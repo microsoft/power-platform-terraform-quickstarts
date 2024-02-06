@@ -13,3 +13,9 @@ output "storage_blob_sapnco_install_link" {
 output "storage_blob_runtime_setup_link" {
   value = azurerm_storage_blob.storage_blob_runtime_setup.url
 }
+output "storage_account_name" {
+  value = azurerm_storage_account.storage_account.name
+}
+output "storage_account_id" {
+  value = azurerm_storage_account.storage_account.id
+}

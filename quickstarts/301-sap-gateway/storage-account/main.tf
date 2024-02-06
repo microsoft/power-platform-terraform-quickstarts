@@ -123,3 +123,23 @@ resource "azurerm_log_analytics_storage_insights" "analytics_storage_insights_sa
   storage_account_key  = azurerm_storage_account.storage_account.primary_access_key
   blob_container_names = [azurerm_storage_container.storage_container_installs.name]
 }
+
+### Private endpoint for Storage Account
+
+resource "azurerm_private_endpoint" "storage_account_pe" {
+  name                = "${azurerm_storage_account.storage_account.name}-pe" #"${azurerm_storage_account.name}-pe"
+  resource_group_name = var.resource_group_name
+  location            = var.region
+  subnet_id           = var.subnet_id
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = var.private_dns_zone_blob_id
+  }
+  private_service_connection {
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_storage_account.storage_account.id
+    name                           = "${azurerm_storage_account.storage_account.name}-psc"
+    subresource_names              = ["blob"]
+  }
+  depends_on = [azurerm_storage_account.storage_account]
+}

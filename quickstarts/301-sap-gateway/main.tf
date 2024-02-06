@@ -68,7 +68,7 @@ resource "azurecaf_name" "subnet" {
 resource "azurerm_subnet" "subnet" {
   name                 = azurecaf_name.subnet.result
   resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name #
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 resource "azurerm_subnet_network_security_group_association" "example" {
@@ -272,11 +272,13 @@ resource "azurerm_key_vault_secret" "key_vault_secret_vm_pwd" {
 }
 
 module "storage_account" {
-  source              = "./storage-account"
-  prefix              = var.prefix
-  base_name           = var.base_name
-  resource_group_name = azurerm_resource_group.rg.name
-  region              = var.region_gw
+  source                   = "./storage-account"
+  prefix                   = var.prefix
+  base_name                = var.base_name
+  resource_group_name      = azurerm_resource_group.rg.name
+  region                   = var.region_gw
+  subnet_id                = azurerm_subnet.subnet.id
+  private_dns_zone_blob_id = [azurerm_private_dns_zone.private_dns_zones["privatelink-blob-core-windows-net"].id]
 }
 
 module "gateway_vm" {
@@ -310,3 +312,52 @@ resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   ]
 }
 
+# Private DNS zones for Azure services
+locals {
+  private_dns_zones = {
+    privatelink-blob-core-windows-net = "privatelink.blob.core.windows.net"
+    privatelink-vaultcore-azure-net   = "privatelink.vaultcore.azure.net"
+  }
+}
+
+resource "azurerm_private_dns_zone" "private_dns_zones" {
+  for_each            = local.private_dns_zones
+  name                = each.value
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+### Private dns links
+resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_network_links" {
+  for_each              = local.private_dns_zones
+  name                  = "${azurerm_virtual_network.vnet.name}-link"
+  resource_group_name   = azurerm_resource_group.rg.name
+  private_dns_zone_name = each.value
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+  depends_on            = [azurerm_private_dns_zone.private_dns_zones]
+}
+### Private endpoint for Key Vault
+resource "azurerm_private_endpoint" "key_vault_pe" {
+  name                = "${azurerm_key_vault.key_vault.name}-pe"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  subnet_id           = azurerm_subnet.subnet.id
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.private_dns_zones["privatelink-vaultcore-azure-net"].id]
+  }
+  private_service_connection {
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_key_vault.key_vault.id
+    name                           = "${azurerm_key_vault.key_vault.name}-psc"
+    subresource_names              = ["vault"]
+  }
+  depends_on = [azurerm_key_vault.key_vault]
+}
+
+### review if it is required
+/*resource "azurerm_role_assignment" "terraform_spn" {
+  scope                = azurerm_key_vault.key_vault.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+*/
