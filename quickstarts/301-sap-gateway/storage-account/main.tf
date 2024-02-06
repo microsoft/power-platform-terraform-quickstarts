@@ -20,7 +20,6 @@ resource "azurecaf_name" "storage_account_name" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
-  #checkov:skip=CKV_AZURE_33:The Storage Account dont use Queue service and is bloqued by the following network_rules block
   name                            = azurecaf_name.storage_account_name.result
   resource_group_name             = var.resource_group_name
   location                        = var.region
