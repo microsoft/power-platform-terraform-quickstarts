@@ -1,23 +1,27 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # D365 Finance Deployment (201 level)
 
-This Terraform module aims to provide a template for automating and standardizing the deployment and management of D365 Finance environments. It utilizes the deployment model outlined at https://learn.microsoft.com/en-us/power-platform/admin/unified-experience/finance-operations-apps-overview .
+This Terraform module aims to provide a template for automating and standardizing the deployment and management of D365 Finance environments.
+It utilizes the deployment model outlined at: [Unified admin experience for finance and operations apps](https://learn.microsoft.com/power-platform/admin/unified-experience/finance-operations-apps-overview).
 
 ## Prerequisites
 
 - Service Principal or User Account with permissions configured as referenced in [this provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication) .
-- A properly assigned D365 license (for example, a Dynamics 365 Finance or Dynamics 365 Supply Chain Management license). For more information on the new license requirements, see https://learn.microsoft.com/en-us/power-platform/admin/unified-experience/finance-operations-apps-overview#transition-from-an-environment-slot-purchasing-model-to-a-capacity-based-model .
+- A properly assigned D365 license (for example, a Dynamics 365 Finance or Dynamics 365 Supply Chain Management license).
+  For more information on the new license requirements, see: [Transition from an environment-slot purchasing model to a capacity-based model](https://learn.microsoft.com/power-platform/admin/unified-experience/finance-operations-apps-overview#transition-from-an-environment-slot-purchasing-model-to-a-capacity-based-model).
 - At least 1 gigabyte of available Operations and Dataverse database capacities
 
 ## Example Files
 
 The example files can be found in `examples/quickstarts/201-D365-finance-environment`
 
-## Terraform Version Constraints:
-* `>= 1.5`
+## Terraform Version Constraints
 
-## Provider Requirements:
-* **powerplatform (`microsoft/power-platform`):** (any version)
+- `>= 1.5`
+
+## Provider Requirements
+
+- **powerplatform (`microsoft/power-platform`):** (any version)
 
 ## Input Variables
 
@@ -34,7 +38,6 @@ The example files can be found in `examples/quickstarts/201-D365-finance-environ
 | `security_group_id` | The security group the environment will be associated with, a GUID. Can be set to 00000000-0000-0000-0000-000000000000 to indicate no security group restricting Dataverse access. | string | `null` | true |
 | `tenant_id` | The Entra (AAD) tenant id of service principal or user | string | `null` | true |
 
-
 ## Output Values
 
 | Name | Description |
@@ -46,11 +49,9 @@ The example files can be found in `examples/quickstarts/201-D365-finance-environ
 | `name` | Display name of the environment |
 | `url` | URL of the environment |
 
-
-
 ## Resources
-* `powerplatform_environment.xpp-dev1` from `powerplatform`
 
+- `powerplatform_environment.xpp-dev1` from `powerplatform`
 
 ## Usage
 
@@ -87,8 +88,8 @@ This module creates a Dynamics 365 Finance development environment using the def
 ## Limitations and Considerations
 
 - Provisioning can take over an hour, so refrain from rerunning the same environment creation Terraform files more than hourly, as this will cause unexpected behavior.
-- This quickstart is configured for service-principal-based authentication as outlined in [this provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication). If you plan to use user-based authentication, you will need to ensure that the selected user is assigned a D365 Finance or D365 Supply Chain Management license as outlined in the [Unified Admin Experience Overview](https://learn.microsoft.com/en-us/power-platform/admin/unified-experience/finance-operations-apps-overview).
+- This quickstart is configured for service-principal-based authentication as outlined in [this provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication). If you plan to use user-based authentication, you will need to ensure that the selected user is assigned a D365 Finance or D365 Supply Chain Management license as outlined in the [Unified Admin Experience Overview](https://learn.microsoft.com/power-platform/admin/unified-experience/finance-operations-apps-overview).
 
 ## Additional Resources
 
-- [Power Platform Admin Documentation](https://learn.microsoft.com/en-us/power-platform/admin/)
+- [Power Platform Admin Documentation](https://learn.microsoft.com/power-platform/admin/)
