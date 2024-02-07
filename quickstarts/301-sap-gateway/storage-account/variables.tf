@@ -26,5 +26,5 @@ variable "subnet_id" {
 variable "private_dns_zone_blob_id" {
   description = "The IDs of the private DNS zones which should be used for the private endpoint in this example"
   type        = list(string)
-  
+
 }
