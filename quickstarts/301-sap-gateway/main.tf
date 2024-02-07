@@ -201,6 +201,35 @@ resource "azurerm_key_vault" "key_vault" {
   }
 }
 
+### encryption key for storage account
+data "azurerm_client_config" "current" {}
+resource "azurerm_key_vault_access_policy" "client" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get"]
+}
+
+resource "azurerm_key_vault_key" "storage_account_key" {
+  name         = "tfex-key"
+  key_vault_id = azurerm_key_vault.key_vault.id
+  key_type     = "RSA"
+  key_size     = 2048
+  key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+
+  depends_on = [
+    azurerm_key_vault_access_policy.client
+  ]
+}
+
+resource "azurerm_storage_account_customer_managed_key" "ok_cmk" {
+  storage_account_id = module.storage_account.storage_account_id
+  key_vault_id       = azurerm_key_vault.key_vault.id
+  key_name           = azurerm_key_vault_key.storage_account_key.name
+}
+
 resource "azurecaf_name" "key_vault_secret_pp" {
   name          = "pp"
   resource_type = "azurerm_key_vault_secret"
