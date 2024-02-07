@@ -51,4 +51,4 @@ This script is intended to be run locally by a user with `Owner` permissions in 
 
 The `bootstrap.sh` [bootstrap.sh](/bootstrap/bootstrap.sh) writes its outputs to a `backend.tfvars` file in the [tenant-configuration](/bootstrap/tenant-configuration/) directory.  The `backend.tfvars` file is used by the [tenant-configuration](/bootstrap/tenant-configuration/) terraform configuration to configure the backend for the terraform state.
 
-After excuting [bootstrap.sh](/bootstrap/bootstrap.sh) you can follow instructions in the [tenant-configuration/README.md](/bootstrap/tenant-configuration/README.md) to configure the tenant settings.
+After executing [bootstrap.sh](/bootstrap/bootstrap.sh) you can follow instructions in the [tenant-configuration/README.md](/bootstrap/tenant-configuration/README.md) to configure the tenant settings.

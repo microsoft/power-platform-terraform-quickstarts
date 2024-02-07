@@ -18,6 +18,8 @@ terraform {
   }
 
   backend "azurerm" {
+    resource_group_name = "value"
+    storage_account_name = "value"
     container_name = "tfstate"
     key            = "tenant-configuration.terraform.tfstate"
   }
