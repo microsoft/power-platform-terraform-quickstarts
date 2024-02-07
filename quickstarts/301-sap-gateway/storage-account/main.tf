@@ -29,8 +29,6 @@ resource "azurerm_storage_account" "storage_account" {
   public_network_access_enabled   = false
   allow_nested_items_to_be_public = false
   shared_access_key_enabled       = false
-  #checkov:skip=CKV_AZURE_33:Ensure storage account is configured with private endpoint
-  #checkov:skip=CKV2_AZURE_1:Ensure storage for critical data are encrypted with Customer Managed Key
   blob_properties {
     delete_retention_policy {
       days = 7
