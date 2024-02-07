@@ -11,6 +11,8 @@ terraform {
   }
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "azurecaf_name" "storage_account_name" {
   name          = var.base_name
   resource_type = "azurerm_storage_account"

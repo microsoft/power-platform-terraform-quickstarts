@@ -279,7 +279,7 @@ module "storage_account" {
   region                   = var.region_gw
   subnet_id                = azurerm_subnet.subnet.id
   private_dns_zone_blob_id = [azurerm_private_dns_zone.private_dns_zones["privatelink-blob-core-windows-net"].id]
-  key_vault_id = azurerm_key_vault.key_vault.id
+  key_vault_id             = azurerm_key_vault.key_vault.id
 }
 
 module "gateway_vm" {
