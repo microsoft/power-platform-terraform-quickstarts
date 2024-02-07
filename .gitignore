@@ -44,7 +44,13 @@ tf.plan
 # Terraform state files
 *.tfstate
 
+#Terraform lock files
+*.lock.hcl
+*.terraform.lock.hcl
+.terraform.lock.hcl
+terraform.locl.hcl
+
 # Checov Scripts
 tfchecov.sh
 *.locl.hcl
-terraform.locl.hcl
+
