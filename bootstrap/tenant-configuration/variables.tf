@@ -16,5 +16,5 @@ variable "resource_group_name" {
 variable "client_id" {
   type        = string
   description = "The client ID of the service principal to use for authenticating to Azure."
-  default = "00000000-0000-0000-0000-000000000000"
+  default     = "00000000-0000-0000-0000-000000000000"
 }

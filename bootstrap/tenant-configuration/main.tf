@@ -39,8 +39,8 @@ data "azurerm_subscription" "current" {
 
 # Get a reference to the Power Platform API's pre-existing service principal
 resource "azuread_service_principal" "power_platform_api" {
-  client_id = var.client_id // Power Platform API
-  use_existing   = true
+  client_id    = var.client_id // Power Platform API
+  use_existing = true
 }
 
 # Create a new Entra ID (Azure AD) application for the Power Platform Admin Service.  This is
@@ -76,7 +76,7 @@ resource "azuread_application" "ppadmin_application" {
 
 # Create a service principal for the Power Platform Admin Service application
 resource "azuread_service_principal" "ppadmin_principal" {
-  client_id               = azuread_application.ppadmin_application.client_id
+  client_id                    = azuread_application.ppadmin_application.client_id
   app_role_assignment_required = false
   owners                       = [data.azuread_client_config.current.object_id]
 }
