@@ -39,7 +39,7 @@ data "azurerm_subscription" "current" {
 
 # Get a reference to the Power Platform API's pre-existing service principal
 resource "azuread_service_principal" "power_platform_api" {
-  application_id = "8578e004-a5c6-46e7-913e-12f58912df43" // Power Platform API
+  client_id = var.client_id // Power Platform API
   use_existing   = true
 }
 
@@ -76,14 +76,14 @@ resource "azuread_application" "ppadmin_application" {
 
 # Create a service principal for the Power Platform Admin Service application
 resource "azuread_service_principal" "ppadmin_principal" {
-  application_id               = azuread_application.ppadmin_application.application_id
+  client_id               = azuread_application.ppadmin_application.client_id
   app_role_assignment_required = false
   owners                       = [data.azuread_client_config.current.object_id]
 }
 
 # Create a client secret for the Power Platform Admin Service application
 resource "azuread_application_password" "ppadmin_secret" {
-  application_object_id = azuread_application.ppadmin_application.object_id
+  application_id = azuread_application.ppadmin_application.application_id
 }
 
 data "azurerm_storage_account" "tf_state_storage_account" {
