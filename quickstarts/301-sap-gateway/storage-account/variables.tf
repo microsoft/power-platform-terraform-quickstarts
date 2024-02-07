@@ -28,3 +28,8 @@ variable "private_dns_zone_blob_id" {
   type        = list(string)
 
 }
+variable "key_vault_id" {
+  description = "The ID of the key vault which should be used for the private endpoint in this example"
+  type        = string
+  
+}

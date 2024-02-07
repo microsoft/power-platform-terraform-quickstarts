@@ -66,6 +66,36 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 
+
+### encryption key for storage account
+resource "azurerm_key_vault_access_policy" "client" {
+  key_vault_id = var.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get"]
+}
+
+resource "azurerm_key_vault_key" "storage_account_key" {
+  name            = "tfex-key"
+  key_vault_id    = var.key_vault_id
+  key_type        = "RSA-HSM"
+  key_size        = 2048
+  key_opts        = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  expiration_date = "2024-12-30T20:00:00Z"
+  depends_on = [
+    azurerm_key_vault_access_policy.client
+  ]
+}
+
+resource "azurerm_storage_account_customer_managed_key" "ok_cmk" {
+  storage_account_id = azurerm_storage_account.storage_account.id
+  key_vault_id       = var.key_vault_id
+  key_name           = azurerm_key_vault_key.storage_account_key.name
+}
+
+### Storage container and blob
 resource "azurerm_storage_container" "storage_container_installs" {
   name                  = "installs"
   storage_account_name  = azurerm_storage_account.storage_account.name
