@@ -202,7 +202,6 @@ resource "azurerm_key_vault" "key_vault" {
 }
 
 ### encryption key for storage account
-data "azurerm_client_config" "current" {}
 resource "azurerm_key_vault_access_policy" "client" {
   key_vault_id = azurerm_key_vault.key_vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
