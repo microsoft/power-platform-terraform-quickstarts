@@ -212,11 +212,13 @@ resource "azurerm_key_vault_access_policy" "client" {
 }
 
 resource "azurerm_key_vault_key" "storage_account_key" {
-  name         = "tfex-key"
-  key_vault_id = azurerm_key_vault.key_vault.id
-  key_type     = "RSA"
-  key_size     = 2048
-  key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  name            = "tfex-key"
+  key_vault_id    = azurerm_key_vault.key_vault.id
+  key_type        = "RSA-HSM"
+  key_size        = 2048
+  key_opts        = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  expiration_date = "2024-12-30T20:00:00Z"
+
 
   depends_on = [
     azurerm_key_vault_access_policy.client
