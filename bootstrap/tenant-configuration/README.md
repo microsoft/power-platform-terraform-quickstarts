@@ -6,13 +6,13 @@ This document describes how to configure tenant level settings and resources nee
 
 * You have already completed the [bootstrap](../bootstrap/README.md) steps
 * You are logged into the Azure CLI with credentials that have:
-    * Owner role on the Azure subscription
-    * Global Administrator or User Administrator role on the Azure AD tenant
+  * Owner role on the Azure subscription
+  * Global Administrator or User Administrator role on the Azure AD tenant
 * You are logged into GitHub with credentials that have admin access to the repository
 
 ## Resources Created
 
-* An app registration and service principal for managaing Power Platform resources
+* An app registration and service principal for managing Power Platform resources
 * Permissions for the service principal
   * Licensing.BillingPolicies.ReadWrite
   * Licensing.BillingPolicies.Read
