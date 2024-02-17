@@ -8,11 +8,17 @@
     "ghcr.io/devcontainers/features/azure-cli": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers-contrib/features/gh-cli:1.0.12": {}
+    "ghcr.io/devcontainers-contrib/features/gh-cli": {
+      "version": "latest"
+    },
+    //"ghcr.io/devcontainers-contrib/features/gh-cli:1.0.12": {},
     // "ghcr.io/devcontainers/features/powershell": {
     //   "version": "latest",
     //   "modules": "Microsoft.PowerApps.Administration.PowerShell,Microsoft.PowerApps.PowerShell"
     // }
+    "ghcr.io/devcontainers/features/python:1.4.0" : {
+      "toolsToinstall": "checkov"
+    }
   },
   "customizations": {
     "vscode": {
