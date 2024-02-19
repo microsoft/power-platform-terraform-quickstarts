@@ -12,25 +12,16 @@ terraform {
     null = {
       source = "hashicorp/null"
     }
-    github = {
-      source = "integrations/github"
-    }
   }
 
-  backend "azurerm" {
-    resource_group_name = "value"
-    storage_account_name = "value"
-    container_name = "tfstate"
-    key            = "tenant-configuration.terraform.tfstate"
-  }
+#backend "azurerm" {}
 }
 
 provider "azurerm" {
   features {}
 }
 
-provider "github" {
-  owner = "commercial-software-engineering" //HACK: This is a workaround for a bug in the GitHub provider https://github.com/integrations/terraform-provider-github/issues/1471
+provider "azuread" {
 }
 
 # Get a reference to the current Azure AD configuration so that we can read the tenant ID
@@ -41,7 +32,19 @@ data "azurerm_subscription" "current" {
 
 # Get a reference to the Power Platform API's pre-existing service principal
 resource "azuread_service_principal" "power_platform_api" {
-  client_id    = var.client_id // Power Platform API
+  client_id    = "8578e004-a5c6-46e7-913e-12f58912df43" // Power Platform API
+  use_existing = true
+}
+
+#get a reference to the PowerApps service principal
+resource "azuread_service_principal" "powerapps_service" {
+  client_id    = "475226c6-020e-4fb2-8a90-7a972cbfc1d4"
+  use_existing = true
+}
+
+#get a reference to the Dynamics CRM service principal
+resource "azuread_service_principal" "dynamics_service" {
+  client_id    = "00000007-0000-0000-c000-000000000000"
   use_existing = true
 }
 
@@ -51,8 +54,10 @@ resource "azuread_application" "ppadmin_application" {
   display_name = "Power Platform Admin Service"
   owners       = [data.azuread_client_config.current.object_id]
 
+
+
   required_resource_access {
-    resource_app_id = resource.azuread_service_principal.power_platform_api.application_id
+    resource_app_id = resource.azuread_service_principal.power_platform_api.client_id
 
     resource_access {
       id   = resource.azuread_service_principal.power_platform_api.oauth2_permission_scope_ids["Licensing.BillingPolicies.ReadWrite"]
@@ -74,6 +79,50 @@ resource "azuread_application" "ppadmin_application" {
       type = "Scope"
     }
   }
+
+  required_resource_access {
+    resource_app_id = resource.azuread_service_principal.powerapps_service.client_id
+    resource_access {
+      id   = resource.azuread_service_principal.powerapps_service.oauth2_permission_scope_ids["User"]
+      type = "Scope"
+    }
+  }
+
+  required_resource_access {
+    resource_app_id = resource.azuread_service_principal.dynamics_service.client_id
+    resource_access {
+      id   = resource.azuread_service_principal.dynamics_service.oauth2_permission_scope_ids["user_impersonation"]
+      type = "Scope"
+    }
+
+  }
+
+  identifier_uris = ["api://powerplatform_provider_terraform"]
+
+  api {
+
+    oauth2_permission_scope {
+      admin_consent_description  = "Allows connection to backend services of Power Platform Terraform Provider"
+      admin_consent_display_name = "Power Platform Terraform Provider Access"
+      enabled                    = true
+      id                         = "2aedce72-ddc7-431d-920c-a321297ffdc2"
+      type                       = "User"
+      user_consent_description   = "Allows connection to backend services of Power Platform Terraform Provider"
+      user_consent_display_name  = "Power Platform Terraform Provider Access"
+      value                      = "user_impersonation"
+    }
+  }
+
+
+}
+
+resource "azuread_application_pre_authorized" "ppadmin_application_allow_azure_cli" {
+  application_id       = azuread_application.ppadmin_application.id
+  authorized_client_id = "04b07795-8ddb-461a-bbee-02f9e1bf7b46" //Azure CLI first party application ID
+
+  permission_ids = [
+    "2aedce72-ddc7-431d-920c-a321297ffdc2",
+  ]
 }
 
 # Create a service principal for the Power Platform Admin Service application
@@ -85,17 +134,19 @@ resource "azuread_service_principal" "ppadmin_principal" {
 
 # Create a client secret for the Power Platform Admin Service application
 resource "azuread_application_password" "ppadmin_secret" {
-  application_id = azuread_application.ppadmin_application.application_id
+  application_id = azuread_application.ppadmin_application.id
 }
 
 data "azurerm_storage_account" "tf_state_storage_account" {
+  count               = var.storage_account_name != "<default>" ? 1 : 0
   name                = var.storage_account_name
   resource_group_name = var.resource_group_name
 }
 
 # Grant the Power Platfom Admin Service Storage Blob Contributor role on the Terraform state storage account
 resource "azurerm_role_assignment" "ppadmin_storage_role_assignment" {
-  scope                = data.azurerm_storage_account.tf_state_storage_account.id
+  count                = var.storage_account_name != "<default>" ? 1 : 0
+  scope                = data.azurerm_storage_account.tf_state_storage_account[count.index].id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azuread_service_principal.ppadmin_principal.object_id
 }
@@ -111,10 +162,10 @@ resource "azurerm_role_assignment" "ppadmin_subscription_role_assignment" {
   principal_id       = azuread_service_principal.ppadmin_principal.object_id
 }
 
-# Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs
+#Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs
 resource "null_resource" "ppadmin_role_assignment" {
   triggers = {
-    client_id = azuread_application.ppadmin_application.application_id
+    client_id = azuread_application.ppadmin_application.client_id
   }
   provisioner "local-exec" {
     when    = create
@@ -125,46 +176,3 @@ resource "null_resource" "ppadmin_role_assignment" {
     command = "${path.module}/grant-ppadmin.sh --client_id ${self.triggers.client_id} --action destroy"
   }
 }
-
-# Get a reference to the GitHub repository that will be used to store the GitHub Actions workflow
-data "github_repository" "quickstarts" {
-  full_name = var.github_repo
-}
-
-# Save the service principal information in GitHub Actions secrets/variables
-# resource "github_actions_secret" "client_secret" {
-#   repository      = data.github_repository.quickstarts.name
-#   secret_name     = "PPADMIN_CLIENT_SECRET"
-#   plaintext_value = azuread_application_password.ppadmin_secret.value
-# }
-
-# resource "github_actions_variable" "client_id" {
-#   repository    = data.github_repository.quickstarts.name
-#   variable_name = "PPADMIN_CLIENT_ID"
-#   value         = azuread_application.ppadmin_application.application_id
-# }
-
-# resource "github_actions_variable" "subscription_id" {
-#   repository    = data.github_repository.quickstarts.name
-#   variable_name = "PPADMIN_SUBSCRIPTION_ID"
-#   value         = data.azurerm_subscription.current.subscription_id
-# }
-
-# resource "github_actions_variable" "tenant_id" {
-#   repository    = data.github_repository.quickstarts.name
-#   variable_name = "PPADMIN_TENANT_ID"
-#   value         = data.azuread_client_config.current.tenant_id
-# }
-
-# # Save the terraform state storage account name in GitHub Actions variables
-# resource "github_actions_variable" "tf_state_storage_account_name" {
-#   repository    = data.github_repository.quickstarts.name
-#   variable_name = "TF_STATE_STORAGE_ACCOUNT_NAME"
-#   value         = var.storage_account_name
-# }
-
-# resource "github_actions_variable" "tf_state_resource_group_name" {
-#   repository    = data.github_repository.quickstarts.name
-#   variable_name = "TF_STATE_RESOURCE_GROUP_NAME"
-#   value         = var.resource_group_name
-# }

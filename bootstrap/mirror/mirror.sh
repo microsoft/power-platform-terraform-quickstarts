@@ -38,4 +38,3 @@ cp mirror.tfrc $download_dir
 chown -R vscode $download_dir
 
 export TF_CLI_CONFIG_FILE="$download_dir/mirror.tfrc"
-

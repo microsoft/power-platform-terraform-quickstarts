@@ -1,5 +1,5 @@
 output "client_id" {
-  value = azuread_application.ppadmin_application.application_id
+  value = azuread_application.ppadmin_application.client_id
 }
 
 output "client_secret" {
@@ -21,8 +21,4 @@ output "storage_account_name" {
 
 output "resource_group_name" {
   value = var.resource_group_name
-}
-
-output "github_repo_name" {
-  value = data.github_repository.quickstarts.name
 }

@@ -12,7 +12,7 @@ This repository contains scripts quickly build out a new tenant and configure it
 
 ### Tooling
 
-The following tooling is pre-installed in the [VS Code Dev Container](https://code.visualstudio.com/docs/devcontainers/containers) and it is highly recommended that you use the Dev Container to run the scripts and terraform modules in this repository:
+**_NOTE:_** The following tooling is pre-installed in the [VS Code Dev Container](https://code.visualstudio.com/docs/devcontainers/containers) and it is highly recommended that you use the Dev Container to run the scripts and terraform modules in this repository:
 
 * [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
 * [Terraform CLI](https://developer.hashicorp.com/terraform/cli)
@@ -35,4 +35,16 @@ The following terraform providers are used in this repository:
 The example terraform modules are intended to be run by GitHub Actions, however there are several steps that need to be run locally by an administrator in order to create the resources the terraform modules need to use.  The following steps should be run in order:
 
 1. [Bootstrap](bootstrap/README.md) this will create and configure the prerequisites that are needed to run the quickstart examples.
-2. **Run a Quickstart** this will create a Power Platform environment and deploy a sample app to it.
+2. Check out **Quickstart Examples**
+
+**_NOTE:_**  **As long as provider is in private repository, you have to run [/bootstrap/mirror/mirror.sh](/bootstrap/mirror/mirror.sh) first to copy provider locally**
+
+## Quickstart Examples
+
+**TODO** Generate list of examples and link to them. move quickstartgen.go from the other repo
+ - basisc sensible
+ - basic with storage 
+ - pipeline
+ - checkov
+ - rest of them from other repo
+**end TODO**
