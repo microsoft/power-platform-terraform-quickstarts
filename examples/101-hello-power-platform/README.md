@@ -1,9 +1,15 @@
 # Quickstart: Hello Power Platform
 
-TODO explain usage of .\mirror.sh 
+TODO
 
-TODO we may want to have this at the start of the container
+**NOTE:** 
+Run /bootstrap/mirror/mirror.sh to copy the latest version of the examples to the root of the repository or be sure that you have following environment variable:
+
 ```bash
-export TF_CLI_CONFIG_FILE="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc"
+export TF_CLI_CONFIG_FIFILE="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc"
 ```
-TODO injecting client/secret into the examples, exaplain how to do this
+
+prerequisites:
+- Run `bootstrap.sh`
+- Entra ID Tenant to create users 
+- Power Platform tenant
