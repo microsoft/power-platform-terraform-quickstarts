@@ -11,9 +11,10 @@ terraform {
 }
 
 provider "powerplatform" {
-  client_id = var.client_id
-  secret    = var.secret
-  tenant_id = var.tenant_id
+  use_cli = true
+  //client_id = var.client_id
+  //secret    = var.secret
+  //tenant_id = var.tenant_id
 }
 
 
