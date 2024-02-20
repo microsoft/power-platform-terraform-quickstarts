@@ -3,9 +3,6 @@ terraform {
     azuread = {
       source = "hashicorp/azuread"
     }
-    azurerm = {
-      source = "hashicorp/azurerm"
-    }
     random = {
       source = "hashicorp/random"
     }
@@ -14,23 +11,22 @@ terraform {
     }
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.3.0-preview"
+      version = "0.5.0-preview"
     }
-  }
-
-  backend "azurerm" {
-    container_name = "tfstate"
-    key            = "101-hello-power-platform.terraform.tfstate"
   }
 }
 
+provider "powerplatform" {
+  use_cli = true
+}
 
-# module "identity" {
-#   source  = "./identity"
-#   aliases = var.aliases
-# }
-
+module "identity" {
+  source  = "./identity"
+  aliases = var.aliases
+}
 
 module "powerplatform" {
   source = "./powerplatform"
+  dev_environment_access_group_id  = module.identity.dev_environment_access_group.id
+  test_environment_access_group_id = module.identity.test_environment_access_group.id
 }

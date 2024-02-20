@@ -19,7 +19,7 @@
 
 # Set the repository and release information
 repo="microsoft/terraform-provider-power-platform"
-release="v0.3.0-preview"
+release="v0.5.0-preview"
 
 # Set the download directory
 download_dir="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform"
@@ -33,4 +33,8 @@ fi
 # Download the release assets
 gh release download "$release" --repo "$repo" --pattern "*.zip" --dir "$download_dir" --clobber
 
-export TF_CLI_CONFIG_FILE="$(readlink -f ./mirror.tfrc)"
+cp mirror.tfrc $download_dir
+
+chown -R vscode $download_dir
+
+export TF_CLI_CONFIG_FILE="$download_dir/mirror.tfrc"
