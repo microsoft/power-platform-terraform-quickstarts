@@ -22,13 +22,25 @@ The example files can be found in `examples/quickstarts/000-blank-sample`
 - azurerm (`hashicorp/azurerm`):** (any version)
 - powerplatform (`microsoft/power-platform`):** (any version)
 
-## Input Variables
+## Using Azure CLI (Preferred)
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| `client_id` | The username of the Power Platform API in user@domain format | string | `null` | true |
-| `secret` | The password of the Power Platform API user | string | `null` | false |
-| `tenant_id` | The AAD tenant id of service principal or user | string | `null` | true |
+The Power Platform provider can use the Azure CLI to authenticate. If you have the Azure CLI installed, you can use it to log in to your Azure account and the Power Platform provider will use the credentials from the Azure CLI.
+
+### Azure CLI Prerequisites
+
+1. [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+
+2. Create a service principal and expose the required permissions using "expose API" in the Azure portal. You can find more information on how to do this in the following [CLI.md](./cli.md) file.
+
+```bash
+az login --scope https://your_exposed_api_url//access
+```
+
+```terraform
+provider "powerplatform" {
+  use_cli = true
+}
+```
 
 ## Output Values
 
