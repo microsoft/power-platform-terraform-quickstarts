@@ -15,10 +15,10 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  #ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
-  #ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
-  #ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
-  #ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
+  ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
+  ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
   TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
   TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
   #POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
@@ -69,12 +69,10 @@ jobs:
         ls -la "$DOWNLOAD_DIR"
 
     # Login to Azure using the Azure CLI to access terraform remote state storage created by bootstrap.sh
-    - name: 'Az CLI login'
-      uses: azure/login@v1
-      with:
-        client-id: ${{ vars.PPADMIN_CLIENT_ID }}
-        tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
-        subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID }}
+    # - name: 'Az CLI login'
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
