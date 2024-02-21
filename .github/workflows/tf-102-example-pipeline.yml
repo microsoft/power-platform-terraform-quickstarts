@@ -1,12 +1,12 @@
-name: 'Terraform Plan/Apply'
+name: '102-Github-Pipilene-Example - Plan/Apply'
 
 on:
   push:
     branches:
     - main
-  pull_request:
-    branches:
-    - main
+  #pull_request:
+  #  branches:
+  #  - main
 
 #Special permissions required for OIDC authentication
 # permissions:
