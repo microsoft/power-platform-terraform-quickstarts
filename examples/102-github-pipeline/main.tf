@@ -24,3 +24,4 @@ provider "powerplatform" {
    domain            = "pipeline-example"
    security_group_id = "00000000-0000-0000-0000-000000000000"
  }
+
