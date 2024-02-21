@@ -7,8 +7,8 @@ terraform {
   }
 
   backend "azurerm" {
-    container_name       = "tfstate"
-    key                  = "pipeline-example.terraform.tfstate"
+    container_name = "tfstate"
+    key            = "pipeline-example.terraform.tfstate"
   }
 }
 
