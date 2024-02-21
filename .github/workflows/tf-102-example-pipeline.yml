@@ -8,9 +8,8 @@ on:
   #  branches:
   #  - main
 
-#Special permissions required for OIDC authentication
-# permissions:
-#   id-token: write
+permissions:
+  id-token: write
 #   contents: read
 #   pull-requests: write
 
