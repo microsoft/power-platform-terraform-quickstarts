@@ -20,8 +20,8 @@ env:
   #ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
   #ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
   #ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
-  #TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
-  #TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
+  TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
+  TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
   #POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
   #POWER_PLATFORM_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
   #POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
@@ -35,7 +35,7 @@ jobs:
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
-      TF_CLI_CONFIG_FILE: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc
+      TF_CLI_CONFIG_FILE: ${{ github.workspace }}/bootstrap/mirror/mirror.tfrc
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
@@ -68,3 +68,29 @@ jobs:
       run: |
         gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
         ls -la "$DOWNLOAD_DIR"
+    
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    # Will fail the build if not
+    - name: Terraform Format
+      run: terraform -chdir=$TARGET_DIR fmt -check
+
+    # Generates an execution plan for Terraform
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform -chdir=$TARGET_DIR plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else 
+          exit 0
+        fi
