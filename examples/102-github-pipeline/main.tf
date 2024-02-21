@@ -15,12 +15,12 @@ terraform {
 provider "powerplatform" {
 }
 
-# resource "powerplatform_environment" "dev" {
-#   location          = "unitedstates"
-#   language_code     = 1033
-#   display_name      = "pipeline-example"
-#   currency_code     = "USD"
-#   environment_type  = "Sandbox"
-#   domain            = "pipeline-example"
-#   security_group_id = "00000000-0000-0000-0000-000000000000"
-# }
+ resource "powerplatform_environment" "dev" {
+   location          = "unitedstates"
+   language_code     = 1033
+   display_name      = "pipeline-example"
+   currency_code     = "USD"
+   environment_type  = "Sandbox"
+   domain            = "pipeline-example"
+   security_group_id = "00000000-0000-0000-0000-000000000000"
+ }
