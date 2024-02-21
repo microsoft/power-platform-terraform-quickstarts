@@ -1,0 +1,70 @@
+name: 'Terraform Plan/Apply'
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+#Special permissions required for OIDC authentication
+# permissions:
+#   id-token: write
+#   contents: read
+#   pull-requests: write
+
+#These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
+env:
+  #ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
+  #ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
+  #ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+  #ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
+  #TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
+  #TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
+  #POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
+  #POWER_PLATFORM_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
+  #POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
+  #TF_VAR_azure_subscription_id: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
+  TARGET_DIR: ${{ github.workspace }}/examples/102-github-pipeline
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    env:
+      #this is needed since we are running terraform with read-only permissions
+      ARM_SKIP_PROVIDER_REGISTRATION: true
+      TF_CLI_CONFIG_FILE: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+    
+    steps:
+    - name: Debug
+      uses: raven-actions/debug@v1
+      with:
+        vars-context: ${{ toJson(vars) }}  # optional
+        secrets-context: ${{ toJson(secrets) }}  # optional
+        needs-context: ${{ toJson(needs) }}  # optional
+        inputs-context: ${{ toJson(inputs) }}  # optional
+      
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of the Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    #Only needed when the repo is still private
+    - name: Download Terraform GitHub Provider
+      env: 
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
+        PROVIDER_VERSION: v0.5.0-preview
+        PROVIDER_REPO: microsoft/terraform-provider-power-platform
+        DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
+      run: |
+        gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
+        ls -la "$DOWNLOAD_DIR"
