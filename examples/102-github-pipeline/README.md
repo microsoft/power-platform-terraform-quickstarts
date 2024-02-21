@@ -1,29 +1,48 @@
-1. run bootstrap with azurerm backend
-2. run mirror.sh if needed
-3. every time set env variables for mirror.tfrc
+<!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
+# Github Pipeline Example (102 level)
 
-setup env secrets for the pipeline unser "settings" -> "settings & variables" -> "actions"
-https://docs.github.com/en/actions/learn-github-actions/variables
+This example demostrates how to create a pipeline that will deploy Power Platform environment using Terraform.
 
-PPADMIN_CLIENT_SECRET = <bootstraped service principal secret>
+## Prerequisites
 
-#fine grainded token to releases in the terraform provider repo
-https://github.com/settings/tokens?type=beta
+- Entra ID Tenant
+- Azure subscription where the terraform state will be stored
+- Power Platform environment
+- Already executed [bootsrap](../../bootstrap/README.md) script
 
-PAT_TOKEN_PP_PROVIDER_REPO = <your personal access token>
+{{ .ModuleDetails }}
 
+## Usage
 
-setup env variables for the pipeline under "settings" -> "settings & variables" -> "actions"
+You can fork or dowload this repository and use it as a starting point for your own pipeline. Copy the [tf-102-example-pipeline.yml](./tf-102-example-pipeline.yml) to the `.github/workflows` directory in your repository.
 
-PPADMIN_CLIENT_ID = <your tenant id>
-PPADMIN_TENANT_ID = <bootstraped service principal tenantId>
-PPADMIN_SUBSCRIPTION_ID = <your subscription id>
+You will have to set folowwing [variables in your repository](https://docs.github.com/en/actions/learn-github-actions/variables):
+- PPADMIN_CLIENT_ID = <your tenant id>
+- PPADMIN_TENANT_ID = <bootstraped service principal tenantId>
+- PPADMIN_SUBSCRIPTION_ID = <your subscription id>
+- TF_STATE_STORAGE_ACCOUNT_NAME = <your storage account name, created by bootstrap.sh>
+- TF_STATE_RESOURCE_GROUP_NAME  = <your resource group name, created by bootstrap.sh>
+The following secrets should be set in the repository settings:
+- PPADMIN_CLIENT_SECRET = <bootstraped service principal secret>
 
-TF_STATE_STORAGE_ACCOUNT_NAME = <your storage account name, created by bootstrap.sh>
-TF_STATE_RESOURCE_GROUP_NAME  = <your resource group name, created by bootstrap.sh>
+To run the pipeline you will have to create a new branch based on your main branch and push and create a pull request. The pipeline will run `Terraform Plan` step on every push to the repository.
 
+![Pipeline](./.img/pr_approval.png)
 
+The Terraform Plan output will also be added to your pull request as a comment:
 
+![Pipeline](./.img/plan_output.png)
 
-terraform init -backend-config=../../backend.tfvars
-terraform apply
+## Detailed Behavior    
+
+The pipeline example was created to demonstrate how to deploy Power Platform environment using Terraform. The pipeline is created from two steps
+
+- `Terraform Plan`: is responsible for creating a plan of the changes that will be applied to the infrastructure. The plan is stored as an artifact and can be reviewed before applying the changes. This step will run on every push to the repository.
+
+- `Terraform Apply`: is responsible for applying the changes to the infrastructure. The changes are applied only if the plan was reviewed and approved. This step will run on every push `main` branch.
+
+![Pipeline](./.img/terraform_apply.png)
+
+## Limitations and Considerations
+
+- This module is provided as a sample only and is not intended for production use without further customization.
