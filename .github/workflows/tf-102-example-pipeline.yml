@@ -68,7 +68,15 @@ jobs:
       run: |
         gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
         ls -la "$DOWNLOAD_DIR"
-    
+
+    # Login to Azure using the Azure CLI to access terraform remote state storage created by bootstrap.sh
+    - name: 'Az CLI login'
+      uses: azure/login@v1
+      with:
+        client-id: ${{ vars.PPADMIN_CLIENT_ID }}
+        tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
+        subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID }}
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
