@@ -44,10 +44,6 @@ variable "environment_type" {
     error_message = "The selected value for environment_type is not in the list of allowed values in variables.tf"
   }
 }
-variable "security_group_id" {
-  description = "The security group the environment will be associated with, a GUID. Can be set to 00000000-0000-0000-0000-000000000000 to indicate no security group restricting Dataverse access."
-  type        = string
-}
 variable "domain" {
   description = "The domain of the environment, such as 'd365fin-dev1'"
   type        = string
