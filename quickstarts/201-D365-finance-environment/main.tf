@@ -18,7 +18,6 @@ resource "powerplatform_environment" "xpp-dev1" {
   language_code    = var.language_code
   currency_code    = var.currency_code
   environment_type = var.environment_type
-  domain           = var.domain
   templates = ["D365_FinOps_Finance"]
   template_metadata = "{\"PostProvisioningPackages\": [{ \"applicationUniqueName\": \"msdyn_FinanceAndOperationsProvisioningAppAnchor\",\n \"parameters\": \"DevToolsEnabled=true|DemoDataEnabled=true\"\n }\n ]\n }"
   security_group_id = var.security_group_id
