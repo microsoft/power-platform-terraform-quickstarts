@@ -64,7 +64,7 @@ jobs:
       env: 
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
         PROVIDER_VERSION: v0.7.4-preview
-        PROVIDER_REPO: mawasile/pp-provider-fork
+        PROVIDER_REPO: mawasile/terraform-provider-power-platform
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |
         gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
@@ -170,7 +170,7 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
           PROVIDER_VERSION: v0.7.4-preview
-          PROVIDER_REPO: mawasile/pp-provider-fork
+          PROVIDER_REPO: mawasile/terraform-provider-power-platform
           DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
         run: |
           gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
