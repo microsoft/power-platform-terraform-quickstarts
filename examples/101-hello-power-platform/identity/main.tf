@@ -31,3 +31,25 @@ resource "azuread_user" "example" {
   mail_nickname       = var.aliases[count.index]
   password            = random_password.passwords[count.index].result
 }
+
+resource "azuread_group" "dev_access" {
+  display_name = "Dataverse Dev Access"
+  description  = "Dataverse Dev Access Group for Power Platform"
+  mail_enabled = false
+  security_enabled = true
+}
+
+resource "azuread_group" "test_access" {
+  display_name = "Dataverse Test Access"
+  description  = "Dataverse Test Access Group for Power Platform"
+  mail_enabled = false
+  security_enabled = true
+  members = azuread_user.example[*].object_id
+}
+
+
+
+
+
+
+  

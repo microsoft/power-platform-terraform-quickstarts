@@ -1,5 +1,5 @@
 output "client_id" {
-  value = azuread_application.ppadmin_application.application_id
+  value = azuread_application.ppadmin_application.client_id
 }
 
 output "client_secret" {
