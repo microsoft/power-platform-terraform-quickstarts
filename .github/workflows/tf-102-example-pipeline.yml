@@ -22,7 +22,7 @@ env:
   TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
   TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
   POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
-  POWER_PLATFORM_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
+  #POWER_PLATFORM_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
   POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
   #TF_VAR_azure_subscription_id: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
   TARGET_DIR: ${{ github.workspace }}/examples/102-github-pipeline
@@ -61,18 +61,12 @@ jobs:
     - name: Download Terraform GitHub Provider
       env: 
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-        PROVIDER_VERSION: v0.6.1-preview
-        PROVIDER_REPO: microsoft/terraform-provider-power-platform
+        PROVIDER_VERSION: v0.7.4-preview
+        PROVIDER_REPO: mawasile/pp-provider-fork
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |
         gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
         ls -la "$DOWNLOAD_DIR"
-
-    # Login to Azure using the Azure CLI to access terraform remote state storage created by bootstrap.sh
-    # - name: 'Az CLI login'
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -80,8 +74,8 @@ jobs:
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
-    # - name: Terraform Format
-    #   run: terraform -chdir=$TARGET_DIR fmt -check
+    - name: Terraform Format
+      run: terraform -chdir=$TARGET_DIR fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -173,8 +167,8 @@ jobs:
       - name: Download Terraform GitHub Provider
         env: 
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-          PROVIDER_VERSION: v0.6.1-preview
-          PROVIDER_REPO: microsoft/terraform-provider-power-platform
+          PROVIDER_VERSION: v0.7.4-preview
+          PROVIDER_REPO: mawasile/pp-provider-fork
           DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
         run: |
           gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
