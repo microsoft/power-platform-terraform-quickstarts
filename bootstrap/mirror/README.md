@@ -11,7 +11,13 @@ sudo -E bash -c 'source ./mirror.sh'
 
 ## Outputs
 
-This script will set the `TF_CLI_CONFIG_FILE` environment variable to the path of the mirror configuration.  This path can be used in the `terraform` CLI to use the mirrored providers.
+This script will set the `TF_CLI_CONFIG_FILE` environment variable to the path of the mirror configuration. This path can be used in the `terraform` CLI to use the mirrored providers.
+
+Every time starting new shell, you need to set the `TF_CLI_CONFIG_FILE` environment variable to the path of the mirror configuration, otherwise the `terraform init` will fail to find the `microsoft/power-platform` provider.
+
+```bash
+export TF_CLI_CONFIG_FILE="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc"
+```
 
 ## Troubleshooting
 
