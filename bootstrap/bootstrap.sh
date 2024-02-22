@@ -98,6 +98,7 @@ export POWER_PLATFORM_TENANT_ID=$(terraform show -json | jq -r '.values.outputs.
 popd
 
 echo "Bootstrap complete!"
+echo ""
 echo "You have to grant permissions to the new 'Power Platform Admin Service' service principal in the Azure portal to access the Power Platform resources."
 echo ""
 echo "You now have following options to login to the Power Platform in Terraform:"

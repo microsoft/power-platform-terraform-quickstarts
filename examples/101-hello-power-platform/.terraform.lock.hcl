@@ -62,6 +62,6 @@ provider "registry.terraform.io/microsoft/power-platform" {
   version     = "0.6.1-preview"
   constraints = "0.6.1-preview"
   hashes = [
-    "h1:athR9R/y46BTo5MpbbzXppLSS2d4G5TNgmt6uCW0/TY=",
+    "h1:MQMzRVWX5ysKHkDeqMtpwKwaXi23cCBlojMD1ZbFzQs=",
   ]
 }

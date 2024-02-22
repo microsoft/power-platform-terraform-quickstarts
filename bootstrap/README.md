@@ -60,6 +60,8 @@ The `bootstrap.sh` script is intended to be run locally by a user with `Owner` p
 ./bootstrap/bootstrap.sh --subscription_id <GUID> --location eastus
 ```
 
+> **Note**: Remeber that the administrator has to grand permsissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
+
 ## Outputs (Advanced version only)
 
 The `bootstrap.sh` [bootstrap.sh](/bootstrap/bootstrap.sh) writes its outputs to a `backend.tfvars` file in the [tenant-configuration](/bootstrap/tenant-configuration/) directory.  The `backend.tfvars` file is used by the [tenant-configuration](/bootstrap/tenant-configuration/) terraform configuration to configure the backend for the terraform state.

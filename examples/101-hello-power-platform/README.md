@@ -16,7 +16,7 @@ This Terraform module aims to provide a fully managed infrastructure that integr
 Execute example with the following commands:
 
 ```
-az login
+az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
 
 terraform init
 
