@@ -99,7 +99,6 @@ popd
 
 echo "Bootstrap complete!"
 echo "You have to grant permissions to the new 'Power Platform Admin Service' service principal in the Azure portal to access the Power Platform resources."
-#TODO crealte consent link
 echo ""
 echo "You now have following options to login to the Power Platform in Terraform:"
 echo "1. Use the following environment variables that can be set using /bootstrap/set-local-env.sh:"
