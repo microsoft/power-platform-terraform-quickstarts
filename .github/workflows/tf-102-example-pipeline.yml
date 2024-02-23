@@ -17,7 +17,6 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  #AZURE_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
   ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
   ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
@@ -61,7 +60,7 @@ jobs:
     - name: Download Terraform GitHub Provider
       env: 
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-        PROVIDER_VERSION: v0.7.4-preview
+        PROVIDER_VERSION: v0.7.5-preview
         PROVIDER_REPO: mawasile/terraform-provider-power-platform
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |
@@ -178,7 +177,7 @@ jobs:
       - name: Download Terraform GitHub Provider
         env: 
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-          PROVIDER_VERSION: v0.7.4-preview
+          PROVIDER_VERSION: v0.7.5-preview
           PROVIDER_REPO: mawasile/terraform-provider-power-platform
           DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
         run: |
