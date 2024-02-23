@@ -196,7 +196,7 @@ jobs:
            subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
       
       - name: 'Run Token Access for Power Platform Provider Service Principal'
-         run: |
+        run: |
            az account get-access-token --resource api://powerplatform_provider_terraform
 
       # Terraform Apply
