@@ -189,5 +189,8 @@ jobs:
 
       # Terraform Apply
       - name: Terraform Apply
+        env:
+          AZURE_SDK_GO_LOGGING: TRUE
+          TF_LOG: DEBUG
         run: terraform -chdir=$TARGET_DIR apply -auto-approve tfplan
 
