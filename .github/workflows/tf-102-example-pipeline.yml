@@ -195,14 +195,9 @@ jobs:
            tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
            subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
       
-      - name: 'Run az commands'
-        run: |
-          az account show
-          az group list
-      
-      # - name: 'Run az commands'
-      #   run: |
-      #     az account get-access-token --resource api://powerplatform_provider_terraform
+      - name: 'Run Token Access for Power Platform Provider Service Principal'
+         run: |
+           az account get-access-token --resource api://powerplatform_provider_terraform
 
       # Terraform Apply
       - name: Terraform Apply
