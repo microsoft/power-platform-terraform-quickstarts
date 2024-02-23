@@ -8,7 +8,54 @@ This Terraform module aims to provide a fully managed infrastructure that integr
 - Power Platform environment
 - Service Principal or User Account with appropriate permissions
 
-{{ .ModuleDetails }}
+## Example Files
+
+The example files can be found in `examples/quickstarts/000-blank-sample`
+
+## Terraform Version Constraints
+
+- `>= 1.5`
+
+## Provider Requirements
+
+- azurerm (`hashicorp/azurerm`):** (any version)
+- powerplatform (`microsoft/power-platform`):** (any version)
+
+## Using Azure CLI (Preferred)
+
+The Power Platform provider can use the Azure CLI to authenticate. If you have the Azure CLI installed, you can use it to log in to your Azure account and the Power Platform provider will use the credentials from the Azure CLI.
+
+### Azure CLI Prerequisites
+
+1. [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+
+2. Create a service principal and expose the required permissions using "expose API" in the Azure portal. You can find more information on how to do this in the following [CLI.md](./cli.md) file.
+
+```bash
+az login --scope https://your_exposed_api_url//access
+```
+
+```terraform
+provider "powerplatform" {
+  use_cli = true
+}
+```
+
+## Output Values
+
+| Name | Description |
+|------|-------------|
+| `id` | Unique identifier of the environment |
+| `name` | Display name of the environment |
+| `url` | URL of the environment |
+
+## Resources
+
+- `powerplatform_environment.development` from `powerplatform`
+
+## Data Sources
+
+- `data.powerplatform_connectors.all_connectors` from `powerplatform`
 
 ## Usage
 
@@ -17,7 +64,7 @@ Include this module in your Terraform scripts as follows:
 ```hcl
 
 module "power_azure_infra" {
-  source            = "./modules/{{ .ModuleName }}"
+  source            = "./modules/000-blank-sample"
   resource_group    = "myResourceGroup"
   power_environment = "myPowerEnvironment"
 }
