@@ -9,10 +9,12 @@ terraform {
   backend "azurerm" {
     container_name = "tfstate"
     key            = "pipeline-example.terraform.tfstate"
+    use_oidc = true
   }
 }
 
 provider "powerplatform" {
+  use_cli = true
 }
 
  resource "powerplatform_environment" "dev" {
