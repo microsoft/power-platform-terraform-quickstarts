@@ -80,6 +80,17 @@ jobs:
     #- name: Terraform Format
     #  run: terraform -chdir=$TARGET_DIR fmt -check
 
+    - name: 'Az CLI login'
+      uses: azure/login@v1 
+      with:
+        client-id: ${{ vars.PPADMIN_CLIENT_ID }}
+        tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
+        subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
+    
+    - name: 'Run Token Access for Power Platform Provider Service Principal'
+      run: |
+        az account get-access-token --resource api://powerplatform_provider_terraform
+  
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
