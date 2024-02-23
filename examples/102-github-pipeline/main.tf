@@ -20,7 +20,7 @@ provider "powerplatform" {
  resource "powerplatform_environment" "dev" {
    location          = "unitedstates"
    language_code     = 1033
-   display_name      = "pipeline-example"
+   display_name      = "pipeline-example1"
    currency_code     = "USD"
    environment_type  = "Sandbox"
    domain            = "pipeline-example"

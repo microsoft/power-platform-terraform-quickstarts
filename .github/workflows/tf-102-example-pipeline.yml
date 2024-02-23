@@ -200,10 +200,10 @@ jobs:
           az account show
           az group list
       
-      - name: 'Run az commands'
-        run: |
-          az account get-access-token --resource api://powerplatform_provider_terraform
-          
+      # - name: 'Run az commands'
+      #   run: |
+      #     az account get-access-token --resource api://powerplatform_provider_terraform
+
       # Terraform Apply
       - name: Terraform Apply
         env:
