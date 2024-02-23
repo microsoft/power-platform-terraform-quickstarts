@@ -19,7 +19,7 @@ permissions:
 env:
   AZURE_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
   ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
-  ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
+  #ARM_CLIENT_SECRET: "${{ secrets.PPADMIN_CLIENT_SECRET }}"
   ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
   TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
@@ -187,6 +187,22 @@ jobs:
         with:
           name: tfplan
           path: ${{ env.TARGET_DIR }}
+
+      - name: 'Az CLI login'
+        uses: azure/login@v1 
+        # with:
+        #   client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        #   tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        #   subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
+      
+      - name: 'Run az commands'
+        run: |
+          az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
 
       # Terraform Apply
       - name: Terraform Apply

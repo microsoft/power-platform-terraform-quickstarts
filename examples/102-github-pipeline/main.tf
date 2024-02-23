@@ -14,7 +14,7 @@ terraform {
 }
 
 provider "powerplatform" {
-  use_oidc = true
+  use_cli = true
 }
 
  resource "powerplatform_environment" "dev" {
