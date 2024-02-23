@@ -193,7 +193,7 @@ jobs:
         with:
            client-id: ${{ vars.PPADMIN_TENANT_ID }}
            tenant-id: ${{ vars.PPADMIN_CLIENT_ID }}
-           #subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+           subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
       
       - name: 'Run az commands'
         run: |
