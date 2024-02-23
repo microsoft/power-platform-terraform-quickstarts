@@ -202,7 +202,7 @@ jobs:
       
       - name: 'Run az commands'
         run: |
-          az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
+          az account get-access-token --resource api://powerplatform_provider_terraform/.default
 
       # Terraform Apply
       - name: Terraform Apply
