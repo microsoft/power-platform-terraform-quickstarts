@@ -202,8 +202,8 @@ jobs:
       
       - name: 'Run az commands'
         run: |
-          az account get-access-token --resource api://powerplatform_provider_terraform/.default
-
+          az account get-access-token --resource api://powerplatform_provider_terraform
+          
       # Terraform Apply
       - name: Terraform Apply
         env:
