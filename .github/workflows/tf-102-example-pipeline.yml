@@ -191,8 +191,8 @@ jobs:
       - name: 'Az CLI login'
         uses: azure/login@v1 
         with:
-           client-id: ${{ vars.PPADMIN_TENANT_ID }}
-           tenant-id: ${{ vars.PPADMIN_CLIENT_ID }}
+           client-id: ${{ vars.PPADMIN_CLIENT_ID }}
+           tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
            subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
       
       - name: 'Run az commands'
