@@ -61,7 +61,7 @@ jobs:
     - name: Download Terraform GitHub Provider
       env: 
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-        PROVIDER_VERSION: v0.8.0-preview
+        PROVIDER_VERSION: v0.8.2-preview
         PROVIDER_REPO: mawasile/terraform-provider-power-platform
         DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
       run: |
@@ -181,7 +181,7 @@ jobs:
       - name: Download Terraform GitHub Provider
         env: 
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-          PROVIDER_VERSION: v0.8.0-preview
+          PROVIDER_VERSION: v0.8.2-preview
           PROVIDER_REPO: mawasile/terraform-provider-power-platform
           DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
         run: |
