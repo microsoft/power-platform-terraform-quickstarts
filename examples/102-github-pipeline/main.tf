@@ -23,5 +23,6 @@ provider "powerplatform" {
     display_name      = "pipeline-example123"
     currency_code     = "USD"
     environment_type  = "Sandbox"
+    security_group_id = ""
   }
 
