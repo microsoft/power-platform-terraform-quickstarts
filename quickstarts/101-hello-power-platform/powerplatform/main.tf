@@ -13,7 +13,6 @@ resource "powerplatform_environment" "dev" {
   display_name      = "terraformdev"
   currency_code     = "USD"
   environment_type  = "Sandbox"
-  domain = "terraformdev"
   security_group_id = var.dev_environment_access_group_id
 }
 
@@ -35,7 +34,6 @@ resource "powerplatform_environment" "test" {
   display_name      = "terraformtest"
   currency_code     = "USD"
   environment_type  = "Sandbox"
-  domain = "terraformtest"
   security_group_id = var.test_environment_access_group_id
 }
 
