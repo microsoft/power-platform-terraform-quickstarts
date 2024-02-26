@@ -2,7 +2,7 @@ terraform {
   required_providers {
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.6.1-preview"
+      version = "0.7.0-preview"
     }
   }
 
@@ -14,7 +14,7 @@ terraform {
 }
 
 provider "powerplatform" {
-  use_cli = true
+  use_oidc = true
 }
 
  resource "powerplatform_environment" "dev" {
