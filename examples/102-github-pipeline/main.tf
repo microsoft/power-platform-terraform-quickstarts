@@ -2,7 +2,7 @@ terraform {
   required_providers {
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.7.5-preview"
+      version = "0.8.0-preview"
     }
   }
 
@@ -14,13 +14,13 @@ terraform {
 }
 
 provider "powerplatform" {
-  use_cli = true
+  use_oidc = true
 }
 
  resource "powerplatform_environment" "dev" {
    location          = "unitedstates"
    language_code     = 1033
-   display_name      = "pipeline-example1"
+   display_name      = "pipeline-example"
    currency_code     = "USD"
    environment_type  = "Sandbox"
    domain            = "pipeline-example"
