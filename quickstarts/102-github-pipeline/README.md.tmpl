@@ -19,11 +19,11 @@ You can fork or download this repository and use it as a starting point for your
 
 You will have to set folowwing [variables in your repository](https://docs.github.com/en/actions/learn-github-actions/variables):
 
-- PPADMIN_CLIENT_ID = <your tenant id>
-- PPADMIN_TENANT_ID = <bootstraped service principal tenantId>
-- PPADMIN_SUBSCRIPTION_ID = <your subscription id>
-- TF_STATE_STORAGE_ACCOUNT_NAME = <your storage account name, created by bootstrap.sh>
-- TF_STATE_RESOURCE_GROUP_NAME  = <your resource group name, created by bootstrap.sh>
+- PPADMIN_CLIENT_ID = `<your tenant id>`
+- PPADMIN_TENANT_ID = `<bootstraped service principal tenantId>`
+- PPADMIN_SUBSCRIPTION_ID = `<your subscription id>`
+- TF_STATE_STORAGE_ACCOUNT_NAME = `<your storage account name, created by bootstrap.sh>`
+- TF_STATE_RESOURCE_GROUP_NAME  = `<your resource group name, created by bootstrap.sh>`
 
 To run the pipeline you will have to create a new branch based on your main branch and push and create a pull request. The pipeline will run `Terraform Plan` step on every push to the repository.
 The pipeline will authenticate using OpenID Connect and will require setting federation between GitHub repository and Entra ID tenant. With federation configured no additional credentials are required to executed pipeline steps against Azure or Power Platform.

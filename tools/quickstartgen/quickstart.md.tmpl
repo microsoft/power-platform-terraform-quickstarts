@@ -4,17 +4,18 @@ The example files can be found in {{ .Path | relativePath | tt}}
 
 {{- if .RequiredCore}}
 
-## Terraform Version Constraints:
+## Terraform Version Constraints
 
 {{- range .RequiredCore }}
-* {{ tt . }}
+- {{ tt . }}
 {{- end}}{{end}}
 
 {{- if .RequiredProviders}}
 
-## Provider Requirements:
+## Provider Requirements
+
 {{- range $name, $req := .RequiredProviders }}
-* **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}{{ commas $req.VersionConstraints | tt }}{{ else }}(any version){{ end }}
+- **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}`>={{ commas $req.VersionConstraints}}`{{ else }}(any version){{ end }}
 {{- end}}{{end}}
 
 {{- if .Variables}}
@@ -25,8 +26,7 @@ The example files can be found in {{ .Path | relativePath | tt}}
 |------|-------------|------|---------|:--------:|
 {{- range .Variables }}
 | {{ tt .Name }} | {{ .Description }} | {{ .Type }} | {{ json .Default | tt }} | {{ .Required }} |
-{{- end}}
-{{end}}
+{{- end}}{{end}}
 
 {{- if .Outputs}}
 
@@ -36,34 +36,36 @@ The example files can be found in {{ .Path | relativePath | tt}}
 |------|-------------|
 {{- range .Outputs }}
 | {{ tt .Name }} | {{ .Description }} |
-{{- end}}
-
-{{end}}
+{{- end}}{{end}}
 
 {{- if .ManagedResources}}
 
 ## Resources
+
 {{- range .ManagedResources }}
-* {{ printf "%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
+- {{ printf "%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
 {{- end}}{{end}}
 
 {{- if .DataResources}}
 
 ## Data Sources
+
 {{- range .DataResources }}
-* {{ printf "data.%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
+- {{ printf "data.%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
 {{- end}}{{end}}
 
 {{- if .ModuleCalls}}
 
 ## Child Modules
+
 {{- range .ModuleCalls }}
-* {{ tt .Name }} from {{ tt .Source }}{{ if .Version }} ({{ tt .Version }}){{ end }}
+- {{ tt .Name }} from {{ tt .Source }}{{ if .Version }} ({{ tt .Version }}){{ end }}
 {{- end}}{{end}}
 
 {{- if .Diagnostics}}
 
 ## Problems
+
 {{- range .Diagnostics }}
 
 ## {{ severity .Severity }}{{ .Summary }}{{ if .Pos }}

@@ -14,11 +14,13 @@ import (
 	"text/template"
 )
 
+const workspacePath = "/workspaces/power-platform-terraform-quickstarts/"
+
 func main() {
 	os.Stdout.WriteString("Generating READMEs for quickstarts\n")
 
-	const path = "/workspaces/power-platform-terraform-quickstarts/examples/quickstarts/"
-	quickstartTemplate, qerr := os.ReadFile("/workspaces/power-platform-terraform-quickstarts/tools/quickstartgen/quickstart.md.tmpl")
+	const path = workspacePath + "/quickstarts/"
+	quickstartTemplate, qerr := os.ReadFile(workspacePath + "/tools/quickstartgen/quickstart.md.tmpl")
 	if qerr != nil {
 		log.Fatal(qerr)
 	}
@@ -102,89 +104,10 @@ func RenderMarkdown(w io.Writer, markdownTemplate string, module *tfconfig.Modul
 			}
 		},
 		"relativePath": func(path string) string {
-			rp, _ := filepath.Rel("/workspaces/power-platform-terraform-quickstarts", path)
+			rp, _ := filepath.Rel(workspacePath, path)
 			return rp
 		},
 	})
 	template.Must(tmpl.Parse(markdownTemplate))
 	return tmpl.Execute(w, module)
 }
-
-const detailsTemplate = `
-<!-- This document is auto-generated. Do not edit directly. -->
-# Module {{ .Path | relativePath | tt}}
-
-{{- if .RequiredCore}}
-
-## Core Version Constraints:
-
-{{- range .RequiredCore }}
-* {{ tt . }}
-{{- end}}{{end}}
-
-{{- if .RequiredProviders}}
-
-## Provider Requirements:
-{{- range $name, $req := .RequiredProviders }}
-* **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}{{ commas $req.VersionConstraints | tt }}{{ else }}(any version){{ end }}
-{{- end}}{{end}}
-
-{{- if .Variables}}
-
-## Input Variables
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-{{- range .Variables }}
-| {{ tt .Name }} | {{ .Description }} | | {{ json .Default | tt }} | {{ .Required }} |
-{{- end}}
-{{end}}
-
-{{- if .Outputs}}
-
-## Output Values
-
-| Name | Description |
-|------|-------------|
-{{- range .Outputs }}
-| {{ tt .Name }} | {{ .Description }} |
-{{- end}}
-
-{{end}}
-
-{{- if .ManagedResources}}
-
-## Managed Resources
-{{- range .ManagedResources }}
-* {{ printf "%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
-{{- end}}{{end}}
-
-{{- if .DataResources}}
-
-## Data Resources
-{{- range .DataResources }}
-* {{ printf "data.%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
-{{- end}}{{end}}
-
-{{- if .ModuleCalls}}
-
-## Child Modules
-{{- range .ModuleCalls }}
-* {{ tt .Name }} from {{ tt .Source }}{{ if .Version }} ({{ tt .Version }}){{ end }}
-{{- end}}{{end}}
-
-{{- if .Diagnostics}}
-
-## Problems
-{{- range .Diagnostics }}
-
-## {{ severity .Severity }}{{ .Summary }}{{ if .Pos }}
-
-(at {{ tt .Pos.Filename }} line {{ .Pos.Line }}{{ end }})
-{{ if .Detail }}
-{{ .Detail }}
-{{- end }}
-
-{{- end}}{{end}}
-
-`

@@ -1,4 +1,5 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
+<!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # Hello Power Platform (101 level)
 
 This Terraform module aims to provide a fully managed infrastructure that integrates Microsoft's Power Platform and Azure services. Utilizing both powerplatform and azurerm Terraform providers, this module encapsulates best practices and serves as a reference architecture for scalable, reliable, and manageable cloud infrastructure.
@@ -9,13 +10,41 @@ This Terraform module aims to provide a fully managed infrastructure that integr
 - Power Platform environment
 - Already executed [bootsrap](../../bootstrap/README.md) script
 
-{{ .ModuleDetails }}
+## Example Files
+
+The example files can be found in `quickstarts/101-hello-power-platform`
+
+## Provider Requirements
+- **azuread (`hashicorp/azuread`):** (any version)
+- **null (`hashicorp/null`):** (any version)
+- **powerplatform (`microsoft/power-platform`):** `>=0.6.1-preview`
+- **random (`hashicorp/random`):** (any version)
+
+## Input Variables
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| `aliases` | The aliases to create users for | list(string) | `["test1","test2"]` | false |
+
+## Output Values
+
+| Name | Description |
+|------|-------------|
+| `dev_environment` |  |
+| `dev_environment_access_group` |  |
+| `test_environment` |  |
+| `test_environment_access_group` |  |
+| `user_credentials` |  |
+
+## Child Modules
+- `identity` from `./identity`
+- `powerplatform` from `./powerplatform`
 
 ## Usage
 
 Execute example with the following commands:
 
-```
+```bash
 az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
 
 terraform init
@@ -27,18 +56,20 @@ terraform apply
 
 ### Idenity Module
 
-The identity modules creates following resources: 
- - given amout of users with aliases specified by `aliases` variable.
- - Entra security group that will be used to secure access to DEV Power Platform environment.
- - Entra security group that will be used to secure access to TEST Power Platform environment.
+The identity modules creates following resources:
+
+- given amout of users with aliases specified by `aliases` variable.
+- Entra security group that will be used to secure access to DEV Power Platform environment.
+- Entra security group that will be used to secure access to TEST Power Platform environment.
 
 ### Power Platform Module
 
 The Powe Platform modules creates following resources:
- - DEV Power Platform environment
- - TEST Power Platform environment
- - enables mananged environment for DEV and TEST environments
- - secures DEV and TEST environments with Entra security groups created in the identity module
+
+- DEV Power Platform environment
+- TEST Power Platform environment
+- enables mananged environment for DEV and TEST environments
+- secures DEV and TEST environments with Entra security groups created in the identity module
 
 ## Limitations and Considerations
 
