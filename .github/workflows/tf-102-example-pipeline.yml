@@ -76,20 +76,6 @@ jobs:
     # Will fail the build if not
     #- name: Terraform Format
     #  run: terraform -chdir=$TARGET_DIR fmt -check
-
-    # This login uses OIDC authentication. You have to have feredation configured for your repository:
-    # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
-    # - name: 'Az CLI login'
-    #   uses: azure/login@v1 
-    #   with:
-    #       client-id: ${{ vars.PPADMIN_CLIENT_ID }}
-    #       tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
-    #       subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
-    
-    # #Run access token request one against the Power Platform Provider Service Principal
-    # - name: 'Run Token Access for Power Platform Provider Service Principal'
-    #   run: |
-    #       az account get-access-token --resource api://powerplatform_provider_terraform
   
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -198,20 +184,6 @@ jobs:
         with:
           name: tfplan
           path: ${{ env.TARGET_DIR }}
-
-      # This login uses OIDC authentication. You have to have feredation configured for your repository:
-      # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
-      # - name: 'Az CLI login'
-      #   uses: azure/login@v1 
-      #   with:
-      #      client-id: ${{ vars.PPADMIN_CLIENT_ID }}
-      #      tenant-id: ${{ vars.PPADMIN_TENANT_ID }}
-      #      subscription-id: ${{ vars.PPADMIN_SUBSCRIPTION_ID  }}
-      
-      # #Run access token request one against the Power Platform Provider Service Principal
-      # - name: 'Run Token Access for Power Platform Provider Service Principal'
-      #   run: |
-      #      az account get-access-token --resource api://powerplatform_provider_terraform
 
       # Terraform Apply
       - name: Terraform Apply
