@@ -1,6 +1,9 @@
 name: '102-Github-Pipilene-Example - Plan/Apply'
 
 on:
+  push:
+    branches:
+    - main
   pull_request:
    branches:
    - main
