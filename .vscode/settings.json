@@ -3,13 +3,13 @@
         "azuretools",
         "Entra",
         "powerplatform",
+        "PPADMIN",
         "quickstart",
         "quickstarts",
-        "Toinstall",
-        "unitedstates",
-        "Entra",
-        "PPADMIN",
         "Quickstarts",
-        "tfrc"
+        "tfcheckov",
+        "tfrc",
+        "Toinstall",
+        "unitedstates"
     ]
 }
