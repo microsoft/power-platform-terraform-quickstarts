@@ -8,7 +8,7 @@ terraform {
 
   backend "azurerm" {
     container_name = "tfstate"
-    key            = "pipeline-example.terraform.tfstate"
+    key            = "pipeline-example-test.terraform.tfstate"
     use_oidc = true
   }
 }
