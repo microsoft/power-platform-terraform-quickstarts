@@ -1,5 +1,5 @@
 echo "##############################################################################"
-echo "# Commands nedded to check the Terraform code for the SAP Gateway Quickstart #"
+echo "# Commands nedded to check the Terraform code lab                            #"
 echo "##############################################################################"
 echo "terraform init"
 terraform init -upgrade
