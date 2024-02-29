@@ -47,7 +47,6 @@ var temaplteFuncHelpers = template.FuncMap{
 
 type ExamplesData struct {
 	QuickStarts []QuickStart
-	Fake        []string
 }
 
 type QuickStart struct {
