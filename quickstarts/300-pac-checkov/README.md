@@ -18,21 +18,21 @@ Policy as code is a practice of managing and defining policies in a code-like fo
 
 ## Example Files
 
-The example files can be found in `quickstarts/103-pac-checkov`
+The example files can be found in `quickstarts/300-pac-checkov`
 
 ## Input Variables
 
-Variables and their purpose can be found in `quickstarts/103-pac-checkov/variables.tf`
+Variables and their purpose can be found in `quickstarts/300-pac-checkov/variables.tf`
 
 ## PaC example steps
 
 - Clone the repo on your computer.
 - Select the PaC example branch
 - Start the dev container, this process can take a couple of minutes.
-- We include a basic terraform storage account creation example in `quickstarts/103-pac-checkov/main.tf`
+- We include a basic terraform storage account creation example in `quickstarts/300-pac-checkov/main.tf`
 - Look to the file and identify the resources that you can deploy with this terraform file.
 - Run the azure login command and authenticate with azure services.
-- Open the `quickstarts/103-pac-checkov/tfcheckov.sh` and look to the commands that are required to run checkov and terraform.
+- Open the `quickstarts/300-pac-checkov/tfcheckov.sh` and look to the commands that are required to run checkov and terraform.
 - Run checkov, we create the tfcheckov.sh (described above), to do that on the dev container console execute the “sh” file “./tfcheckov.sh”.
 
  ```bash
