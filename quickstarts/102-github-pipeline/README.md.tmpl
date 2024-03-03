@@ -8,7 +8,7 @@ This example demostrates how to create a pipeline that will deploy Power Platfor
 - Azure subscription where the terraform state will be stored
 - Power Platform environment
 - Already executed [bootsrap](../../bootstrap/README.md) script
-- Configured federation between GitHub repository that you use this pipeline and Entra ID tenant: <https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure>
+- Configured federation between GitHub repository that you use this pipeline and Entra ID tenant: <https://docs.github.com/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure>
 
 {{ .ModuleDetails }}
 
@@ -16,7 +16,7 @@ This example demostrates how to create a pipeline that will deploy Power Platfor
 
 You can fork or download this repository and use it as a starting point for your own pipeline. Copy the [tf-102-example-pipeline.yml](./tf-102-example-pipeline.yml) to the `.github/workflows` directory in your repository.
 
-You will have to set folowwing [variables in your repository](https://docs.github.com/en/actions/learn-github-actions/variables):
+You will have to set folowwing [variables in your repository](https://docs.github.com/actions/learn-github-actions/variables):
 
 - PPADMIN_CLIENT_ID = `<your tenant id>`
 - PPADMIN_TENANT_ID = `<bootstraped service principal tenantId>`

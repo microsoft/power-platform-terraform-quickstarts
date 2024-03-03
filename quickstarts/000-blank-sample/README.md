@@ -28,7 +28,7 @@ The Power Platform provider can use the Azure CLI to authenticate. If you have t
 
 ### Azure CLI Prerequisites
 
-1. [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+1. [Install the Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
 
 2. Create a service principal and expose the required permissions using "expose API" in the Azure portal. You can find more information on how to do this in the following [CLI.md](./cli.md) file.
 

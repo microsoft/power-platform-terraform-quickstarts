@@ -33,7 +33,12 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
-/*
+// The following section is commented with the objective of removing the comments and executing checkov,
+// after executing it we can see the tool's alerts.
+
+// Remove comments from the next section and run checkov to view and resolve the alerts.
+
+/* 
 resource "azurecaf_name" "storage_account_name" {
   name          = var.base_name
   resource_type = "azurerm_storage_account"

@@ -1,34 +1,36 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # Github Pipeline Example (102 level)
 
-This example demostrates how to create a pipeline that will deploy Power Platform environment using Terraform.
+This example demonstrates how to create a pipeline that will deploy Power Platform environment using Terraform.
 
 ## Prerequisites
 
 - Entra ID Tenant
 - Azure subscription where the terraform state will be stored
 - Power Platform environment
-- Already executed [bootsrap](../../bootstrap/README.md) script
-- Configured federation between GitHub repository that you use this pipeline and Entra ID tenant: <https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure>
+- Already executed [bootstrap](../../bootstrap/README.md) script
+- Configured federation between GitHub repository that you use this pipeline and Entra ID tenant: <https://docs.github.com/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure>
 
 ## Example Files
 
 The example files can be found in `quickstarts/102-github-pipeline`
 
 ## Provider Requirements
+
 - **powerplatform (`microsoft/power-platform`):** `>=0.7.0-preview`
 
 ## Resources
+
 - `powerplatform_environment.dev` from `powerplatform`
 
 ## Usage
 
 You can fork or download this repository and use it as a starting point for your own pipeline. Copy the [tf-102-example-pipeline.yml](./tf-102-example-pipeline.yml) to the `.github/workflows` directory in your repository.
 
-You will have to set folowwing [variables in your repository](https://docs.github.com/en/actions/learn-github-actions/variables):
+You will have to set following [variables in your repository](https://docs.github.com/actions/learn-github-actions/variables):
 
 - PPADMIN_CLIENT_ID = `<your tenant id>`
-- PPADMIN_TENANT_ID = `<bootstraped service principal tenantId>`
+- PPADMIN_TENANT_ID = `<bootstrapped service principal tenantId>`
 - PPADMIN_SUBSCRIPTION_ID = `<your subscription id>`
 - TF_STATE_STORAGE_ACCOUNT_NAME = `<your storage account name, created by bootstrap.sh>`
 - TF_STATE_RESOURCE_GROUP_NAME  = `<your resource group name, created by bootstrap.sh>`
