@@ -1,4 +1,4 @@
-# PaC with checkov example (100 level)
+# PaC with checkov example (300 level)
 
 This example demonstrates how to use checkov to detect security or policy misconfigurations using terraform to deploy an Azure storage account and a blob container.
 
@@ -14,6 +14,8 @@ Policy as code is a practice of managing and defining policies in a code-like fo
 - Entra ID Tenant
 - Azure subscription where the terraform state will be stored
 - Power Platform environment (optional)
+
+{{ .ModuleDetails }}
 
 ## Example Files
 
@@ -60,4 +62,6 @@ resource "azurerm_storage_account" "storage_account" {
 
 The goal is to see the checkov behavior and solve a couple of those warnings.
 
-Checkov Terraform scans can be found [here](https://www.checkov.io/5.Policy%20Index/terraform.html)
+## Additional Resources
+
+- [Checkov Terraform scans](https://www.checkov.io/5.Policy%20Index/terraform.html)

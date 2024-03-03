@@ -19,18 +19,15 @@ variable "d365_finance_environment_name" {
     error_message = "The length of the d365_finance_environment_name property cannot exceed 20 characters for D365 Finance environment deployments."
   }
 }
-#Available locations are listed at //https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/locations?api-version=2023-06-01
 variable "location" {
   description = "The region where the environment will be deployed, such as 'unitedstates'"
   type        = string
   #This default will eventually be removed when other regions become supported.
 }
-#Available langauge codes are listed at https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/locations/unitedstates/environmentLanguages?api-version=2023-06-01
 variable "language_code" {
   description = "The desired Language Code for the environment, such as '1033' (U.S. english)"
   type        = string
 }
-#Available currency codes are listed at https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/locations/unitedstates/environmentCurrencies?api-version=2023-06-01
 variable "currency_code" {
   description = "The desired Currency Code for the environment, such as 'USD'"
   type        = string

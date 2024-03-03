@@ -61,4 +61,6 @@ resource "azurerm_storage_account" "storage_account" {
 
 The goal is to see the checkov behavior and solve a couple of those warnings.
 
-Checkov Terraform scans can be found [here](https://www.checkov.io/5.Policy%20Index/terraform.html)
+## Additional Resources
+
+- [Checkov Terraform scans](https://www.checkov.io/5.Policy%20Index/terraform.html)
