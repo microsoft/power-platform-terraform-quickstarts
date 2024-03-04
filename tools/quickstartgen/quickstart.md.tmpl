@@ -14,8 +14,13 @@ The example files can be found in {{ .Path | relativePath | tt}}
 
 ## Provider Requirements
 
+The Terraform plugins or "providers" that this IaC deployment requires are:
+
+
 {{- range $name, $req := .RequiredProviders }}
+
 - **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}`>={{ commas $req.VersionConstraints}}`{{ else }}(any version){{ end }}
+
 {{- end}}{{end}}
 
 {{- if .Variables}}
@@ -43,7 +48,9 @@ The example files can be found in {{ .Path | relativePath | tt}}
 ## Resources
 
 {{- range .ManagedResources }}
+
 - {{ printf "%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
+
 {{- end}}{{end}}
 
 {{- if .DataResources}}
@@ -51,7 +58,9 @@ The example files can be found in {{ .Path | relativePath | tt}}
 ## Data Sources
 
 {{- range .DataResources }}
+
 - {{ printf "data.%s.%s" .Type .Name | tt }} from {{ tt .Provider.Name }}
+
 {{- end}}{{end}}
 
 {{- if .ModuleCalls}}
@@ -59,7 +68,9 @@ The example files can be found in {{ .Path | relativePath | tt}}
 ## Child Modules
 
 {{- range .ModuleCalls }}
+
 - {{ tt .Name }} from {{ tt .Source }}{{ if .Version }} ({{ tt .Version }}){{ end }}
+
 {{- end}}{{end}}
 
 {{- if .Diagnostics}}

@@ -16,9 +16,13 @@ This example demostrates how to create a pipeline that will deploy Power Platfor
 The example files can be found in `quickstarts/102-github-pipeline`
 
 ## Provider Requirements
+
+The Terraform plugins or "providers" that this IaC deployment requires are:
+
 - **powerplatform (`microsoft/power-platform`):** `>=0.7.0-preview`
 
 ## Resources
+
 - `powerplatform_environment.dev` from `powerplatform`
 
 ## Usage

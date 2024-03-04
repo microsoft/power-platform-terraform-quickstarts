@@ -14,9 +14,15 @@ This Terraform module aims to provide a fully managed infrastructure that integr
 The example files can be found in `quickstarts/101-hello-power-platform`
 
 ## Provider Requirements
+
+The Terraform plugins or "providers" that this IaC deployment requires are:
+
 - **azuread (`hashicorp/azuread`):** (any version)
+
 - **null (`hashicorp/null`):** (any version)
+
 - **powerplatform (`microsoft/power-platform`):** `>=0.6.1-preview`
+
 - **random (`hashicorp/random`):** (any version)
 
 ## Input Variables
@@ -36,7 +42,9 @@ The example files can be found in `quickstarts/101-hello-power-platform`
 | `user_credentials` |  |
 
 ## Child Modules
+
 - `identity` from `./identity`
+
 - `powerplatform` from `./powerplatform`
 
 ## Usage

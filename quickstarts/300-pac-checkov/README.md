@@ -21,7 +21,11 @@ Policy as code is a practice of managing and defining policies in a code-like fo
 The example files can be found in `quickstarts/300-pac-checkov`
 
 ## Provider Requirements
+
+The Terraform plugins or "providers" that this IaC deployment requires are:
+
 - **azurecaf (`aztfmod/azurecaf`):** `>=>=1.2.26`
+
 - **azurerm (`hashicorp/azurerm`):** `>=>=3.74.0`
 
 ## Input Variables
@@ -35,16 +39,10 @@ The example files can be found in `quickstarts/300-pac-checkov`
 | `tenant_id` | The tenant ID of service principal or user at Power Platform | string | `null` | true |
 
 ## Resources
+
 - `azurecaf_name.rg` from `azurecaf`
+
 - `azurerm_resource_group.rg` from `azurerm`
-
-## Example Files
-
-The example files can be found in `quickstarts/300-pac-checkov`
-
-## Input Variables
-
-Variables and their purpose can be found in `quickstarts/300-pac-checkov/variables.tf`
 
 ## PaC example steps
 
