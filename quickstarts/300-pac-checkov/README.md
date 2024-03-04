@@ -1,5 +1,5 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
-# PaC with checkov example (100 level)
+# PaC with checkov example (300 level)
 
 This example demonstrates how to use checkov to detect security or policy misconfigurations using terraform to deploy an Azure storage account and a blob container.
 
@@ -15,6 +15,28 @@ Policy as code is a practice of managing and defining policies in a code-like fo
 - Entra ID Tenant
 - Azure subscription where the terraform state will be stored
 - Power Platform environment (optional)
+
+## Example Files
+
+The example files can be found in `quickstarts/300-pac-checkov`
+
+## Provider Requirements
+- **azurecaf (`aztfmod/azurecaf`):** `>=>=1.2.26`
+- **azurerm (`hashicorp/azurerm`):** `>=>=3.74.0`
+
+## Input Variables
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| `base_name` | The base name which should be used for all resources name | string | `"pac"` | false |
+| `location` | The Azure region where the resources in this example should be created | string | `null` | true |
+| `prefix` | The prefix which should be used for all resources name | string | `"pac"` | false |
+| `subscription_id` | The subscription ID of the service principal with on-premise data gateway admin permissions | string | `null` | true |
+| `tenant_id` | The tenant ID of service principal or user at Power Platform | string | `null` | true |
+
+## Resources
+- `azurecaf_name.rg` from `azurecaf`
+- `azurerm_resource_group.rg` from `azurerm`
 
 ## Example Files
 
