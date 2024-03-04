@@ -2,18 +2,23 @@
   "name": "Terraform",
   "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
   "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+			"version": "latest"
+		},
     "ghcr.io/devcontainers/features/terraform": {
       "version": "latest"
     },
     "ghcr.io/devcontainers/features/azure-cli": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers-contrib/features/gh-cli:1.0.12": {}
-    // "ghcr.io/devcontainers/features/powershell": {
-    //   "version": "latest",
-    //   "modules": "Microsoft.PowerApps.Administration.PowerShell,Microsoft.PowerApps.PowerShell"
-    // }
+    "ghcr.io/devcontainers-contrib/features/gh-cli": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/python:1.4.1" : {
+      "toolsToinstall": "checkov"
+    }
   },
+  "postCreateCommand": "git config --global --add safe.directory /workspaces/power-platform-terraform-quickstarts",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -21,8 +26,9 @@
         "github.copilot", 
         "github.copilot-chat", 
         "ms-azuretools.vscode-bicep", 
-        "github.vscode-github-actions"
-//        "ms-vscode.powershell"
+        "github.vscode-github-actions",
+        "ms-azuretools.vscode-azureterraform",
+        "DavidAnson.vscode-markdownlint"
       ],
       "settings": {
         "terraform.languageServer": {
