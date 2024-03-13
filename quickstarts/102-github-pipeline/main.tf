@@ -93,24 +93,18 @@ locals {
 }
 
 resource "powerplatform_environment" "user_dev_env" {
-  count = length(local.dev_users)
+  count = length(azuread_user.dev_user)
   location          = "unitedstates"
   language_code     = 1033
-  display_name      = "${dev_users[count.index]}-development-env"
+  display_name      = "${azuread_user.dev_user[count.index].mail_nickname}-private-development"
   currency_code     = "USD"
   environment_type  = "Sandbox"
   security_group_id = azuread_group.dev_access.id
 }
 
 resource "powerplatform_user" "user_dev_env" {
-  count = length(local.dev_users)
+  count = length(azuread_user.dev_user)
   environment_id = powerplatform_environment.user_dev_env[count.index].id
   security_roles = local.local_dev_env_roles
   aad_id = azuread_user.dev_user[count.index].id
 }
-
-
-
-
-
-
