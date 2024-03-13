@@ -41,10 +41,10 @@ resource "random_password" "passwords" {
   override_special = "_%@"
 }
 
-resource "azuread_user" "user1" {
-  user_principal_name = "user1@${local.domain_name}"
-  display_name        = "User One"
-  mail_nickname       = "user1"
+resource "azuread_user" "dev_user1" {
+  user_principal_name = "dev1@${local.domain_name}"
+  display_name        = "Dev User1"
+  mail_nickname       = "dev1"
   password = random_password.passwords.result
 }
 
@@ -60,7 +60,6 @@ resource "azuread_group_member" "user1_member" {
   member_object_id = azuread_user.user1.id
 }
 
-
 resource "powerplatform_environment" "dev" {
   location          = "unitedstates"
   language_code     = 1033
@@ -70,3 +69,19 @@ resource "powerplatform_environment" "dev" {
   security_group_id = azuread_group.dev_access.id
 }
 
+data "powerplatform_securityroles" "all" {
+  environment_id = powerplatform_environment.dev.id
+}
+
+locals {
+  developer_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.id if 
+    role.name == "System Customizer" || 
+    role.name ==  "Environment Maker"
+  ])
+}
+
+resource "powerplatform_user" "new_user" {
+  environment_id = powerplatform_environment.dev.id
+  security_roles = local.developer_roles
+  aad_id = azuread_user.user1.id
+}
