@@ -66,7 +66,7 @@ resource "azuread_group" "dev_access" {
   description  = "Dataverse Dev Environment Access Group for Power Platform"
   mail_enabled = false
   security_enabled = true 
-  members = azuread_user.dev_user[*].id
+  members = values(azuread_user.dev_user)[*].id
 }
 
 resource "powerplatform_environment" "dev" {
