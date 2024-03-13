@@ -42,18 +42,18 @@ resource "random_password" "passwords" {
   override_special = "_%@"
 }
 
-# locals {
-#   dev_users = toset([ "dev2", "dev3", "dev4" ])
-# }
+locals {
+  dev_users = toset([ "dev1", "dev2"])
+}
 
-# resource "azuread_user" "dev_user" {
-#   for_each = local.dev_users
-#   user_principal_name = "${each.value}@${local.domain_name}"
-#   display_name        = each.value
-#   mail_nickname       = each.value
-#   password = random_password.passwords.result
-#   usage_location = "US"
-# }
+resource "azuread_user" "dev_user" {
+  for_each = local.dev_users
+  user_principal_name = "${each.value}@${local.domain_name}"
+  display_name        = each.value
+  mail_nickname       = each.value
+  password = random_password.passwords.result
+  usage_location = "US"
+}
 
 # resource "azuread_group" "dev_access" {
 #   display_name = "Dataverse Dev Environment Access"
