@@ -43,7 +43,7 @@ resource "random_password" "passwords" {
 }
 
 locals {
-  dev_users = tolist([ "dev1", "dev2", "dev3" ])
+  dev_users = tolist([ "dev1", "dev3" ])
 }
 
 resource "azuread_user" "dev_user" {
@@ -142,7 +142,7 @@ resource "azuread_group" "prod_access" {
 resource "powerplatform_environment" "prod" {
   location          = "unitedstates"
   language_code     = 1033
-  display_name      = "test"
+  display_name      = "prod"
   currency_code     = "USD"
   environment_type  = "Production"
   security_group_id = azuread_group.prod_access.id
