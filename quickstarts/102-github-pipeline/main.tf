@@ -46,11 +46,17 @@ locals {
   dev_users = toset([ "dev1", "dev2" ])
 }
 
+
+
 resource "azuread_user" "dev_user" {
-  count = length(local.dev_users)
-  user_principal_name = "${local.dev_users[count.index]}@${local.domain_name}"
-  display_name        = local.dev_users[count.index]
-  mail_nickname       = local.dev_users[count.index]
+ // count = length(local.dev_users)
+  for_each = local.dev_users
+  //user_principal_name = "${local.dev_users[count.index]}@${local.domain_name}"
+  user_principal_name = "${each.value}@${local.domain_name}"
+  //display_name        = local.dev_users[count.index]
+  //mail_nickname       = local.dev_users[count.index]
+  display_name        = each.value
+  mail_nickname       = each.value
   password = random_password.passwords.result
   usage_location = "US"
 }
@@ -77,7 +83,7 @@ data "powerplatform_securityroles" "all" {
 }
 
 resource "powerplatform_user" "new_user" {
-  count = length(local.dev_users)
+  count = length(azuread_user.dev_user)
   environment_id = powerplatform_environment.dev.id
   security_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
     role.name == "System Customizer" || 
