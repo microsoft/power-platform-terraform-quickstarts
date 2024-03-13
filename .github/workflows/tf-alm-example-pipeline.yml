@@ -1,4 +1,4 @@
-name: '102-Github-Pipilene-Example - Plan/Apply'
+name: 'tf-alm-pipeline - Plan/Apply'
 
 on:
   push:
