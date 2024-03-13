@@ -31,9 +31,6 @@ data "azuread_domains" "aad_domains" {
   only_initial = true
 }
 
-data "powerplatform_securityroles" "all" {
-  environment_id = powerplatform_environment.dev.id
-}
 
 locals {
   domain_name = data.azuread_domains.aad_domains.domains[0].domain_name
@@ -75,24 +72,22 @@ resource "powerplatform_environment" "dev" {
   security_group_id = azuread_group.dev_access.id
 }
 
+data "powerplatform_securityroles" "all" {
+  environment_id = powerplatform_environment.dev.id
+}
+
 resource "powerplatform_user" "new_user" {
   count = length(local.dev_users)
   environment_id = powerplatform_environment.dev.id
-  security_roles = local.developer_roles
+  security_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
+    role.name == "System Customizer" || 
+    role.name ==  "Environment Maker"
+  ])
   aad_id = azuread_user.dev_user[count.index].id
 
   depends_on = [ azuread_group.dev_access ]
 }
 
-locals {
-  developer_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
-    role.name == "System Customizer" || 
-    role.name ==  "Environment Maker"
-  ])
-  local_dev_env_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
-    role.name == "System Administrator"
-  ])
-}
 
 resource "powerplatform_environment" "user_dev_env" {
   count = length(azuread_user.dev_user)
@@ -104,10 +99,17 @@ resource "powerplatform_environment" "user_dev_env" {
   security_group_id = azuread_group.dev_access.id
 }
 
+data "powerplatform_securityroles" "user_dev_env_roles" {
+  count = length(powerplatform_environment.user_dev_env)
+  environment_id = powerplatform_environment.user_dev_env[count.index].id
+}
+
 resource "powerplatform_user" "user_dev_env" {
   count = length(azuread_user.dev_user)
   environment_id = powerplatform_environment.user_dev_env[count.index].id
-  security_roles = local.local_dev_env_roles
+  security_roles = toset([for role in data.powerplatform_securityroles.user_dev_env_rolesp[count.index].security_roles : role.role_id if 
+    role.name == "System Administrator"
+  ])
   aad_id = azuread_user.dev_user[count.index].id
 
   depends_on = [ azuread_group.dev_access ]
