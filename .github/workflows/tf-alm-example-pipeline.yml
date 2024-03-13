@@ -24,8 +24,8 @@ env:
   TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
   POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
   POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
-  TARGET_DIR: ${{ github.workspace }}/examples/102-github-pipeline
-  #TF_LOG: DEBUG
+  TARGET_DIR: ${{ github.workspace }}/quickstarts/102-github-pipeline
+  TF_LOG: DEBUG
 
 jobs:
   terraform-plan:
