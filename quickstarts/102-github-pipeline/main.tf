@@ -129,5 +129,21 @@ resource "powerplatform_environment" "test" {
   display_name      = "test"
   currency_code     = "USD"
   environment_type  = "Sandbox"
-  security_group_id = azuread_group.dev_access.id
+  security_group_id = azuread_group.test_access.id
+}
+
+resource "azuread_group" "prod_access" {
+  display_name = "Dataverse Prod Environment Access"
+  description  = "Dataverse Prod Environment Access Group for Power Platform"
+  mail_enabled = false
+  security_enabled = true 
+}
+
+resource "powerplatform_environment" "prod" {
+  location          = "unitedstates"
+  language_code     = 1033
+  display_name      = "test"
+  currency_code     = "USD"
+  environment_type  = "Production"
+  security_group_id = azuread_group.prod_access.id
 }
