@@ -57,7 +57,7 @@ resource "azuread_group" "dev_access" {
 
 resource "azuread_group_member" "user1_member" {
   group_object_id = azuread_group.dev_access.id
-  member_object_id = azuread_user.user1.id
+  member_object_id = azuread_user.dev_user1.id
 }
 
 resource "powerplatform_environment" "dev" {
@@ -83,5 +83,5 @@ locals {
 resource "powerplatform_user" "new_user" {
   environment_id = powerplatform_environment.dev.id
   security_roles = local.developer_roles
-  aad_id = azuread_user.user1.id
+  aad_id = azuread_user.dev_user1.id
 }
