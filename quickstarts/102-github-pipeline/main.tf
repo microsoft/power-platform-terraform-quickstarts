@@ -69,6 +69,7 @@ resource "powerplatform_environment" "dev" {
   currency_code     = "USD"
   environment_type  = "Sandbox"
   security_group_id = azuread_group.dev_access.id
+  depends_on = [ azuread_group_member.user1_member ]
 }
 
 data "powerplatform_securityroles" "all" {
