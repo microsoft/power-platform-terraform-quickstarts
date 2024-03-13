@@ -89,7 +89,7 @@ resource "powerplatform_user" "new_user" {
     role.name == "System Customizer" || 
     role.name ==  "Environment Maker"
   ])
-  aad_id = azuread_user.dev_user[count.index].id
+  aad_id = azuread_user.dev_user[each.key].id
 
   depends_on = [ azuread_group.dev_access ]
 }
@@ -99,7 +99,7 @@ resource "powerplatform_environment" "user_dev_env" {
   count = length(azuread_user.dev_user)
   location          = "unitedstates"
   language_code     = 1033
-  display_name      = "${azuread_user.dev_user[count.index].mail_nickname}-private-development"
+  display_name      = "${azuread_user.dev_user[each.key].mail_nickname}-private-development"
   currency_code     = "USD"
   environment_type  = "Sandbox"
   security_group_id = azuread_group.dev_access.id
