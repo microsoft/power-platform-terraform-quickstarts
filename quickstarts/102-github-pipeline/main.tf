@@ -43,7 +43,7 @@ resource "random_password" "passwords" {
 }
 
 locals {
-  dev_users = tolist([ "dev1", "dev2" ])
+  dev_users = tolist([ "dev1", "dev2", "dev3" ])
 }
 
 resource "azuread_user" "dev_user" {
@@ -113,4 +113,21 @@ resource "powerplatform_user" "user_dev_env" {
   aad_id = azuread_user.dev_user[count.index].id
 
   depends_on = [ azuread_group.dev_access ]
+}
+
+
+resource "azuread_group" "test_access" {
+  display_name = "Dataverse Test Environment Access"
+  description  = "Dataverse Test Environment Access Group for Power Platform"
+  mail_enabled = false
+  security_enabled = true 
+}
+
+resource "powerplatform_environment" "test" {
+  location          = "unitedstates"
+  language_code     = 1033
+  display_name      = "test"
+  currency_code     = "USD"
+  environment_type  = "Sandbox"
+  security_group_id = azuread_group.dev_access.id
 }
