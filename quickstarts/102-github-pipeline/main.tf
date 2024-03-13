@@ -83,7 +83,7 @@ data "powerplatform_securityroles" "all" {
 }
 
 resource "powerplatform_user" "new_user" {
-  count = length(azuread_user.dev_user)
+  for_each = azuread_user.dev_user
   environment_id = powerplatform_environment.dev.id
   security_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
     role.name == "System Customizer" || 
@@ -96,7 +96,7 @@ resource "powerplatform_user" "new_user" {
 
 
 resource "powerplatform_environment" "user_dev_env" {
-  count = length(azuread_user.dev_user)
+  for_each = azuread_user.dev_user
   location          = "unitedstates"
   language_code     = 1033
   display_name      = "${azuread_user.dev_user[each.key].mail_nickname}-private-development"
@@ -106,14 +106,15 @@ resource "powerplatform_environment" "user_dev_env" {
 }
 
 data "powerplatform_securityroles" "user_dev_env_roles" {
-  count = length(powerplatform_environment.user_dev_env)
-  environment_id = powerplatform_environment.user_dev_env[count.index].id
+  //count = length(powerplatform_environment.user_dev_env)
+  for_each = powerplatform_environment.user_dev_env
+  environment_id = powerplatform_environment.user_dev_env[each.key].id
 }
 
 resource "powerplatform_user" "user_dev_env" {
-  count = length(azuread_user.dev_user)
-  environment_id = powerplatform_environment.user_dev_env[count.index].id
-  security_roles = toset([for role in data.powerplatform_securityroles.user_dev_env_roles[count.index].security_roles : role.role_id if 
+  for_each = azuread_user.dev_user
+  environment_id = powerplatform_environment.user_dev_env[each.key].id
+  security_roles = toset([for role in data.powerplatform_securityroles.user_dev_env_roles[each.key].security_roles : role.role_id if 
     role.name == "System Administrator"
   ])
   aad_id = azuread_user.dev_user[count.index].id
