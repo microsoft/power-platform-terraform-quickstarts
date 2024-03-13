@@ -17,6 +17,10 @@ provider "powerplatform" {
   use_oidc = true
 }
 
+provider "azuread" {
+  use_oidc = true
+}
+
 resource "azuread_user" "user1" {
   user_principal_name = "user1@mateuszwasilewskihotmail.onmicrosoft.com"
   display_name        = "User One"
