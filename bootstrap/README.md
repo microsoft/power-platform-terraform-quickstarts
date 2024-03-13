@@ -1,12 +1,14 @@
 # Initial Bootstrap Configuration
 
 This directory contains scripts to bootstrap the initial configuration for using the Power Platform Terraform Provider and **Quickstart Examples**. You have following boostrap options to choose from:
- * Having terraform state saved locally (simlpified version)
- * Having terraform state saved in Azure Storage Account (advanced version required for Azure Subscription)
 
-More informatios regarding terraform state can be found here: 
- - <https://developer.hashicorp.com/terraform/language/state>
- - <https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli>
+* Having terraform state saved locally (simplified setup for learning and evaluation, but not recommended for production usage)
+* Having terraform state saved in Azure Storage Account (advanced setup which more closely mimics production configuration and requires an Azure Subscription)
+
+More information regarding terraform state can be found here:
+
+* <https://developer.hashicorp.com/terraform/language/state>
+* <https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli>
 
 ## Resources Created
 
@@ -49,18 +51,19 @@ It is highly recommended that you use the Dev Container to run the bootstrap scr
 
 The `bootstrap.sh` script is intended to be run locally by a user with `Owner` permissions in the Azure subscription, `Global Administrator` or `User Administrator` permissions in the Azure AD tenant.
 
+### Simple version with local Terraform state
 
-- Simple version with local Terraform state:
 ```bash
 ./bootstrap/bootstrap.sh
 ```
 
-- Advanced version with Azure Storage Account as Terraform state backend:
+### Advanced version with Azure Storage Account as Terraform state backend
+
 ```bash
 ./bootstrap/bootstrap.sh --subscription_id <GUID> --location eastus
 ```
 
-> **Note**: Remeber that the administrator has to grand permsissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
+> **Note**: Remeber that the administrator has to grant permsissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
 
 ## Outputs (Advanced version only)
 
