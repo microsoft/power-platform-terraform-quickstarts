@@ -74,7 +74,7 @@ data "powerplatform_securityroles" "all" {
 }
 
 locals {
-  developer_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.id if 
+  developer_roles = toset([for role in data.powerplatform_securityroles.all.security_roles : role.role_id if 
     role.name == "System Customizer" || 
     role.name ==  "Environment Maker"
   ])
