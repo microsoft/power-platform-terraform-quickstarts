@@ -46,6 +46,7 @@ resource "azuread_user" "dev_user1" {
   display_name        = "Dev User1"
   mail_nickname       = "dev1"
   password = random_password.passwords.result
+  usage_location = "US"
 }
 
 resource "azuread_group" "dev_access" {
@@ -54,6 +55,7 @@ resource "azuread_group" "dev_access" {
   mail_enabled = false
   security_enabled = true
 }
+
 
 resource "azuread_group_member" "user1_member" {
   group_object_id = azuread_group.dev_access.id
