@@ -43,7 +43,7 @@ resource "random_password" "passwords" {
 }
 
 locals {
-  dev_users = toset([ "dev1", "dev2" ])
+  dev_users = toset([ "dev2", "dev3", "dev4" ])
 }
 
 
