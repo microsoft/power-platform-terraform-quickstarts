@@ -1,4 +1,4 @@
-name: 'tf-alm-pipeline - Plan/Apply'
+name: 'tf-alm-validate-state-drift - Plan/Apply'
 
 on:
   workflow_dispatch:
