@@ -4,6 +4,12 @@ terraform {
       source  = "microsoft/power-platform"
       version = "0.10.0-preview"
     }
+    azuread = {
+      source = "hashicorp/azuread"
+    }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 
   backend "azurerm" {
@@ -21,10 +27,25 @@ provider "azuread" {
   use_oidc = true
 }
 
+data "azuread_domains" "aad_domains" {
+  only_initial = true
+}
+
+locals {
+  domain_name = data.azuread_domains.aad_domains.domains[0].domain_name
+}
+
+resource "random_password" "passwords" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
+
 resource "azuread_user" "user1" {
-  user_principal_name = "user1@mateuszwasilewskihotmail.onmicrosoft.com"
+  user_principal_name = "user1@${local.domain_name}"
   display_name        = "User One"
   mail_nickname       = "user1"
+  password = random_password.passwords.result
 }
 
 resource "azuread_group" "dev_access" {
