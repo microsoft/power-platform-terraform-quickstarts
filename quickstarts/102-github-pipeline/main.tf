@@ -80,6 +80,8 @@ resource "powerplatform_user" "new_user" {
   environment_id = powerplatform_environment.dev.id
   security_roles = local.developer_roles
   aad_id = azuread_user.dev_user[count.index].id
+
+  depends_on = [ azuread_group.dev_access ]
 }
 
 locals {
@@ -107,4 +109,6 @@ resource "powerplatform_user" "user_dev_env" {
   environment_id = powerplatform_environment.user_dev_env[count.index].id
   security_roles = local.local_dev_env_roles
   aad_id = azuread_user.dev_user[count.index].id
+
+  depends_on = [ azuread_group.dev_access ]
 }
