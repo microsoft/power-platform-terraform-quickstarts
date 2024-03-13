@@ -1,3 +1,4 @@
+<!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # Power Platform Terraform Quickstarts
 
 This repository contains example terraform modules that can be used to quickly deploy Power Platform environments and other Azure resources.  The modules are intended to demonstrate some common scenarios where managing Power Platform resources along side Azure, [Entra](https://entra.microsoft.com), or other resources can be facilitated with the [Terraform Provider for Power Platform](https://github.com/microsoft/terraform-provider-power-platform).  The modules are examples and are not intended to be used in production environments without modification.
@@ -40,11 +41,7 @@ The example terraform modules are intended to be run by GitHub Actions, however 
 **_NOTE:_**  **As long as provider is in private repository, you have to run [/bootstrap/mirror/mirror.sh](/bootstrap/mirror/mirror.sh) first to copy provider locally**
 
 ## Quickstart Examples
-
-**TODO** Generate list of examples and link to them. move quickstartgen.go from the other repo
- - basisc sensible
- - basic with storage 
- - pipeline
- - checkov
- - rest of them from other repo
-**end TODO**
+* [101-hello-power-platform](./quickstarts/101-hello-power-platform/README.md)
+* [102-github-pipeline](./quickstarts/102-github-pipeline/README.md)
+* [201-D365-finance-environment](./quickstarts/201-D365-finance-environment/README.md)
+* [300-pac-checkov](./quickstarts/300-pac-checkov/README.md)

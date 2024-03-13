@@ -1,0 +1,6 @@
+
+{{- if .QuickStarts}}
+
+{{- range .QuickStarts }}
+* [{{  .Name }}](./quickstarts/{{.Name}}/README.md)
+{{- end}}{{end}}
