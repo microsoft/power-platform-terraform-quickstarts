@@ -44,7 +44,7 @@ The pipeline will authenticate using OpenID Connect and will require setting fed
 
 The Terraform Plan output will also be added to your pull request as a comment:
 
-![Pipeline](./.img/plan_output.png)
+![Pipeline](.img/plan_output.png)
 
 ## Detailed Behavior
 

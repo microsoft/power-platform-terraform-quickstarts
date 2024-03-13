@@ -18,8 +18,8 @@
 # fi
 
 # Set the repository and release information
-repo="microsoft/terraform-provider-power-platform"
-release="v0.6.1-preview"
+repo="mawasile/terraform-provider-power-platform"
+release="v0.10.0-preview"
 
 # Set the download directory
 download_dir="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform"
@@ -37,4 +37,4 @@ cp mirror.tfrc $download_dir
 
 chown -R vscode $download_dir
 
-export TF_CLI_CONFIG_FILE="$download_dir/mirror.tfrc"
+export TF_CLI_CONFIG_FILE="/usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform/mirror.tfrc"
