@@ -107,7 +107,7 @@ data "powerplatform_securityroles" "user_dev_env_roles" {
 resource "powerplatform_user" "user_dev_env" {
   count = length(azuread_user.dev_user)
   environment_id = powerplatform_environment.user_dev_env[count.index].id
-  security_roles = toset([for role in data.powerplatform_securityroles.user_dev_env_rolesp[count.index].security_roles : role.role_id if 
+  security_roles = toset([for role in data.powerplatform_securityroles.user_dev_env_roles[count.index].security_roles : role.role_id if 
     role.name == "System Administrator"
   ])
   aad_id = azuread_user.dev_user[count.index].id
