@@ -30,8 +30,6 @@ provider "azuread" {
 data "azuread_domains" "aad_domains" {
   only_initial = true
 }
-<<<<<<< HEAD
-
 
 locals {
   domain_name = data.azuread_domains.aad_domains.domains[0].domain_name
@@ -147,5 +145,3 @@ resource "powerplatform_environment" "prod" {
   environment_type  = "Production"
   security_group_id = azuread_group.prod_access.id
 }
-=======
->>>>>>> 1122830a7efa28a2f33277ceac33769c2d858c5c
