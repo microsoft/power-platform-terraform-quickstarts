@@ -11,7 +11,7 @@ terraform {
     }
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "0.10.0-preview"
+      version = "0.10.2-preview"
     }
   }
 }
