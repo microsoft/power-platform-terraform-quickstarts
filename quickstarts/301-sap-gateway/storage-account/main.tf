@@ -30,7 +30,7 @@ resource "azurerm_storage_account" "storage_account" {
   min_tls_version                 = "TLS1_2"
   public_network_access_enabled   = false
   allow_nested_items_to_be_public = false
-  shared_access_key_enabled       = false
+  shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
   blob_properties {
     delete_retention_policy {
       days = 7

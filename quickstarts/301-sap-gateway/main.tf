@@ -179,12 +179,12 @@ resource "azurerm_key_vault" "key_vault" {
   resource_group_name           = azurerm_resource_group.rg.name
   tenant_id                     = var.tenant_id_gw
   sku_name                      = "standard"
-  public_network_access_enabled = false # Checov requirement verify if it is needed
+  public_network_access_enabled = true # Checov requires "false" , If you deploy from a dev vm that vm or agent needs to be on the same vnet or vnets with connectivity
   purge_protection_enabled      = true
   soft_delete_retention_days    = 7
 
   network_acls {
-    default_action = "Deny"
+    default_action = "Allow"  #Checkov requires "Deny"
     bypass         = "AzureServices"
   }
 
@@ -308,10 +308,9 @@ resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   key_vault_id = azurerm_key_vault.key_vault.id
   tenant_id    = var.tenant_id_gw
   object_id    = module.gateway_vm.vm_opgw_principal_id
-  secret_permissions = [
-    "Get",
-    "List",
-  ]
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get","List"]
 }
 
 # Private DNS zones for Azure services
