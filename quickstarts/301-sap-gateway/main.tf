@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">=3.74.0"
+      version = "3.97.1"
     }
     azurecaf = {
       source  = "aztfmod/azurecaf"
@@ -18,7 +18,7 @@ provider "azurerm" {
     }
     key_vault {
       purge_soft_delete_on_destroy    = true
-      recover_soft_deleted_key_vaults = false
+      recover_soft_deleted_key_vaults = true
     }
   }
   client_id       = var.client_id_gw
@@ -28,6 +28,10 @@ provider "azurerm" {
 }
 
 data "azurerm_client_config" "current" {}
+
+output "object_id_current" {
+  value = data.azurerm_client_config.current.object_id
+}
 
 resource "azurecaf_name" "rg" {
   name          = var.base_name
@@ -40,7 +44,11 @@ resource "azurecaf_name" "rg" {
 resource "azurerm_resource_group" "rg" {
   name     = azurecaf_name.rg.result
   location = var.region_gw
+  tags = {
+  environment = var.environment }
 }
+
+####  Network Resources ####
 
 resource "azurecaf_name" "vnet" {
   name          = var.base_name
@@ -149,13 +157,56 @@ resource "azurerm_network_interface" "nic" {
     private_ip_address_allocation = "Dynamic"
     # public_ip_address_id          = azurerm_public_ip.publicip.id # Uncomment this line to assign a public IP to make the VM accessible from the internet
   }
-
 }
 
 resource "azurerm_network_interface_security_group_association" "rgassociation" {
   network_interface_id      = azurerm_network_interface.nic.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
+
+# Private DNS zones for Azure services
+locals {
+  private_dns_zones = {
+    privatelink-blob-core-windows-net = "privatelink.blob.core.windows.net"
+    privatelink-vaultcore-azure-net   = "privatelink.vaultcore.azure.net"
+  }
+}
+
+resource "azurerm_private_dns_zone" "private_dns_zones" {
+  for_each            = local.private_dns_zones
+  name                = each.value
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+### Private dns links
+resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_network_links" {
+  for_each              = local.private_dns_zones
+  name                  = "${azurerm_virtual_network.vnet.name}-link"
+  resource_group_name   = azurerm_resource_group.rg.name
+  private_dns_zone_name = each.value
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+  depends_on            = [azurerm_private_dns_zone.private_dns_zones]
+}
+### Private endpoint for Key Vault
+resource "azurerm_private_endpoint" "key_vault_pe" {
+  name                = "${azurerm_key_vault.key_vault.name}-pe"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  subnet_id           = azurerm_subnet.subnet.id
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.private_dns_zones["privatelink-vaultcore-azure-net"].id]
+  }
+  private_service_connection {
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_key_vault.key_vault.id
+    name                           = "${azurerm_key_vault.key_vault.name}-psc"
+    subresource_names              = ["vault"]
+  }
+  depends_on = [azurerm_key_vault.key_vault]
+}
+
+####    Key Vault Resources   ####
 
 resource "random_string" "key_vault_suffix" {
   length  = 3
@@ -178,29 +229,46 @@ resource "azurerm_key_vault" "key_vault" {
   location                      = azurerm_resource_group.rg.location
   resource_group_name           = azurerm_resource_group.rg.name
   tenant_id                     = var.tenant_id_gw
-  sku_name                      = "standard"
+  sku_name                      = "premium"
   public_network_access_enabled = true # Checov requires "false" , If you deploy from a dev vm that vm or agent needs to be on the same vnet or vnets with connectivity
   purge_protection_enabled      = true
   soft_delete_retention_days    = 7
+  enabled_for_disk_encryption   = true
+  enable_rbac_authorization     = true
 
   network_acls {
-    default_action = "Allow"  #Checkov requires "Deny"
+    default_action = "Allow" #Checkov requires "Deny"
     bypass         = "AzureServices"
   }
 
   access_policy {
-    tenant_id = var.tenant_id_gw
+    tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
-    secret_permissions = [
-      "Get",
-      "List",
-      "Delete",
-      "Set",
-      "Purge",
-    ]
+    secret_permissions = ["Get", "List", "Delete", "Set", "Purge"]
+    key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify", "Update", "GetRotationPolicy", "SetRotationPolicy"]
   }
 }
+
+/* Access polocy for the key vault defined in the resource above terraform documents to only asign permisions one time 
+### access policy for user or current excecution
+resource "azurerm_key_vault_access_policy" "current" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get"]
+}
+*/
+
+/* This role asignment is not working, it is not possible to assign the role to the key vault
+resource "azurerm_role_assignment" "role_assignment_keyvault" {
+  scope                = azurerm_key_vault.key_vault.id
+  role_definition_name = "Key Vault Reader"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+*/
 
 resource "azurecaf_name" "key_vault_secret_pp" {
   name          = "pp"
@@ -272,6 +340,18 @@ resource "azurerm_key_vault_secret" "key_vault_secret_vm_pwd" {
   content_type    = "text/plain"
 }
 
+/* 
+resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id    = var.tenant_id_gw
+  object_id    = module.gateway_vm.vm_opgw_principal_id
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get", "List"]
+}
+*/
+
+
 module "storage_account" {
   source                   = "./storage-account"
   prefix                   = var.prefix
@@ -281,8 +361,10 @@ module "storage_account" {
   subnet_id                = azurerm_subnet.subnet.id
   private_dns_zone_blob_id = [azurerm_private_dns_zone.private_dns_zones["privatelink-blob-core-windows-net"].id]
   key_vault_id             = azurerm_key_vault.key_vault.id
+  //key_vault_access_policy = azurerm_key_vault_access_policy.key_vault_access_policy.id
 }
 
+/*
 module "gateway_vm" {
   source                     = "./gateway-vm"
   resource_group_name        = azurerm_resource_group.rg.name
@@ -303,54 +385,4 @@ module "gateway_vm" {
   gateway_name               = var.gateway_name
   secret_name_recover_key_gw = azurerm_key_vault_secret.key_vault_secret_recover_key.name
 }
-
-resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
-  key_vault_id = azurerm_key_vault.key_vault.id
-  tenant_id    = var.tenant_id_gw
-  object_id    = module.gateway_vm.vm_opgw_principal_id
-
-  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
-  secret_permissions = ["Get","List"]
-}
-
-# Private DNS zones for Azure services
-locals {
-  private_dns_zones = {
-    privatelink-blob-core-windows-net = "privatelink.blob.core.windows.net"
-    privatelink-vaultcore-azure-net   = "privatelink.vaultcore.azure.net"
-  }
-}
-
-resource "azurerm_private_dns_zone" "private_dns_zones" {
-  for_each            = local.private_dns_zones
-  name                = each.value
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-### Private dns links
-resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_network_links" {
-  for_each              = local.private_dns_zones
-  name                  = "${azurerm_virtual_network.vnet.name}-link"
-  resource_group_name   = azurerm_resource_group.rg.name
-  private_dns_zone_name = each.value
-  virtual_network_id    = azurerm_virtual_network.vnet.id
-  depends_on            = [azurerm_private_dns_zone.private_dns_zones]
-}
-### Private endpoint for Key Vault
-resource "azurerm_private_endpoint" "key_vault_pe" {
-  name                = "${azurerm_key_vault.key_vault.name}-pe"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  subnet_id           = azurerm_subnet.subnet.id
-  private_dns_zone_group {
-    name                 = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.private_dns_zones["privatelink-vaultcore-azure-net"].id]
-  }
-  private_service_connection {
-    is_manual_connection           = false
-    private_connection_resource_id = azurerm_key_vault.key_vault.id
-    name                           = "${azurerm_key_vault.key_vault.name}-psc"
-    subresource_names              = ["vault"]
-  }
-  depends_on = [azurerm_key_vault.key_vault]
-}
+*/

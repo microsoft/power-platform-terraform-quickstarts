@@ -75,3 +75,7 @@ variable "recover_key_gw" {
   description = "The recovery key of the gateway"
   type        = string
 }
+variable "environment" {
+  description = "tag name of the environment like dev, stg, prod"
+  type        = string
+}

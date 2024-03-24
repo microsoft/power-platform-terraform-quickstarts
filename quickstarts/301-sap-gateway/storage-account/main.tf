@@ -26,16 +26,18 @@ resource "azurerm_storage_account" "storage_account" {
   resource_group_name             = var.resource_group_name
   location                        = var.region
   account_tier                    = "Standard"
-  account_replication_type        = "GRS"
+  account_replication_type        = "LRS" // GRS will be the recomended value for production 
   min_tls_version                 = "TLS1_2"
-  public_network_access_enabled   = false
-  allow_nested_items_to_be_public = false
-  shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
+  public_network_access_enabled   = true  //this feature needs to be changed to be false once the setup is completed.
+  allow_nested_items_to_be_public = false //this feature needs to be changed to be false once the setup is completed.
+  shared_access_key_enabled       = false //this feature needs to be changed to be false once the setup is completed.
   blob_properties {
     delete_retention_policy {
       days = 7
     }
   }
+  # reading queue properties sends error after deploy the storage account 
+  /* 
   queue_properties {
     logging {
       read                  = true
@@ -57,11 +59,12 @@ resource "azurerm_storage_account" "storage_account" {
       version               = "1.0"
     }
   }
+  */
   identity {
     type = "SystemAssigned"
   }
   network_rules {
-    default_action = "Deny"
+    default_action = "Allow" // "Deny"
     bypass         = ["AzureServices", "Logging", "Metrics"]
   }
 
@@ -70,26 +73,56 @@ resource "azurerm_storage_account" "storage_account" {
 
 
 ### encryption key for storage account
-resource "azurerm_key_vault_access_policy" "client" {
+/*resource "azurerm_key_vault_access_policy" "client" {
   key_vault_id = var.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
   secret_permissions = ["Get"]
-}
+}*/
 
 resource "azurerm_key_vault_key" "storage_account_key" {
-  name            = "tfex-key"
-  key_vault_id    = var.key_vault_id
-  key_type        = "RSA-HSM"
-  key_size        = 2048
-  key_opts        = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
-  expiration_date = "2024-12-30T20:00:00Z"
-  depends_on = [
-    azurerm_key_vault_access_policy.client
+  name         = "tfex-key"
+  key_vault_id = var.key_vault_id
+  key_type     = "RSA-HSM"
+  key_size     = 2048
+  #  key_opts        = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
   ]
+
+  rotation_policy {
+    automatic {
+      time_before_expiry = "P30D"
+    }
+
+    expire_after         = "P90D"
+    notify_before_expiry = "P29D"
+  }
+  expiration_date = "2024-12-30T20:00:00Z"
 }
+
+/*
+resource "azurerm_role_assignment" "role_assignment_storagekv" {
+  scope                = var.key_vault_id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = azurerm_storage_account.storage_account.id
+}
+*/
+/*
+resource "azurerm_role_assignment" "role_assignment_keyvault" {
+  scope                = var.key_vault_id
+  role_definition_name = "Key Vault Reader"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+*/
+
 
 resource "azurerm_storage_account_customer_managed_key" "ok_cmk" {
   storage_account_id = azurerm_storage_account.storage_account.id
