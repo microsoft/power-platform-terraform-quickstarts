@@ -30,13 +30,15 @@ resource "azurerm_storage_account" "storage_account" {
   min_tls_version                 = "TLS1_2"
   public_network_access_enabled   = true  //this feature needs to be changed to be false once the setup is completed.
   allow_nested_items_to_be_public = false //this feature needs to be changed to be false once the setup is completed.
-  shared_access_key_enabled       = false //this feature needs to be changed to be false once the setup is completed.
+  shared_access_key_enabled       = true  //this feature needs to be changed to be false once the setup is completed.
+
+  // Blob properties fail the secod time the script is run, so it is commented out
+  /*
   blob_properties {
     delete_retention_policy {
       days = 7
     }
   }
-  # reading queue properties sends error after deploy the storage account 
   /* 
   queue_properties {
     logging {
@@ -60,13 +62,19 @@ resource "azurerm_storage_account" "storage_account" {
     }
   }
   */
+
+
+
   identity {
     type = "SystemAssigned"
   }
+
+
   network_rules {
-    default_action = "Allow" // "Deny"
+    default_action = "Allow" // this feature needs to be changed to be"Deny"
     bypass         = ["AzureServices", "Logging", "Metrics"]
   }
+
 
 }
 
@@ -82,6 +90,8 @@ resource "azurerm_storage_account" "storage_account" {
   secret_permissions = ["Get"]
 }*/
 
+### Storage account Key vault key
+/*
 resource "azurerm_key_vault_key" "storage_account_key" {
   name         = "tfex-key"
   key_vault_id = var.key_vault_id
@@ -107,6 +117,7 @@ resource "azurerm_key_vault_key" "storage_account_key" {
   }
   expiration_date = "2024-12-30T20:00:00Z"
 }
+*/
 
 /*
 resource "azurerm_role_assignment" "role_assignment_storagekv" {
@@ -123,26 +134,29 @@ resource "azurerm_role_assignment" "role_assignment_keyvault" {
 }
 */
 
-
+/*
 resource "azurerm_storage_account_customer_managed_key" "ok_cmk" {
   storage_account_id = azurerm_storage_account.storage_account.id
   key_vault_id       = var.key_vault_id
   key_name           = azurerm_key_vault_key.storage_account_key.name
 }
+*/
 
 ### Storage container and blob
+
 resource "azurerm_storage_container" "storage_container_installs" {
   name                  = "installs"
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }
 
+
 resource "azurerm_storage_blob" "storage_blob_ps7_setup" {
   name                   = "ps7-setup.ps1"
   storage_account_name   = azurerm_storage_account.storage_account.name
   storage_container_name = azurerm_storage_container.storage_container_installs.name
   type                   = "Block"
-  source                 = "/workspaces/terraform-provider-power-platform/examples/quickstarts/301-sap-gateway/storage-account/scripts/ps7-setup.ps1"
+  source                 = "./storage-account/scripts/ps7-setup.ps1"
 }
 
 resource "azurerm_storage_blob" "storage_blob_java_runtime" {
@@ -150,24 +164,25 @@ resource "azurerm_storage_blob" "storage_blob_java_runtime" {
   storage_account_name   = azurerm_storage_account.storage_account.name
   storage_container_name = azurerm_storage_container.storage_container_installs.name
   type                   = "Block"
-  source                 = "/workspaces/terraform-provider-power-platform/examples/quickstarts/301-sap-gateway/storage-account/scripts/java-setup.ps1"
+  source                 = "./storage-account/scripts/java-setup.ps1"
 }
-
+/*
 resource "azurerm_storage_blob" "storage_blob_sapnco_install" {
   name                   = "sapnco.msi"
   storage_account_name   = azurerm_storage_account.storage_account.name
   storage_container_name = azurerm_storage_container.storage_container_installs.name
   type                   = "Block"
-  source                 = "/workspaces/terraform-provider-power-platform/examples/quickstarts/301-sap-gateway/storage-account/sapnco-msi/sapnco.msi"
+  source                 = "./storage-account/sapnco-msi/sapnco.msi"
 }
-
+*/
 resource "azurerm_storage_blob" "storage_blob_runtime_setup" {
   name                   = "runtime-setup.ps1"
   storage_account_name   = azurerm_storage_account.storage_account.name
   storage_container_name = azurerm_storage_container.storage_container_installs.name
   type                   = "Block"
-  source                 = "/workspaces/terraform-provider-power-platform/examples/quickstarts/301-sap-gateway/storage-account/scripts/runtime-setup.ps1"
+  source                 = "./storage-account/scripts/runtime-setup.ps1"
 }
+
 
 ### Loging for Storageaccount blob
 
@@ -188,7 +203,7 @@ resource "azurerm_log_analytics_storage_insights" "analytics_storage_insights_sa
 }
 
 ### Private endpoint for Storage Account
-
+/*
 resource "azurerm_private_endpoint" "storage_account_pe" {
   name                = "${azurerm_storage_account.storage_account.name}-pe" #"${azurerm_storage_account.name}-pe"
   resource_group_name = var.resource_group_name
@@ -206,3 +221,4 @@ resource "azurerm_private_endpoint" "storage_account_pe" {
   }
   depends_on = [azurerm_storage_account.storage_account]
 }
+*/
