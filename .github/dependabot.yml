@@ -10,13 +10,37 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "/quickstarts" # Location of package manifests
+    directory: "/quickstarts/101-hello-power-platform" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/quickstarts/102-github-pipeline" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/quickstarts/103-power-pipelines" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/quickstarts/201-D365-finance-environment" # Location of package manifests
+    schedule:
+      interval: "daily"      
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/quickstarts/300-pac-checkov" # Location of package manifests
+    schedule:
+      interval: "daily"    
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/bootstrap/tenant-configuration" # Location of package manifests
+    schedule:
+      interval: "daily"              
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/.github/workflows" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: "devcontainers" # See documentation for possible values
+    directory: "/"
+    schedule:
+      interval: "daily"      
 groups:
   all:
     patterns:
