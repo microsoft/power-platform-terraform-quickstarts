@@ -54,3 +54,5 @@ terraform.locl.hcl
 tfchecov.sh
 *.locl.hcl
 
+# SAP installation files
+sapnco.msi
