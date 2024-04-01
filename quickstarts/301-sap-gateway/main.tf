@@ -18,7 +18,7 @@ provider "azurerm" {
     }
     key_vault {
       purge_soft_delete_on_destroy    = true
-      recover_soft_deleted_key_vaults = false
+      recover_soft_deleted_key_vaults = true
     }
   }
   client_id       = var.client_id_gw
@@ -40,6 +40,9 @@ resource "azurecaf_name" "rg" {
 resource "azurerm_resource_group" "rg" {
   name     = azurecaf_name.rg.result
   location = var.region_gw
+  tags = {
+    environment = var.environment
+  }
 }
 
 resource "azurecaf_name" "vnet" {
@@ -70,6 +73,11 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name #
   address_prefixes     = ["10.0.1.0/24"]
+}
+
+resource "azurerm_subnet_network_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
 resource "azurecaf_name" "nsg" {
@@ -139,12 +147,12 @@ resource "azurerm_network_interface" "nic" {
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = var.sap_subnet_id
+    name = "internal"
+    #subnet_id                     = var.sap_subnet_id
+    subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip.id
+    # public_ip_address_id          = azurerm_public_ip.publicip.id # Uncomment this line to assign a public IP to make the VM accessible from the internet
   }
-
 }
 
 resource "azurerm_network_interface_security_group_association" "rgassociation" {
