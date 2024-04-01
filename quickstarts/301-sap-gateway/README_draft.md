@@ -1,0 +1,104 @@
+# SAP Connectivity Runtime Setup (301 level)
+
+This Terraform module aims to provide a fully managed infrastructure that integrates Microsoft's Power Platform and Azure services with SAP Systems. Utilizing  `azurerm` and `azurecaf` Terraform providers, this module encapsulates best practices and serves as a reference architecture for scalable, reliable, and manageable cloud infrastructure.
+
+In order to provide connectivity between SAP and Microsoft services, it is required to install a set runtime software and also setup particular configuration. This document is a guide to setup a Terraform script to provision the Virtual Machine and all the requirements to connect the SHIR (Self-hosted Integration Runtime), the Microsoft Gateway and SAP .NET Connector.
+
+## Prerequisites and Preparation
+
+### Credentials
+
+- Azure subscription
+- Service Principal or User Account with permissions configured as referenced in [the provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication).
+- All the credentials for Azure resources creation.
+
+### SAP Systems
+
+For the execution of this Terraform script, you do not need the SAP credentials or the application server information. However, it is important to know how to connect to the SAP system to provide proper information to the script.
+
+The scenario covered by this script is the SAP system installed on-premisses on Azure, and you cannot use a public address, so you will need to provide the subnet ID where the SAP system is installed.
+
+The subnet ID is available at the JSON view of the virtual network, in the parameter id. It is expected something like below:
+
+`/subscriptions/abababab-12ab-ab00-82e2-aa00babab102/resourceGroups/resouce-group-name/providers/Microsoft.Network/virtualNetworks/VNet-name/subnets/default`
+
+### Storage Account Preparation
+
+Before you execute the script, you need to upload the SAP .NET Connector MSI file the folder `./storage-account/sapnco-msi` and rename to `sapnco.msi` (check below for more information).
+
+### SHIR Nodes Preparation
+
+Make sure there is not any node assigned to the self-hosted integration runtime at Synapse or ADF. Please check more information at [Create a self-hosted integration runtime - Azure Data Factory & Azure Synapse | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory).
+
+{{ .ModuleDetails }}
+
+## Usage
+
+The entire script is required for the proper installation, unless you decide to create any one of the resources separatelly.
+
+You have to execute the normal Terraform commands:
+
+``terraform init -upgrade
+
+``terraform plan -var-file=local.tfvars
+
+``terraform apply -var-file=local.tfvars
+
+``terraform destroy -var-file=local.tfvars
+
+## Terraform Version Constraints
+
+- azurerm `>=3.74.0`
+- azurecaf `>=1.2.26`
+
+## Detailed Behavior
+
+### On-Premise Data Gateway
+
+A Windows Virtual Machine is created with all the software connectors required to connect on-premise data gateway and self-hosted integration runtime.
+
+It is the list of software installed on the Virtual Machine:
+
+#### PowerShell 7
+
+It is required to execute the script for the on-premise data gateway installation. After VM creation, the [script](./gateway-vm/scripts/ps7-setup.ps1) download and install PowerShell 7.
+
+#### Java Runtime
+
+If you will use Parquet file, it is required for SHIR runtime and SAP data flows. Check the [prerequisites](https://learn.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory#prerequisites) in the documentation for more details.
+
+#### Microsoft Self-Hosted Integration Runtime (SHIR)
+
+It is the runtime used to connect the VM to SHIR in Synapse/ADF/Fabric. Check the [documentation](https://learn.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime) for more details.
+
+#### SAP Connector for .Net
+
+It is the runtime used to connect the VM to SAP system. You need to [download the MSI file](https://support.sap.com/en/product/connectors/msnet.html) and upload to the folder mentioned above. The installation provided in this guide, follows this [documentation](https://learn.microsoft.com/en-us/azure/data-factory/sap-change-data-capture-shir-preparation).
+
+#### On-Premises Data Gateway
+
+It is the runtime used to connect to the Power Platform connectors (e.g. SAP ERP). Here is some references used to created the script:
+
+- [Learn how to install On-premises data gateway for Azure Analysis Services | Microsoft Learn](https://learn.microsoft.com/en-us/azure/analysis-services/analysis-services-gateway-install?tabs=azure-powershell)
+- [Data Gateway Documentation](https://learn.microsoft.com/en-us/powershell/module/datagateway/?view=datagateway-ps)
+
+### Power Platform Resources
+
+A PowerApps Environment is created.
+
+### Network
+
+All resources are provisioned within the same Azure Virtual Network where the SAP System is installed (`sap_subnet_id` input parameter), ensuring that they can communicate securely without exposure to the public internet.
+
+## Limitations and Considerations
+
+- Due to Power Platform limitations, certain resources may not fully support Terraform's state management.
+- Make sure to set appropriate RBAC for Azure and Power Platform resources.
+- This module is provided as a sample only and is not intended for production use without further customization.
+
+## Additional Resources
+
+- [Create and configure a self-hosted integration runtime](https://learn.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime)
+- [Power Platform Admin Documentation](https://learn.microsoft.com/en-us/power-platform/admin/)
+- [Azure AD Terraform Provider](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration)
+- <https://learn.microsoft.com/en-us/power-platform/admin/wp-onpremises-gateway>
