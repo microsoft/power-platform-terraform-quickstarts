@@ -44,8 +44,8 @@ resource "azuread_application" "gateway_application" {
 }
 
 resource "azuread_service_principal" "gateway_principal" {
-  client_id = azuread_application.gateway_application.application_id
-  description    = "Gateway Principal"
+  client_id   = azuread_application.gateway_application.application_id
+  description = "Gateway Principal"
 }
 
 resource "azuread_service_principal_password" "gateway_principal_password" {
