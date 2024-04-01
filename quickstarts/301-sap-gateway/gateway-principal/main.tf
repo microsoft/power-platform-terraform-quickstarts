@@ -21,7 +21,7 @@ data "azuread_application_published_app_ids" "well_known" {
 }
 
 data "azuread_service_principal" "powerbi" {
-  application_id = data.azuread_application_published_app_ids.well_known.result.PowerBiService
+  client_id = data.azuread_application_published_app_ids.well_known.result.PowerBiService
   #use_existing   = true
 }
 
@@ -44,7 +44,7 @@ resource "azuread_application" "gateway_application" {
 }
 
 resource "azuread_service_principal" "gateway_principal" {
-  application_id = azuread_application.gateway_application.application_id
+  client_id = azuread_application.gateway_application.application_id
   description    = "Gateway Principal"
 }
 
