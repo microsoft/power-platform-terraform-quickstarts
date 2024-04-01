@@ -25,6 +25,20 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = var.region
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version                 = "TLS1_2"
+  public_network_access_enabled   = true //this feature needs to be changed to be false once the setup is completed.
+  allow_nested_items_to_be_public = true //this feature needs to be changed to be false once the setup is completed.
+  shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  network_rules {
+    default_action = "Allow" // this feature needs to be changed to be"Deny"
+    bypass         = ["AzureServices", "Logging", "Metrics"]
+  }
+
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
