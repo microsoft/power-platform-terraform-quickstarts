@@ -364,7 +364,7 @@ module "storage_account" {
   //key_vault_access_policy = azurerm_key_vault_access_policy.key_vault_access_policy.id
 }
 
-/*
+
 module "gateway_vm" {
   source                     = "./gateway-vm"
   resource_group_name        = azurerm_resource_group.rg.name
@@ -384,5 +384,6 @@ module "gateway_vm" {
   runtime_setup_link         = module.storage_account.storage_blob_runtime_setup_link
   gateway_name               = var.gateway_name
   secret_name_recover_key_gw = azurerm_key_vault_secret.key_vault_secret_recover_key.name
+  depends_on                 = [module.storage_account]
 }
-*/
+

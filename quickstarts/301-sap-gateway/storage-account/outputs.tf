@@ -1,4 +1,3 @@
-/*
 output "storage_blob_ps7_setup_link" {
   value = azurerm_storage_blob.storage_blob_ps7_setup.url
 }
@@ -20,4 +19,3 @@ output "storage_account_name" {
 output "storage_account_id" {
   value = azurerm_storage_account.storage_account.id
 }
-*/

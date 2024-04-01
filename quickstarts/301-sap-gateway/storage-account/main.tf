@@ -25,12 +25,12 @@ resource "azurerm_storage_account" "storage_account" {
   name                            = azurecaf_name.storage_account_name.result
   resource_group_name             = var.resource_group_name
   location                        = var.region
-  account_tier                    = "Standard"
-  account_replication_type        = "LRS" // GRS will be the recomended value for production 
+  account_tier                    = "Standard" // Review the tier after production maybe change to be "Standard"
+  account_replication_type        = "LRS"      // GRS will be the recomended value for production 
   min_tls_version                 = "TLS1_2"
-  public_network_access_enabled   = true  //this feature needs to be changed to be false once the setup is completed.
-  allow_nested_items_to_be_public = false //this feature needs to be changed to be false once the setup is completed.
-  shared_access_key_enabled       = true  //this feature needs to be changed to be false once the setup is completed.
+  public_network_access_enabled   = true //this feature needs to be changed to be false once the setup is completed.
+  allow_nested_items_to_be_public = true //this feature needs to be changed to be false once the setup is completed.
+  shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
 
   // Blob properties fail the secod time the script is run, so it is commented out
   /*
@@ -166,7 +166,7 @@ resource "azurerm_storage_blob" "storage_blob_java_runtime" {
   type                   = "Block"
   source                 = "./storage-account/scripts/java-setup.ps1"
 }
-/*
+
 resource "azurerm_storage_blob" "storage_blob_sapnco_install" {
   name                   = "sapnco.msi"
   storage_account_name   = azurerm_storage_account.storage_account.name
@@ -174,7 +174,7 @@ resource "azurerm_storage_blob" "storage_blob_sapnco_install" {
   type                   = "Block"
   source                 = "./storage-account/sapnco-msi/sapnco.msi"
 }
-*/
+
 resource "azurerm_storage_blob" "storage_blob_runtime_setup" {
   name                   = "runtime-setup.ps1"
   storage_account_name   = azurerm_storage_account.storage_account.name
@@ -203,6 +203,7 @@ resource "azurerm_log_analytics_storage_insights" "analytics_storage_insights_sa
 }
 
 ### Private endpoint for Storage Account
+
 /*
 resource "azurerm_private_endpoint" "storage_account_pe" {
   name                = "${azurerm_storage_account.storage_account.name}-pe" #"${azurerm_storage_account.name}-pe"
