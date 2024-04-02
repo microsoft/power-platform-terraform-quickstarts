@@ -3,9 +3,25 @@
 
 This Terraform module aims to provide a fully managed infrastructure that integrates Microsoft's Power Platform and Azure services with SAP Systems. Utilizing  `azurerm` and `azurecaf` Terraform providers, this module encapsulates best practices and serves as a reference architecture for scalable, reliable, and manageable cloud infrastructure.
 
-## Prerequisites
+In order to provide connectivity between SAP and Microsoft services, it is required to install a set runtime software and also setup particular configuration.
+This document is a guide to setup a Terraform script to provision the Virtual Machine and all the requirements to connect the SHIR (Self-hosted Integration Runtime),
+the Microsoft Gateway and SAP .NET Connector.
 
+## Prerequisites and Preparation
+
+- Azure subscription
+- All the credentials for Azure resources creation.
 - Service Principal or User Account with permissions configured as referenced in [the provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication).
+
+### SAP Systems
+
+For the execution of this Terraform script, you do not need the SAP credentials or the application server information. However, it is important to know how to connect to the SAP system to provide proper information to the script.
+
+The scenario covered by this script is the SAP system installed on-premisses on Azure, and you cannot use a public address, so you will need to provide the subnet ID where the SAP system is installed.
+
+The subnet ID is available at the JSON view of the virtual network, in the parameter id. It is expected something like below:
+
+`/subscriptions/abababab-12ab-ab00-82e2-aa00babab102/resourceGroups/resouce-group-name/providers/Microsoft.Network/virtualNetworks/VNet-name/subnets/default`
 
 ### Storage Account Preparation
 
@@ -17,12 +33,17 @@ Make sure there is not any node assigned to the self-hosted integration runtime 
 
 ## Example Files
 
-The example files can be found in `examples/quickstarts/301-sap-gateway`
+The example files can be found in `quickstarts/301-sap-gateway`
 
-## Provider Requirements:
-* **azurecaf (`aztfmod/azurecaf`):** `>=1.2.26`
-* **azurerm (`hashicorp/azurerm`):** `>=3.74.0`
-* **random:** (any version)
+## Provider Requirements
+
+The Terraform plugins or "providers" that this IaC deployment requires are:
+
+- **azurecaf (`aztfmod/azurecaf`):** `>=>=1.2.26`
+
+- **azurerm (`hashicorp/azurerm`):** `>=>=3.74.0`
+
+- **random:** (any version)
 
 ## Input Variables
 
@@ -31,6 +52,7 @@ The example files can be found in `examples/quickstarts/301-sap-gateway`
 | `base_name` | The base name which should be used for all resources name | string | `"AzureSAPIntegration"` | false |
 | `client_id_gw` | The client ID / app ID of the service principal where the on-premise data gateway admin permissions | string | `null` | true |
 | `client_id_pp` | The client ID / app ID of the service principal with Power Platform admin permissions | string | `null` | true |
+| `environment` | tag name of the environment like dev, stg, prod | string | `null` | true |
 | `gateway_name` | The name of the gateway to be created on Power Platform | string | `null` | true |
 | `prefix` | The prefix which should be used for all resources name | string | `"opdgw"` | false |
 | `recover_key_gw` | The recovery key of the gateway | string | `null` | true |
@@ -40,46 +62,74 @@ The example files can be found in `examples/quickstarts/301-sap-gateway`
 | `secret_pp` | The secret of the service principal with Power Platform admin permissions | string | `null` | true |
 | `shir_key` | Value of the secret name for the IR key | string | `null` | true |
 | `subscription_id_gw` | The subscription ID of the service principal with on-premise data gateway admin permissions | string | `null` | true |
+| `tags` | A map of tags to add to all resources | map(string) | `{"costcenter":"12345","department":"IT","environment":"dev"}` | false |
 | `tenant_id_gw` | The tenant ID of service principal or user | string | `null` | true |
 | `tenant_id_pp` | The tenant ID of service principal or user at Power Platform | string | `null` | true |
 | `user_id_admin_pp` | The user ID to be assigned as Admin role of the Power Platform | string | `null` | true |
 
-
 ## Resources
-* `azurecaf_name.key_vault` from `azurecaf`
-* `azurecaf_name.key_vault_secret_irkey` from `azurecaf`
-* `azurecaf_name.key_vault_secret_pp` from `azurecaf`
-* `azurecaf_name.key_vault_secret_recover_key` from `azurecaf`
-* `azurecaf_name.key_vault_secret_vm_pwd` from `azurecaf`
-* `azurecaf_name.nic` from `azurecaf`
-* `azurecaf_name.nsg` from `azurecaf`
-* `azurecaf_name.publicip` from `azurecaf`
-* `azurecaf_name.rg` from `azurecaf`
-* `azurecaf_name.subnet` from `azurecaf`
-* `azurecaf_name.vnet` from `azurecaf`
-* `azurerm_key_vault.key_vault` from `azurerm`
-* `azurerm_key_vault_access_policy.key_vault_access_policy` from `azurerm`
-* `azurerm_key_vault_secret.key_vault_secret_irkey` from `azurerm`
-* `azurerm_key_vault_secret.key_vault_secret_pp` from `azurerm`
-* `azurerm_key_vault_secret.key_vault_secret_recover_key` from `azurerm`
-* `azurerm_key_vault_secret.key_vault_secret_vm_pwd` from `azurerm`
-* `azurerm_network_interface.nic` from `azurerm`
-* `azurerm_network_interface_security_group_association.rgassociation` from `azurerm`
-* `azurerm_network_security_group.nsg` from `azurerm`
-* `azurerm_public_ip.publicip` from `azurerm`
-* `azurerm_resource_group.rg` from `azurerm`
-* `azurerm_subnet.subnet` from `azurerm`
-* `azurerm_virtual_network.vnet` from `azurerm`
-* `random_string.key_vault_suffix` from `random`
-* `random_string.vm_pwd` from `random`
+
+- `azurecaf_name.key_vault` from `azurecaf`
+
+- `azurecaf_name.key_vault_secret_irkey` from `azurecaf`
+
+- `azurecaf_name.key_vault_secret_pp` from `azurecaf`
+
+- `azurecaf_name.key_vault_secret_recover_key` from `azurecaf`
+
+- `azurecaf_name.key_vault_secret_vm_pwd` from `azurecaf`
+
+- `azurecaf_name.nic` from `azurecaf`
+
+- `azurecaf_name.nsg` from `azurecaf`
+
+- `azurecaf_name.publicip` from `azurecaf`
+
+- `azurecaf_name.rg` from `azurecaf`
+
+- `azurecaf_name.subnet` from `azurecaf`
+
+- `azurecaf_name.vnet` from `azurecaf`
+
+- `azurerm_key_vault.key_vault` from `azurerm`
+
+- `azurerm_key_vault_secret.key_vault_secret_irkey` from `azurerm`
+
+- `azurerm_key_vault_secret.key_vault_secret_pp` from `azurerm`
+
+- `azurerm_key_vault_secret.key_vault_secret_recover_key` from `azurerm`
+
+- `azurerm_key_vault_secret.key_vault_secret_vm_pwd` from `azurerm`
+
+- `azurerm_network_interface.nic` from `azurerm`
+
+- `azurerm_network_interface_security_group_association.rgassociation` from `azurerm`
+
+- `azurerm_network_security_group.nsg` from `azurerm`
+
+- `azurerm_public_ip.publicip` from `azurerm`
+
+- `azurerm_resource_group.rg` from `azurerm`
+
+- `azurerm_subnet.subnet` from `azurerm`
+
+- `azurerm_subnet_network_security_group_association.example` from `azurerm`
+
+- `azurerm_virtual_network.vnet` from `azurerm`
+
+- `random_string.key_vault_suffix` from `random`
+
+- `random_string.vm_pwd` from `random`
 
 ## Data Sources
-* `data.azurerm_client_config.current` from `azurerm`
+
+- `data.azurerm_client_config.current` from `azurerm`
 
 ## Child Modules
-* `gateway_vm` from `./gateway-vm`
-* `storage_account` from `./storage-account`
 
+- `gateway_vm` from `./gateway-vm`
+
+- `storage_account` from `./storage-account`
 
 ## Usage
 
