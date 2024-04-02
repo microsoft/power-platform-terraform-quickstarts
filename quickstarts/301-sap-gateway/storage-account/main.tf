@@ -38,7 +38,7 @@ resource "azurerm_storage_account" "storage_account" {
     default_action = "Allow" // this feature needs to be changed to be"Deny"
     bypass         = ["AzureServices", "Logging", "Metrics"]
   }
-
+  tags = var.tags
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
@@ -87,6 +87,7 @@ resource "azurerm_log_analytics_workspace" "analytics_workspace_sapinteration" {
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+  tags                = var.tags
 }
 resource "azurerm_log_analytics_storage_insights" "analytics_storage_insights_sapintegration" {
   name                 = "sapintegration-storageinsightconfig"

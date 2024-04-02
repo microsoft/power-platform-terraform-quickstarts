@@ -101,3 +101,13 @@ variable "encryption_at_host_enabled" {
   default     = false
   type        = bool
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default = {
+    environment = "dev"
+    department  = "IT"
+    costcenter  = "12345"
+  }
+}

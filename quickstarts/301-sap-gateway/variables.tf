@@ -101,3 +101,13 @@ variable "environment" {
   description = "tag name of the environment like dev, stg, prod"
   type        = string
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default = {
+    environment = "dev"
+    department  = "IT"
+    costcenter  = "12345"
+  }
+}

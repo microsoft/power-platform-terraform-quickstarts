@@ -23,6 +23,7 @@ resource "azurerm_shared_image_gallery" "sig" {
   name                = azurecaf_name.sig.result
   resource_group_name = var.resource_group_name
   location            = var.region
+  tags                = var.tags
 }
 
 # Create PowerShell 7 version in Shared Image Gallery
@@ -142,6 +143,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
     version_id = module.runtime-setup.runtime_version_id
     order      = 4
   }
+  tags = var.tags
 }
 
 # Create a virtual machine extension to run the runtime-setup.ps1 script
@@ -164,4 +166,5 @@ SETTINGS
     create = "60m"
     delete = "60m"
   }
+  tags = var.tags
 }

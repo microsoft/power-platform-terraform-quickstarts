@@ -19,3 +19,13 @@ variable "region" {
   description = "The Azure region where the resources in this example should be created"
   type        = string
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default = {
+    environment = "dev"
+    department  = "IT"
+    costcenter  = "12345"
+  }
+}

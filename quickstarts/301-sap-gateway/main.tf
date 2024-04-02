@@ -40,9 +40,7 @@ resource "azurecaf_name" "rg" {
 resource "azurerm_resource_group" "rg" {
   name     = azurecaf_name.rg.result
   location = var.region_gw
-  tags = {
-    environment = var.environment
-  }
+  tags     = var.tags
 }
 
 resource "azurecaf_name" "vnet" {
@@ -58,6 +56,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+  tags                = var.tags
 }
 
 resource "azurecaf_name" "subnet" {
@@ -131,6 +130,7 @@ resource "azurerm_public_ip" "publicip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
+  tags                = var.tags
 }
 
 resource "azurecaf_name" "nic" {
@@ -153,6 +153,7 @@ resource "azurerm_network_interface" "nic" {
     private_ip_address_allocation = "Dynamic"
     # public_ip_address_id          = azurerm_public_ip.publicip.id # Uncomment this line to assign a public IP to make the VM accessible from the internet
   }
+  tags = var.tags
 }
 
 resource "azurerm_network_interface_security_group_association" "rgassociation" {
@@ -200,6 +201,7 @@ resource "azurerm_key_vault" "key_vault" {
     secret_permissions = ["Get", "List", "Delete", "Set", "Purge"]
     key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify", "Update", "GetRotationPolicy", "SetRotationPolicy"]
   }
+  tags = var.tags
 }
 
 resource "azurecaf_name" "key_vault_secret_pp" {
@@ -216,6 +218,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_pp" {
   key_vault_id    = azurerm_key_vault.key_vault.id
   expiration_date = "2024-12-30T20:00:00Z"
   content_type    = "text/plain"
+  tags            = var.tags
 }
 
 resource "azurecaf_name" "key_vault_secret_irkey" {
@@ -232,6 +235,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_irkey" {
   key_vault_id    = azurerm_key_vault.key_vault.id
   expiration_date = "2024-12-30T20:00:00Z"
   content_type    = "text/plain"
+  tags            = var.tags
 }
 
 resource "azurecaf_name" "key_vault_secret_recover_key" {
@@ -248,7 +252,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_recover_key" {
   key_vault_id    = azurerm_key_vault.key_vault.id
   expiration_date = "2024-12-30T20:00:00Z"
   content_type    = "text/plain"
-
+  tags            = var.tags
 }
 
 resource "random_string" "vm_pwd" {
@@ -271,6 +275,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_vm_pwd" {
   key_vault_id    = azurerm_key_vault.key_vault.id
   expiration_date = "2024-12-30T20:00:00Z"
   content_type    = "text/plain"
+  tags            = var.tags
 }
 
 module "storage_account" {
@@ -301,14 +306,3 @@ module "gateway_vm" {
   gateway_name               = var.gateway_name
   secret_name_recover_key_gw = azurerm_key_vault_secret.key_vault_secret_recover_key.name
 }
-
-resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
-  key_vault_id = azurerm_key_vault.key_vault.id
-  tenant_id    = var.tenant_id_gw
-  object_id    = module.gateway_vm.vm_opgw_principal_id
-  secret_permissions = [
-    "Get",
-    "List",
-  ]
-}
-
