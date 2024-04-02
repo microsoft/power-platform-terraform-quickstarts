@@ -20,11 +20,11 @@ resource "azurecaf_name" "storage_account_name" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
-  name                     = azurecaf_name.storage_account_name.result
-  resource_group_name      = var.resource_group_name
-  location                 = var.region
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  name                            = azurecaf_name.storage_account_name.result
+  resource_group_name             = var.resource_group_name
+  location                        = var.region
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
   min_tls_version                 = "TLS1_2"
   public_network_access_enabled   = true //this feature needs to be changed to be false once the setup is completed.
   allow_nested_items_to_be_public = true //this feature needs to be changed to be false once the setup is completed.
