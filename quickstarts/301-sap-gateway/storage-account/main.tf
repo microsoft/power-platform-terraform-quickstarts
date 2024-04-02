@@ -79,4 +79,20 @@ resource "azurerm_storage_blob" "storage_blob_runtime_setup" {
   source                 = "./storage-account/scripts/runtime-setup.ps1"
 }
 
+### Loging for Storageaccount blob
 
+resource "azurerm_log_analytics_workspace" "analytics_workspace_sapinteration" {
+  name                = "sapintegration-workspace"
+  location            = var.region
+  resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+resource "azurerm_log_analytics_storage_insights" "analytics_storage_insights_sapintegration" {
+  name                 = "sapintegration-storageinsightconfig"
+  resource_group_name  = var.resource_group_name
+  workspace_id         = azurerm_log_analytics_workspace.analytics_workspace_sapinteration.id
+  storage_account_id   = azurerm_storage_account.storage_account.id
+  storage_account_key  = azurerm_storage_account.storage_account.primary_access_key
+  blob_container_names = [azurerm_storage_container.storage_container_installs.name]
+}
