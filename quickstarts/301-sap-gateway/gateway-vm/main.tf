@@ -104,7 +104,8 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
   patch_assessment_mode                                  = "ImageDefault"
   patch_mode                                             = "AutomaticByOS"
   encryption_at_host_enabled                             = var.encryption_at_host_enabled # "true" Enable encryption at host, need's to configure the disk encryption set
-  allow_extension_operations                             = var.allow_extension_operations # "false" This feature needs to be turn to true to allow the VM to install extensions
+  #checkov:skip=CKV_AZURE_151:encryption_at_host_enabled is set to false do to we dont have permisions to enable that feature.
+  allow_extension_operations                             = var.allow_extension_operations # "false" This feature needs to be turn to true to allow the VM to install extensions.
   #checkov:skip=CKV_AZURE_50:allow_extension_operations is set to false to install SAP SW.
  
   os_disk {
