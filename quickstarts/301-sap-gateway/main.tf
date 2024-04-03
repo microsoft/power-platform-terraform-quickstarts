@@ -192,6 +192,7 @@ resource "azurerm_key_vault" "key_vault" {
   network_acls {
     default_action = "Allow" #Checkov requires "Deny"
     bypass         = "AzureServices"
+    #checkov:skip=CKV_AZURE_109: This keyVault is not intended to be accessed from on-premises networks
   }
 
   access_policy {
