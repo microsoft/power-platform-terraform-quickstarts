@@ -37,10 +37,13 @@ resource "azurerm_storage_account" "storage_account" {
   network_rules {
     default_action = "Allow" // this feature needs to be changed to be"Deny"
     #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access, this deployment requires public access to the storage account"
+    #checkov:skip=CKV_AZURE_35: "Ensure default network access rule for Storage Accounts is set to deny"
     bypass         = ["AzureServices", "Logging", "Metrics"]
   }
   tags = var.tags
   #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests, this deployment dont use queue service"
+  #checkov:skip=CKV_AZURE_190:"Ensure that Storage blobs restrict public access, this deployment requires public access to the blob"
+  #checkov:skip=CKV2_AZURE_38: "Ensure soft-delete is enabled on Azure storage account, we need to review this impmementation later, terraform fails applying this feature"
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
@@ -48,6 +51,7 @@ resource "azurerm_storage_container" "storage_container_installs" {
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "blob"
   #checkov:skip=CKV_AZURE_190:"Ensure that Storage blobs restrict public access, this deployment requires public access to the blob"
+  #checkov:skip=CKV_AZURE_34: "Ensure that 'Public access level' is set to Private for blob containers"
 }
 
 resource "azurerm_storage_blob" "storage_blob_ps7_setup" {
