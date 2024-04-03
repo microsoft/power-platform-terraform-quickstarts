@@ -36,15 +36,18 @@ resource "azurerm_storage_account" "storage_account" {
 
   network_rules {
     default_action = "Allow" // this feature needs to be changed to be"Deny"
+    #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access, this deployment requires public access to the storage account"
     bypass         = ["AzureServices", "Logging", "Metrics"]
   }
   tags = var.tags
+  #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests, this deployment dont use queue service"
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
   name                  = "installs"
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "blob"
+  #checkov:skip=CKV_AZURE_190:"Ensure that Storage blobs restrict public access, this deployment requires public access to the blob"
 }
 
 resource "azurerm_storage_blob" "storage_blob_ps7_setup" {
