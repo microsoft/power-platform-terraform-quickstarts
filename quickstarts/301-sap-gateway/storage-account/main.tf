@@ -44,6 +44,11 @@ resource "azurerm_storage_account" "storage_account" {
   #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests, this deployment dont use queue service"
   #checkov:skip=CKV_AZURE_190:"Ensure that Storage blobs restrict public access, this deployment requires public access to the blob"
   #checkov:skip=CKV2_AZURE_38: "Ensure soft-delete is enabled on Azure storage account, we need to review this impmementation later, terraform fails applying this feature"
+  #checkov:skip=CKV2_AZURE_47: "Ensure storage account is configured without blob anonymous access, scrips require public access to the blob"
+  #checkov:skip=CKV2_AZURE_40: "Ensure storage account is not configured with Shared Key authorization, scrips require public access to the blob"
+  #checkov:skip=CKV2_AZURE_41: "Ensure storage account is configured with SAS expiration policy, this require correct accesss permisions in the subscription"
+  #checkov:skip=CKV2_AZURE_33: "Ensure storage account is configured with private endpoint, this deployment requires public access to the blob"
+  #checkov:skip=CKV2_AZURE_1: "Ensure storage for critical data are encrypted with Customer Managed Key, KMK is not implemented in this deployment du to a lack of permissions in the subscription"
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {

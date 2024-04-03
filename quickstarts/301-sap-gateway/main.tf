@@ -194,6 +194,7 @@ resource "azurerm_key_vault" "key_vault" {
     bypass         = "AzureServices"
     #checkov:skip=CKV_AZURE_109: This keyVault is not intended to be accessed from on-premises networks
     #checkov:skip=CKV_AZURE_189: "This deployment requires Azure Key Vault disables public network access"
+    #checkov:skip=CKV2_AZURE_32: "Ensure private endpoint is configured to key vault, this deployment requires public access to the key vault"
   }
 
   access_policy {
