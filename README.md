@@ -43,8 +43,6 @@ The example terraform modules are intended to be run by GitHub Actions, however 
 > As long as provider is in private repository, you have to run [/bootstrap/mirror/mirror.sh](/bootstrap/mirror/mirror.sh) first to copy provider locally
 
 ## Quickstart Examples
-
-Following the Quickstarts examples:
 * [101-hello-power-platform](./quickstarts/101-hello-power-platform/README.md)
 * [102-github-pipeline](./quickstarts/102-github-pipeline/README.md)
 * [201-D365-finance-environment](./quickstarts/201-D365-finance-environment/README.md)
