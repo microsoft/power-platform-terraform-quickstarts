@@ -16,8 +16,8 @@ The following resources are created by the `bootstrap.sh` script:
 
 ### Identity and Access Management
 
-This is a list of all the required permissions for the service principal. The service principal is used to manage Power Platform resources.
-An API for this app registration will also be exposed in order to use [Azure CLI as authentication harness](https://github.com/microsoft/terraform-provider-power-platform/blob/main/docs/cli.md) for you terraform scripts.
+This is a list of all the required permissions for the app registration / service principal. The service principal can be used to manage Power Platform resources.
+An API for this app registration will also be exposed in order to use [Azure CLI as authentication harness](https://github.com/microsoft/terraform-provider-power-platform/blob/main/docs/cli.md) for your Terraform modules.
 
 * An app registration and service principal for managing Power Platform resources
 * Dynamics CRM
@@ -32,7 +32,10 @@ An API for this app registration will also be exposed in order to use [Azure CLI
 * [Power Platform Admin role grant to the service principal](https://learn.microsoft.com/en-us/power-platform/admin/powerplatform-api-create-service-principal#registering-an-admin-management-application)
 * Azure Data Access Blob Contributor role grant to the service principal
 
-### Terraform State Backend in Azure Storage Account (advanced version)
+### Optional: Terraform State Backend in Azure Storage Account (advanced version)
+
+> [!NOTE]
+> Storing state in an Azure Storage Account is optional for using the QuickStarts.  These configuration options are provided here to allow the examples to more closely mimic production deployments but are not fully hardened for use in production as is.
 
 * Azure resource group for terraform state
 * Azure storage account for terraform state
@@ -66,8 +69,18 @@ The `bootstrap.sh` script is intended to be run locally by a user with `Owner` p
 > [!NOTE]
 > Remember that the administrator has to grant permsissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
 
-## Outputs (Advanced version only)
+#### Outputs (Advanced version only)
 
 The `bootstrap.sh` [bootstrap.sh](/bootstrap/bootstrap.sh) writes its outputs to a `backend.tfvars` file in the [tenant-configuration](/bootstrap/tenant-configuration/) directory.  The `backend.tfvars` file is used by the [tenant-configuration](/bootstrap/tenant-configuration/) terraform configuration to configure the backend for the terraform state.
 
-After executing [bootstrap.sh](/bootstrap/bootstrap.sh) you can follow instructions in the [tenant-configuration/README.md](/bootstrap/tenant-configuration/README.md) to configure the tenant settings.
+## Next Steps
+
+### Log In
+
+After running `./bootstrap.sh` you can use the following command to login as a user
+
+```bash 
+az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
+```
+
+If you want to run the examples as a service principal, see the [Authenticating to Power Platform](https://microsoft.github.io/terraform-provider-power-platform/#authenticating-to-power-platform) section of the Power Platform Terraform Provider documenation for more authentication options.
