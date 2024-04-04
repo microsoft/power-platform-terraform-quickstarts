@@ -37,7 +37,7 @@ The following terraform providers are used in this repository:
 The example terraform modules are intended to be run by GitHub Actions, however there are several steps that need to be run locally by an administrator in order to create the resources the terraform modules need to use.  The following steps should be run in order:
 
 1. [Bootstrap](bootstrap/README.md) this will create and configure the prerequisites that are needed to run the quickstart examples.
-2. Check out **Quickstart Examples**
+2. Try out any of the following **Quickstart Examples**
 
 ## Quickstart Examples
 * [101-hello-power-platform](./quickstarts/101-hello-power-platform/README.md)
