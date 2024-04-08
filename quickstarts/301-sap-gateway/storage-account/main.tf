@@ -38,7 +38,7 @@ resource "azurerm_storage_account" "storage_account" {
     default_action = "Allow" // this feature needs to be changed to be"Deny"
     #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access, this deployment requires public access to the storage account"
     #checkov:skip=CKV_AZURE_35: "Ensure default network access rule for Storage Accounts is set to deny"
-    bypass         = ["AzureServices", "Logging", "Metrics"]
+    bypass = ["AzureServices", "Logging", "Metrics"]
   }
   tags = var.tags
   #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests, this deployment dont use queue service"
