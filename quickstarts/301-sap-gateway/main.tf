@@ -187,7 +187,7 @@ resource "azurerm_key_vault" "key_vault" {
   purge_protection_enabled      = true
   soft_delete_retention_days    = 7
   enabled_for_disk_encryption   = true
-  enable_rbac_authorization     = true
+  enable_rbac_authorization     = false # Checkov requires "true"
 
   network_acls {
     default_action = "Allow" #Checkov requires "Deny"
@@ -197,12 +197,22 @@ resource "azurerm_key_vault" "key_vault" {
     #checkov:skip=CKV2_AZURE_32: "Ensure private endpoint is configured to key vault, this deployment requires public access to the key vault"
   }
 
+
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
+
     secret_permissions = ["Get", "List", "Delete", "Set", "Purge"]
     key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify", "Update", "GetRotationPolicy", "SetRotationPolicy"]
+  }
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = module.gateway_vm.vm_opgw_principal_id
+
+    secret_permissions = ["Get", "List"]
+    key_permissions    = ["Get", "List"]
   }
   tags = var.tags
 }
