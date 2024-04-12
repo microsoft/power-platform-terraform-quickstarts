@@ -21,10 +21,6 @@ provider "azurerm" {
       recover_soft_deleted_key_vaults = true
     }
   }
-  client_id       = var.client_id_gw
-  client_secret   = var.secret_gw
-  tenant_id       = var.tenant_id_gw
-  subscription_id = var.subscription_id_gw
 }
 
 data "azurerm_client_config" "current" {}
