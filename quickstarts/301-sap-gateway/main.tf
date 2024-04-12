@@ -143,9 +143,8 @@ resource "azurerm_network_interface" "nic" {
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name = "internal"
-    #subnet_id                     = var.sap_subnet_id
-    subnet_id                     = azurerm_subnet.subnet.id
+    name                          = "internal"
+    subnet_id                     = var.sap_subnet_id # azurerm_subnet.subnet.id change this value if you want to deploy the gateway in a different subnet
     private_ip_address_allocation = "Dynamic"
     # public_ip_address_id          = azurerm_public_ip.publicip.id # Uncomment this line to assign a public IP to make the VM accessible from the internet
   }
