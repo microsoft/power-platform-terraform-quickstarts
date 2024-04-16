@@ -11,9 +11,6 @@ terraform {
 }
 
 provider "azuread" {
-  //client_id     = var.client_id
-  //client_secret = var.secret
-  //tenant_id     = var.tenant_id
 }
 
 data "azuread_application_published_app_ids" "well_known" {
@@ -44,7 +41,7 @@ resource "azuread_application" "gateway_application" {
 }
 
 resource "azuread_service_principal" "gateway_principal" {
-  client_id   = azuread_application.gateway_application.application_id
+  client_id   = azuread_application.gateway_application.client_id
   description = "Gateway Principal"
 }
 
