@@ -11,7 +11,9 @@ the Microsoft Gateway and SAP .NET Connector.
 
 - Azure subscription
 - All the credentials for Azure resources creation.
-- Service Principal or User Account with permissions configured as referenced in [the provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication).
+- Service Principal or User Account with permissions configured as referenced in [the provider's user documentation](https://microsoft.github.io/terraform-provider-power-platform#authentication),
+we provide a terraform script to create a Service Principal with the required configuration in the folder `./gateway-principal`.
+
 
 ### SAP Systems
 
@@ -134,6 +136,12 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 ## Usage
 
 The entire script is required for the proper installation, unless you decide to create any one of the resources separatelly.
+
+
+> [!NOTE]
+> To use Terraform commands against your Azure subscription, you must first authenticate Terraform to that subscription. The article [Authenticate Terraform to Azure](https://learn.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash)
+> provides guidance on how to do this, remember to choose the correct subscription.
+> It is highly recommended that you use the [VS Code Dev Container](https://code.visualstudio.com/docs/devcontainers/containers) to run the scripts and terraform modules in this repository.
 
 You have to execute the normal Terraform commands:
 
