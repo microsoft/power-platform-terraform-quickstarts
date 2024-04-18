@@ -40,8 +40,4 @@ updates:
   - package-ecosystem: "devcontainers" # See documentation for possible values
     directory: "/"
     schedule:
-      interval: "daily"      
-groups:
-  all:
-    patterns:
-      - "*"
+      interval: "daily"
