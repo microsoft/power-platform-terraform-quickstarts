@@ -17,7 +17,6 @@ import (
 const workspacePath = "/workspaces/power-platform-terraform-quickstarts/"
 const mainReadmeTemplatePath = workspacePath + "/tools/quickstartgen/mainreadmetemplate.md.tmpl"
 const mainReadmePath = workspacePath + "/tools/quickstartgen/mainreadme.md.tmpl"
-const sapgwPrincipalPath = "/workspaces/power-platform-terraform-quickstarts/quickstarts/301-sap-gateway/gateway-principal/"
 
 var temaplteFuncHelpers = template.FuncMap{
 	"tt": func(s string) string {
@@ -58,7 +57,6 @@ func main() {
 	GenerateQuickstarts()
 	GenerateMainReadme()
 	GenerateTools()
-	GenerateModules()
 }
 
 func GenerateMainReadme() {
@@ -182,64 +180,6 @@ func GenerateTools() {
 
 	const path = workspacePath + "/tools/"
 	quickstartTemplate, qerr := os.ReadFile(workspacePath + "/tools/quickstartgen/quickstart.md.tmpl")
-	if qerr != nil {
-		log.Fatal(qerr)
-	}
-
-	qsDir, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer qsDir.Close()
-
-	// Read directory entries
-	fileInfos, err := qsDir.Readdir(-1) // Passing -1 to read all available entries
-	if err != nil {
-		log.Fatalf("Failed to read directory: %v", err)
-	}
-
-	// Iterate over each entry and print subdirectories
-	for _, fileInfo := range fileInfos {
-		if fileInfo.IsDir() {
-
-			modulePath := filepath.Join(path, fileInfo.Name())
-
-			os.Stdout.WriteString("Generating README.md for " + modulePath + "\n")
-
-			// Parse the terraform in the module
-			module, diags := tfconfig.LoadModule(modulePath)
-			if diags.HasErrors() {
-				panic(diags)
-			}
-
-			// Parse the README.md.tmpl
-			var readmeTemplate bytes.Buffer
-			readmeTemplate.WriteString("<!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->\n")
-			err := RenderReadme(&readmeTemplate, filepath.Join(path, fileInfo.Name(), "README.md.tmpl"), struct {
-				ModuleDetails string
-				ModuleName    string
-			}{
-				ModuleDetails: string(quickstartTemplate),
-				ModuleName:    fileInfo.Name(),
-			})
-			if err != nil {
-				panic(err)
-			}
-
-			var readmeMarkdown bytes.Buffer
-			RenderQuickStartReadmeMarkdown(&readmeMarkdown, readmeTemplate.String(), module)
-
-			os.WriteFile(filepath.Join(path, fileInfo.Name(), "README.md"), readmeMarkdown.Bytes(), 0644)
-		}
-	}
-}
-
-func GenerateModules() {
-	os.Stdout.WriteString("Generating READMEs for quickstarts modules\n")
-
-	const path = sapgwPrincipalPath
-	quickstartTemplate, qerr := os.ReadFile(sapgwPrincipalPath + "README.md.tmpl")
 	if qerr != nil {
 		log.Fatal(qerr)
 	}
