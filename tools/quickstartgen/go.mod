@@ -1,6 +1,6 @@
 module github.com/microsoft/terraform-provider-power-platform/tools/quickstartgen
 
-go 1.21.0
+go 1.23
 
 require github.com/hashicorp/terraform-config-inspect v0.0.0-20231204233900-a34142ec2a72
 
