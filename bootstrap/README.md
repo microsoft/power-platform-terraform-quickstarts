@@ -67,7 +67,7 @@ The `bootstrap.sh` script is intended to be run locally by a user with `Owner` p
 ```
 
 > [!NOTE]
-> Remember that the administrator has to grant permsissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
+> Remember that the administrator has to grant permissions to the newly created service principal. The service principal will be created in the same tenant as the subscription.
 
 #### Outputs (Advanced version only)
 
