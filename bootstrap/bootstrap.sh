@@ -72,7 +72,7 @@ if [ "$#" -eq 4 ]; then
     TF_IN_AUTOMATION=1 terraform apply --auto-approve -var-file=./bootstrap_backend.tfvars
     
 elif [ "$#" -eq 0 ]; then
-   #az login --allow-no-subscriptions
+   az login --allow-no-subscriptions
    pushd ./tenant-configuration
 
    # Disable AzureRM backend in the main.tf file
