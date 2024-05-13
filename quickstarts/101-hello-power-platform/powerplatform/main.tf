@@ -9,11 +9,13 @@ terraform {
 
 resource "powerplatform_environment" "dev" {
   location          = "unitedstates"
-  language_code     = 1033
   display_name      = "terraformdev"
-  currency_code     = "USD"
   environment_type  = "Sandbox"
-  security_group_id = var.dev_environment_access_group_id
+  dataverse = {
+    language_code     = 1033
+    currency_code     = "USD"
+    security_group_id = var.dev_environment_access_group_id
+  }
 }
 
 resource "powerplatform_managed_environment" "dev_managed" {
@@ -30,11 +32,13 @@ resource "powerplatform_managed_environment" "dev_managed" {
 
 resource "powerplatform_environment" "test" {
   location          = "unitedstates"
-  language_code     = 1033
   display_name      = "terraformtest"
-  currency_code     = "USD"
   environment_type  = "Sandbox"
-  security_group_id = var.test_environment_access_group_id
+  dataverse = {
+    language_code     = 1033
+    currency_code     = "USD"
+    security_group_id = var.test_environment_access_group_id
+  }
 }
 
 resource "powerplatform_managed_environment" "test_managed" {
