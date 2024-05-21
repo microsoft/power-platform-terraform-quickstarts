@@ -1,18 +1,18 @@
 terraform {
   required_version = ">= 1.5"
   required_providers {
-    powerplatform = {
+    power-platform = {
       source = "microsoft/power-platform"
     }
   }
 }
 
-provider "powerplatform" {
+provider "power-platform" {
   use_cli = true
 }
 
 
-resource "powerplatform_environment" "xpp-dev1" {
+resource "power-platform_environment" "xpp-dev1" {
   display_name     = var.d365_finance_environment_name
   location         = var.location
   environment_type = var.environment_type

@@ -9,14 +9,14 @@ terraform {
     null = {
       source = "hashicorp/null"
     }
-    powerplatform = {
+    power-platform = {
       source  = "microsoft/power-platform"
       version = "2.0.2-preview"
     }
   }
 }
 
-provider "powerplatform" {
+provider "power-platform" {
   use_cli = true
 }
 
@@ -25,8 +25,8 @@ module "identity" {
   aliases = var.aliases
 }
 
-module "powerplatform" {
-  source = "./powerplatform"
+module "power-platform" {
+  source = "./power-platform"
   dev_environment_access_group_id  = module.identity.dev_environment_access_group.id
   test_environment_access_group_id = module.identity.test_environment_access_group.id
 }

@@ -22,7 +22,7 @@ assignees: ""
 ```hcl
 # Sample Terraform config that describes how the new resource might look.
 
-data "powerplatform_[your data source name]" "example_data_source" {
+data "power-platform_[your data source name]" "example_data_source" {
   name = "example"
   parameter1 = "value1"
   parameter2 = "value2"

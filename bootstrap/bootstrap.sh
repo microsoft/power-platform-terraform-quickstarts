@@ -103,20 +103,20 @@ echo "You have to grant permissions to the new 'Power Platform Admin Service' se
 echo ""
 echo "You now have following options to login to the Power Platform in Terraform:"
 echo "1. Use the following environment variables that can be set using /bootstrap/set-local-env.sh:"
-echo "    provider 'powerplatform' {
+echo "    provider 'power-platform' {
     }
     "
 
 echo "2. Use the client_id, client_secret and tenant_id directly:
-    provider 'powerplatform' {
+    provider 'power-platform' {
       client_id     = var.client_id
       client_secret = var.client_secret
       tenant_id     = var.tenant_id
     }
     "
 echo "3. Use Azure CLI to login that will be used in the provider block:
-    For login use: az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
+    For login use: az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default
 
-    provider 'powerplatform' {
+    provider 'power-platform' {
       use_cli = true
     }"

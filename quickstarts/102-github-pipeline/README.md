@@ -19,11 +19,11 @@ The example files can be found in `quickstarts/102-github-pipeline`
 
 The Terraform plugins or "providers" that this IaC deployment requires are:
 
-- **powerplatform (`microsoft/power-platform`):** `>=2.0.2-preview`
+- **power-platform (`microsoft/power-platform`):** `>=2.0.2-preview`
 
 ## Resources
 
-- `powerplatform_environment.dev` from `powerplatform`
+- `power-platform_environment.dev` from `power-platform`
 
 ## Usage
 
