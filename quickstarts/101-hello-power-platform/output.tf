@@ -12,17 +12,17 @@ output "test_environment_access_group" {
 
 output "dev_environment" {
     value = { 
-        id =  module.powerplatform.dev_environment.id
-        url = module.powerplatform.dev_environment.url
-        version = module.powerplatform.dev_environment.version
+        id =  module.power-platform.dev_environment.id
+        url = module.power-platform.dev_environment.url
+        version = module.power-platform.dev_environment.version
     }
 }
 
 output "test_environment" {
     value = { 
-        id =  module.powerplatform.test_environment.id
-        url = module.powerplatform.test_environment.url
-        version = module.powerplatform.test_environment.version
+        id =  module.power-platform.test_environment.id
+        url = module.power-platform.test_environment.url
+        version = module.power-platform.test_environment.version
     }
 }
 

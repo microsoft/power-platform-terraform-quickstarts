@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    powerplatform = {
+    power-platform = {
       source  = "microsoft/power-platform"
       version = "2.0.2-preview"
     }
@@ -13,11 +13,11 @@ terraform {
   }
 }
 
-provider "powerplatform" {
+provider "power-platform" {
   use_oidc = true
 }
 
- resource "powerplatform_environment" "dev" {
+ resource "power-platform_environment" "dev" {
    location          = "unitedstates"
    display_name      = "pipeline-example"
    environment_type  = "Sandbox"

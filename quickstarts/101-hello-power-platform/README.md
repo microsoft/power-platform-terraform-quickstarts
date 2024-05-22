@@ -1,7 +1,7 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # Hello Power Platform (101 level)
 
-This Terraform module aims to provide a fully managed infrastructure that integrates Microsoft's Power Platform and Azure services. Utilizing both powerplatform and azurerm Terraform providers, this module encapsulates best practices and serves as a reference architecture for scalable, reliable, and manageable cloud infrastructure.
+This Terraform module aims to provide a fully managed infrastructure that integrates Microsoft's Power Platform and Azure services. Utilizing both power-platform and azurerm Terraform providers, this module encapsulates best practices and serves as a reference architecture for scalable, reliable, and manageable cloud infrastructure.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - **null (`hashicorp/null`):** (any version)
 
-- **powerplatform (`microsoft/power-platform`):** `>=2.0.2-preview`
+- **power-platform (`microsoft/power-platform`):** `>=2.0.2-preview`
 
 - **random (`hashicorp/random`):** (any version)
 
@@ -45,14 +45,14 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - `identity` from `./identity`
 
-- `powerplatform` from `./powerplatform`
+- `power-platform` from `./power-platform`
 
 ## Usage
 
 Execute example with the following commands:
 
 ```bash
-az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
+az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default
 
 terraform init
 

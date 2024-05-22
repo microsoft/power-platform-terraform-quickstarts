@@ -80,7 +80,7 @@ The `bootstrap.sh` [bootstrap.sh](/bootstrap/bootstrap.sh) writes its outputs to
 After running `./bootstrap.sh` you can use the following command to login as a user
 
 ```bash 
-az login --allow-no-subscriptions --scope api://powerplatform_provider_terraform/.default
+az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default
 ```
 
 If you want to run the examples as a service principal, see the [Authenticating to Power Platform](https://microsoft.github.io/terraform-provider-power-platform/#authenticating-to-power-platform) section of the Power Platform Terraform Provider documenation for more authentication options.

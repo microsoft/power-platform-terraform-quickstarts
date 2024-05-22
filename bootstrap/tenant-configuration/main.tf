@@ -97,7 +97,7 @@ resource "azuread_application" "ppadmin_application" {
 
   }
 
-  identifier_uris = ["api://powerplatform_provider_terraform"]
+  identifier_uris = ["api://power-platform_provider_terraform"]
 
   api {
 

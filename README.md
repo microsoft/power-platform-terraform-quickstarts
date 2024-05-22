@@ -25,7 +25,7 @@ This repository contains scripts quickly build out a new tenant and configure it
 
 The following terraform providers are used in this repository:
 
-* [PowerPlatform](https://github.com/microsoft/terraform-provider-power-platform)
+* [Power-Platform](https://github.com/microsoft/terraform-provider-power-platform)
 * [AzureRM](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 * [AzureAD](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
 * [GitHub](https://registry.terraform.io/providers/integrations/github/latest/docs)
@@ -46,4 +46,4 @@ The example terraform modules are intended to be run by GitHub Actions, however 
 * [300-pac-checkov](./quickstarts/300-pac-checkov/README.md)
 * [301-sap-gateway](./quickstarts/301-sap-gateway/README.md)
 
-Quickstarts use the PowerPlatform provider, documentation can be found [here](https://microsoft.github.io/terraform-provider-power-platform/).
+Quickstarts use the Power-Platform provider, documentation can be found [here](https://microsoft.github.io/terraform-provider-power-platform/).
