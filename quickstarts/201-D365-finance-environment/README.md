@@ -51,7 +51,7 @@ The example files can be found in `examples/quickstarts/201-D365-finance-environ
 
 ## Resources
 
-- `power-platform_environment.xpp-dev1` from `power-platform`
+- `powerplatform_environment.xpp-dev1` from `power-platform`
 
 ## Usage
 

@@ -23,7 +23,7 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 ## Resources
 
-- `power-platform_environment.dev` from `power-platform`
+- `powerplatform_environment.dev` from `power-platform`
 
 ## Usage
 
