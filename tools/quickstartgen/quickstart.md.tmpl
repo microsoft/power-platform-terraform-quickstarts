@@ -19,7 +19,7 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 {{- range $name, $req := .RequiredProviders }}
 
-- **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}`>={{ commas $req.VersionConstraints}}`{{ else }}(any version){{ end }}
+- **{{ $name }}{{ if $req.Source }} ({{ $req.Source | tt }}){{ end }}:** {{ if $req.VersionConstraints }}`{{ commas $req.VersionConstraints}}`{{ else }}(any version){{ end }}
 
 {{- end}}{{end}}
 

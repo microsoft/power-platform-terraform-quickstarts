@@ -31,7 +31,7 @@ You can fork or download this repository and use it as a starting point for your
 
 You will have to set following [variables in your repository](https://docs.github.com/actions/learn-github-actions/variables):
 
-- PPADMIN_CLIENT_ID = `<bootstraped service principal clientId>`
+- PPADMIN_CLIENT_ID = `<your tenant id>`
 - PPADMIN_TENANT_ID = `<bootstraped service principal tenantId>`
 - PPADMIN_SUBSCRIPTION_ID = `<your subscription id>`
 - TF_STATE_STORAGE_ACCOUNT_NAME = `<your storage account name, created by bootstrap.sh>`

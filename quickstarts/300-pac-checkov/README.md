@@ -24,9 +24,9 @@ The example files can be found in `quickstarts/300-pac-checkov`
 
 The Terraform plugins or "providers" that this IaC deployment requires are:
 
-- **azurecaf (`aztfmod/azurecaf`):** `>=>=1.2.26`
+- **azurecaf (`aztfmod/azurecaf`):** `>=1.2.26`
 
-- **azurerm (`hashicorp/azurerm`):** `>=>=3.74.0`
+- **azurerm (`hashicorp/azurerm`):** `>=3.74.0`
 
 ## Input Variables
 
