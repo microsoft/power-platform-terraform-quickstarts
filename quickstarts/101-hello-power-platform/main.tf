@@ -9,14 +9,14 @@ terraform {
     null = {
       source = "hashicorp/null"
     }
-    power-platform = {
+    powerplatform = {
       source  = "microsoft/power-platform"
       version = ">=2.0.2-preview"
     }
   }
 }
 
-provider "power-platform" {
+provider "powerplatform" {
   use_cli = true
 }
 
