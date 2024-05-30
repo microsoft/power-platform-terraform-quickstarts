@@ -31,7 +31,6 @@ jobs:
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
-      TF_CLI_CONFIG_FILE: ${{ github.workspace }}/bootstrap/mirror/mirror.tfrc
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
@@ -54,25 +53,9 @@ jobs:
       with:
         terraform_wrapper: false
 
-    #Only needed when the repo is still private
-    - name: Download Terraform GitHub Provider
-      env: 
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-        PROVIDER_VERSION: v0.7.0-preview
-        PROVIDER_REPO: microsoft/terraform-provider-power-platform
-        DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
-      run: |
-        gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
-        ls -la "$DOWNLOAD_DIR"
-
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    # Will fail the build if not
-    #- name: Terraform Format
-    #  run: terraform -chdir=$TARGET_DIR fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -147,7 +130,6 @@ jobs:
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
-      TF_CLI_CONFIG_FILE: ${{ github.workspace }}/bootstrap/mirror/mirror.tfrc
 
     steps:
       # Checkout the repository to the GitHub Actions runner
@@ -160,17 +142,6 @@ jobs:
         with:
           terraform_wrapper: false
   
-      #Only needed when the repo is still private
-      - name: Download Terraform GitHub Provider
-        env: 
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN_PP_PROVIDER_REPO }}
-          PROVIDER_VERSION: v0.7.0-preview
-          PROVIDER_REPO: microsoft/terraform-provider-power-platform
-          DOWNLOAD_DIR: /usr/share/terraform/providers/registry.terraform.io/microsoft/power-platform
-        run: |
-          gh release download "$PROVIDER_VERSION" --repo "$PROVIDER_REPO" --pattern "*.zip" --dir "$DOWNLOAD_DIR" --clobber
-          ls -la "$DOWNLOAD_DIR"
-      
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
