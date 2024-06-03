@@ -50,6 +50,7 @@ resource "azurerm_storage_account" "storage_account" {
   #checkov:skip=CKV2_AZURE_41: "Ensure storage account is configured with SAS expiration policy, this require correct accesss permisions in the subscription"
   #checkov:skip=CKV2_AZURE_33: "Ensure storage account is configured with private endpoint, this deployment requires public access to the blob"
   #checkov:skip=CKV2_AZURE_1: "Ensure storage for critical data are encrypted with Customer Managed Key, KMK is not implemented in this deployment du to a lack of permissions in the subscription"
+  #checkov:skip=CKV_AZURE_50: "Ensure Azure Storage Account storing Machine Learning workspace high business impact data is not publicly accessible"
 }
 
 resource "azurerm_storage_container" "storage_container_installs" {
