@@ -38,6 +38,7 @@ resource "azurerm_storage_account" "storage_account" {
     default_action = "Allow" // this feature needs to be changed to be"Deny"
     #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access, this deployment requires public access to the storage account"
     #checkov:skip=CKV_AZURE_35: "Ensure default network access rule for Storage Accounts is set to deny"
+    #checkov:skip=CKV_AZURE_50: "Ensure Azure Storage Account storing Machine Learning workspace high business impact data is not publicly accessible"
     bypass = ["AzureServices", "Logging", "Metrics"]
   }
   tags = var.tags
