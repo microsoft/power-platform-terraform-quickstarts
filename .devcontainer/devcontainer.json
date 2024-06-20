@@ -14,7 +14,7 @@
     "ghcr.io/devcontainers-contrib/features/gh-cli": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers/features/python:1.6.1" : {
+    "ghcr.io/devcontainers/features/python:1.6.2" : {
       "toolsToinstall": "checkov"
     }
   },
