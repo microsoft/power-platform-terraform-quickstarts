@@ -99,12 +99,19 @@ resource "powerplatform_environment" "coe-kit-prod" {
 
 resource "powerplatform_solution" "solution" {
   environment_id = powerplatform_environment.coe-kit-prod.id
-  solution_file  = "${path.module}/coe-starter-kit-extracted/CenterofExcellenceCoreComponents.zip"
+  solution_file  = "${path.cwd}/coe-starter-kit-extracted/CenterofExcellenceCoreComponents.zip"
   solution_name  = "CenterofExcellenceCoreComponents"
   settings_file  = local_file.solution_settings_file.filename
 
   depends_on = [null_resource.rename_center_of_excellence_core_components_solution]
 }
+
+//TODO create keyvault and store secrets or use existing keyvault
+//mocking values for now to use in solution import
+locals {
+  fake_kv_secret = "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/foo/providers/Microsoft.KeyVault/foo/secrets/foo"
+}
+
 
 //this file is generated using:
 //pac solution create-settings --solution-zip .\CenterofExcellenceCoreComponents_4_32_2_managed.zip --settings-file out.json
@@ -112,7 +119,7 @@ resource "powerplatform_solution" "solution" {
 //TODO: for env variables we need to expose them as script's input variables, unless something can be read from current 
 //script context such as `admin_CurrentEnvironment`
 resource "local_file" "solution_settings_file" {
-  filename = "${path.module}/CenterofExcellenceCoreComponents_solution_settings_prod.json"
+  filename = "${path.cwd}/CenterofExcellenceCoreComponents_solution_settings_prod.json"
   content  = <<EOF
 {
   "EnvironmentVariables": [
@@ -247,7 +254,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsClientAzureSecret",
-      "Value": "",
+      "Value": "${local.fake_kv_secret}",
       "Name": {
         "Default": "Audit Logs - Client Azure Secret",
         "ByLcid": {
