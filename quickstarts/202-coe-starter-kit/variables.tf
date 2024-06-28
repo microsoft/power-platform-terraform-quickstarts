@@ -3,7 +3,6 @@ variable "environment_parameters" {
     type = object({
         env_name = string,
         env_location = string,
-        install_creator_kit = bool,
     })
 }
 

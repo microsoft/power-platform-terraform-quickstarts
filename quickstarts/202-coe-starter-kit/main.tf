@@ -34,7 +34,6 @@ data "powerplatform_tenant_application_packages" "creator_kit_app" {
 //https://learn.microsoft.com/en-us/power-platform/guidance/creator-kit/setup#option-1-manually-install-the-solutions
 //TODO: instal satelite creator kit solutions (they do install togther with the main kit via appsource): https://learn.microsoft.com/en-us/power-platform/guidance/creator-kit/setup#step-2-install-the-reference-solutions-optional
 resource "powerplatform_environment_application_package_install" "creator_kit_app_install" {
-  count          = var.environment_parameters.install_creator_kit ? 1 : 0
   environment_id = powerplatform_environment.coe-kit-prod.id
   unique_name    = one(data.powerplatform_tenant_application_packages.creator_kit_app.applications).unique_name
 }
@@ -63,4 +62,6 @@ resource "powerplatform_solution" "solution" {
   solution_file  = module.helpers.center_of_excellence_core_components_solution_zip_path
   solution_name  = "CenterofExcellenceCoreComponents"
   settings_file  = module.helpers.center_of_excellence_core_components_settings_file_path
+
+  depends_on = [ powerplatform_environment_application_package_install.creator_kit_app_install ]
 }
