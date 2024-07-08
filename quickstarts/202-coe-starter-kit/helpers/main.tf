@@ -41,8 +41,6 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
 }
 
 
-
-
 //this file is generated using:
 //pac solution create-settings --solution-zip .\CenterofExcellenceCoreComponents_4_32_2_managed.zip --settings-file out.json
 //TODO: for connections we need a connectionid of each existing connection
@@ -55,7 +53,7 @@ resource "local_file" "solution_settings_file" {
   "EnvironmentVariables": [
     {
       "SchemaName": "admin_AdmineMailPreferredLanguage",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_admine_mail_preferred_language}",
       "DefaultValue": "en-US",
       "Name": {
         "Default": "Admin eMail Preferred Language",
@@ -72,7 +70,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AdminMail",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_admin_mail}",
       "Name": {
         "Default": "Admin eMail",
         "ByLcid": {
@@ -88,7 +86,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AppConnectionsDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_app_connections_dataflow_id}",
       "Name": {
         "Default": "App Connections Dataflow ID",
         "ByLcid": {
@@ -104,7 +102,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AppDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_app_dataflow_id}",
       "Name": {
         "Default": "App Dataflow ID",
         "ByLcid": {
@@ -120,7 +118,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ApprovalAdmin",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_approval_admin}",
       "Name": {
         "Default": "Individual Admin",
         "ByLcid": {
@@ -136,7 +134,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AppUsageDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_app_usage_dataflow_id}",
       "Name": {
         "Default": "App Usage Dataflow ID",
         "ByLcid": {
@@ -152,7 +150,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsAudience",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_audit_logs_audience}",
       "Name": {
         "Default": "Audit Logs - Audience",
         "ByLcid": {
@@ -168,7 +166,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsAuthority",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_audit_logs_authority}",
       "Name": {
         "Default": "Audit Logs - Authority",
         "ByLcid": {
@@ -184,7 +182,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsClientAzureSecret",
-      "Value": "${var.parameters.core.admin_AuditLogsClientAzureSecret}",
+      "Value": "${var.parameters.core.admin_audit_logs_client_azure_secret}",
       "Name": {
         "Default": "Audit Logs - Client Azure Secret",
         "ByLcid": {
@@ -200,7 +198,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsClientID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_audit_logs_client_id}",
       "Name": {
         "Default": "Audit Logs - ClientID",
         "ByLcid": {
@@ -216,7 +214,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_AuditLogsClientSecret",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_audit_logs_client_secret}",
       "Name": {
         "Default": "Audit Logs - Client Secret",
         "ByLcid": {
@@ -232,7 +230,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_Capacityalertpercentage",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_capacity_alert_percentage}",
       "DefaultValue": "0.8",
       "Name": {
         "Default": "Capacity alert percentage ",
@@ -249,7 +247,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CoESystemUserID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_coe_system_user_id}",
       "Name": {
         "Default": "CoE System User ID",
         "ByLcid": {
@@ -265,7 +263,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CommandCenterApplicationClientID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_command_center_application_client_id}",
       "Name": {
         "Default": "Command Center - Application Client ID",
         "ByLcid": {
@@ -281,7 +279,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CommandCenterClientAzureSecret",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_command_center_client_azure_secret}",
       "Name": {
         "Default": "Command Center - Client Azure Secret",
         "ByLcid": {
@@ -297,7 +295,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CommandCenterClientSecret",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_command_center_client_secret}",
       "Name": {
         "Default": "Command Center - Client Secret",
         "ByLcid": {
@@ -313,7 +311,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CommunityURL",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_community_url}",
       "Name": {
         "Default": "Community URL",
         "ByLcid": {
@@ -329,7 +327,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_CompanyName",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_company_name}",
       "Name": {
         "Default": "CompanyName",
         "ByLcid": {
@@ -345,7 +343,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ComplianceAppsNumberDaysSincePublished",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_compliance_apps_number_days_since_published}",
       "DefaultValue": "60",
       "Name": {
         "Default": "Compliance – Apps – Number Days Since Published",
@@ -362,7 +360,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ComplianceAppsNumberGroupsShared",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_compliance_apps_number_groups_shared}",
       "DefaultValue": "1",
       "Name": {
         "Default": "Compliance – Apps – Number Groups Shared",
@@ -379,7 +377,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ComplianceAppsNumberLaunchesLast30Days",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_compliance_apps_number_launches_last_30_days}",
       "DefaultValue": "30",
       "Name": {
         "Default": "Compliance – Apps – Number Launches Last 30 Days",
@@ -396,7 +394,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ComplianceAppsNumberUsersShared",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_compliance_apps_number_users_shared}",
       "DefaultValue": "20",
       "Name": {
         "Default": "Compliance – Apps - Number Users Shared",
@@ -413,7 +411,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ComplianceChatbotsNumberLaunches",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_compliance_chatbots_number_launches}",
       "DefaultValue": "50",
       "Name": {
         "Default": "Compliance – Chatbots – Number Launches",
@@ -446,7 +444,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_DelayInventory",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_delay_inventory}",
       "DefaultValue": "yes",
       "Name": {
         "Default": "DelayInventory",
@@ -463,7 +461,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_DelayObjectInventory",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_delay_object_inventory}",
       "DefaultValue": "no",
       "Name": {
         "Default": "DelayObjectInventory",
@@ -480,7 +478,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_DeleteFromCoE",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_delete_from_coe}",
       "DefaultValue": "yes",
       "Name": {
         "Default": "Also Delete From CoE",
@@ -497,7 +495,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_DeveloperComplianceCenterURL",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_developer_compliance_center_url}",
       "Name": {
         "Default": "Developer Compliance Center URL",
         "ByLcid": {
@@ -513,7 +511,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_DisabledUsersareOrphaned",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_disabled_users_are_orphaned}",
       "DefaultValue": "no",
       "Name": {
         "Default": "Disabled Users are Orphaned",
@@ -530,7 +528,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_eMailBodyStart",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_email_body_start}",
       "DefaultValue": "<body>     <div id='content'>         <table id='form'>             <tr>                 <td><img id='logo' src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1280px-Microsoft_logo_%282012%29.svg.png' width='300'></td>             </tr>             <tr>                 <td>                     <p id='header'>Power Platform</p>                 </td>             </tr>             <tr id='ribbon'>                 <td>                     <tr>                         <td></td>                     </tr>                     <tr id='message'>                         <td>",
       "Name": {
         "Default": "eMail Body Start",
@@ -547,7 +545,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_eMailBodyStop",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_email_body_stop}",
       "DefaultValue": "</td>                     </tr>         </table>     </div> </body>",
       "Name": {
         "Default": "eMail Body Stop",
@@ -564,7 +562,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_eMailHeaderStyle",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_email_header_style}",
       "DefaultValue": "<head>     <style>         body {             background-color: #efefef;             font-family: Segoe UI;             text-align: center;         }          #content {             border: 1px solid #742774;             background-color: #ffffff;             width: 650px;             margin-bottom: 50px;             display: inline-block;         }          #logo {             margin-left: 52px;             margin-top: 40px;             width: 60px;             height: 12px;         }          #header {             font-size: 24px;             margin-left: 50px;             margin-top: 20px;             margin-bottom: 20px;         }          #ribbon {             background-color: #742774;         }          #ribbonContent {             font-size: 20px;             padding-left: 30px;             padding-top: 10px;             padding-bottom: 20px;             color: white;             width: 100%;             padding-right: 10px;         }          #message>td {             font-size: 14px;             padding-left: 60px;             padding-right: 60px;             padding-top: 20px;             padding-bottom: 40px;         }          #footer>td {             font-size: 12px;             background-color: #cfcfcf;             height: 40px;             padding-top: 15px;             padding-left: 40px;             padding-bottom: 20px;         }          #form {             width: 100%;             border-collapse: collapse;         }          #app {             width: 60%;             font-size: 12px;         }          .label {             color: #5f5f5f         }          table {             border-collapse: collapse;             width: 100%;         }          th,         td {             padding: 8px;             text-align: left;             border-bottom: 1px solid #ddd;         }     </style> </head>",
       "Name": {
         "Default": "eMail Header Style",
@@ -581,7 +579,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_EnvironmentDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_environment_dataflow_id}",
       "Name": {
         "Default": "Environment Dataflow ID",
         "ByLcid": {
@@ -597,7 +595,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_EnvRequestAutoApproveCertainGroups",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_env_request_auto_approve_certain_groups}",
       "DefaultValue": "no",
       "Name": {
         "Default": "Env Request - Automatically Approve Certain Groups",
@@ -614,7 +612,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_EnvRequestEnableCostTracking",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_env_request_enable_cost_tracking}",
       "DefaultValue": "no",
       "Name": {
         "Default": "Env Request - Enable Cost Tracking",
@@ -631,7 +629,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_FlowConnectionsDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_flow_connections_dataflow_id}",
       "Name": {
         "Default": "Flow Connections Dataflow ID",
         "ByLcid": {
@@ -647,7 +645,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_FlowDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_flow_dataflow_id}",
       "Name": {
         "Default": "Flow Dataflow ID",
         "ByLcid": {
@@ -663,7 +661,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_FlowUsageDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_flow_usage_dataflow_id}",
       "Name": {
         "Default": "Flow Usage Dataflow ID",
         "ByLcid": {
@@ -679,7 +677,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_FullInventory",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_full_inventory}",
       "DefaultValue": "no",
       "Name": {
         "Default": "FullInventory",
@@ -696,7 +694,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_GraphURLEnvironmentVariable",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_graph_url_environment_variable}",
       "Name": {
         "Default": "Graph URL Environment Variable",
         "ByLcid": {
@@ -712,7 +710,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_HostDomains",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_host_domains}",
       "Name": {
         "Default": "Host Domains",
         "ByLcid": {
@@ -728,7 +726,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_InventoryandTelemetryinAzureDataStorageaccount",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_inventory_and_telemetry_in_azure_data_storage_account}",
       "DefaultValue": "no",
       "Name": {
         "Default": "Inventory and Telemetry in Azure Data Storage account",
@@ -745,7 +743,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_InventoryFilter_DaysToLookBack",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_inventory_filter_days_to_look_back}",
       "DefaultValue": "7",
       "Name": {
         "Default": "InventoryFilter_DaysToLookBack",
@@ -762,7 +760,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_isFullTenantInventory",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_is_full_tenant_inventory}",
       "DefaultValue": "yes",
       "Name": {
         "Default": "is All Environments Inventory",
@@ -779,7 +777,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_MakerDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_maker_dataflow_id}",
       "Name": {
         "Default": "Maker Dataflow ID",
         "ByLcid": {
@@ -795,7 +793,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ModelAppDataflowID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_model_app_dataflow_id}",
       "Name": {
         "Default": "Model App Dataflow ID",
         "ByLcid": {
@@ -811,7 +809,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_PowerAppEnvironmentVariable",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_power_app_environment_variable}",
       "Name": {
         "Default": "PowerApp Maker Environment Variable",
         "ByLcid": {
@@ -827,7 +825,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_PowerAppPlayerEnvironmentVariable",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_power_app_player_environment_variable}",
       "Name": {
         "Default": "PowerApp Player Environment Variable",
         "ByLcid": {
@@ -843,7 +841,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_PowerAutomateEnvironmentVariable",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_power_automate_environment_variable}",
       "Name": {
         "Default": "Power Automate Environment Variable",
         "ByLcid": {
@@ -859,7 +857,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_PowerPlatformMakeSecurityGroup",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_power_platform_make_security_group}",
       "Name": {
         "Default": "Power Platform Maker Group ID",
         "ByLcid": {
@@ -875,7 +873,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_PowerPlatformUserGroupID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_power_platform_user_group_id}",
       "Name": {
         "Default": "Power Platform User Group ID",
         "ByLcid": {
@@ -891,7 +889,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_ProductionEnvironment",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_production_environment}",
       "DefaultValue": "yes",
       "Name": {
         "Default": "ProductionEnvironment",
@@ -908,7 +906,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_SyncFlowErrorsDeleteAfterXDays",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_sync_flow_errors_delete_after_x_days}",
       "DefaultValue": "7",
       "Name": {
         "Default": "Sync Flow Errors Delete After X Days",
@@ -925,7 +923,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_TenantID",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_tenant_id}",
       "Name": {
         "Default": "TenantID",
         "ByLcid": {
@@ -941,7 +939,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_UserPhotosForbiddenByPolicy",
-      "Value": "",
+      "Value": "${var.parameters.core.admin_user_photos_forbidden_by_policy}",
       "DefaultValue": "no",
       "Name": {
         "Default": "DEPRECATED 0 User Photos ForbiddenByPolicy",
@@ -958,7 +956,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "coe_EnvironmentRequestAdminAppUrl",
-      "Value": "",
+      "Value": "${var.parameters.core.coe_environment_request_admin_app_url}",
       "Name": {
         "Default": "Environment Request Admin App Url",
         "ByLcid": {
