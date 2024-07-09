@@ -1,5 +1,9 @@
 variable "parameters" {
   type        = object({
+    release = object({
+      coe_starter_kit_get_latest_release   = bool,
+      coe_starter_kit_specific_release_tag = string,
+    })
     env = object({
       env_id = string, 
     })

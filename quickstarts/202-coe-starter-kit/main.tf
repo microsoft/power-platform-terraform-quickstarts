@@ -2,7 +2,7 @@ terraform {
   required_providers {
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "2.4.1-preview"
+      version = "2.5.0-preview"
     }
   }
 }
@@ -11,11 +11,29 @@ provider "powerplatform" {
   use_cli = true
 }
 
-module "helpers" {
-  source = "./helpers"
+provider "github" {
+
+}
+
+module "creator_kit" {
+  source = "./creator_kit"
   parameters = {
+    release = {
+      creator_kit_get_latest_release   = var.release_parameters.creator_kit_get_latest_release,
+      creator_kit_specific_release_tag = var.release_parameters.creator_kit_specific_release_tag,
+    }
+  }
+}
+
+module "coe_starter_kit" {
+  source = "./coe_starter_kit"
+  parameters = {
+    release = {
+      coe_starter_kit_get_latest_release   = var.release_parameters.coe_starter_kit_get_latest_release,
+      coe_starter_kit_specific_release_tag = var.release_parameters.coe_starter_kit_specific_release_tag,
+    }
     env = {
-      env_id = powerplatform_environment.coe-kit-prod.id
+      env_id = powerplatform_environment.coe_kit_env.id
     }
     core = {
       admin_admine_mail_preferred_language                        = var.core_components_parameters.admin_admine_mail_preferred_language,
@@ -72,30 +90,14 @@ module "helpers" {
       admin_sync_flow_errors_delete_after_x_days                  = var.core_components_parameters.admin_sync_flow_errors_delete_after_x_days,
       admin_tenant_id                                             = var.core_components_parameters.admin_tenant_id,
       //admin_tenant_id                                             = jsondecode(data.powerplatform_rest_query.org_details.output.body).Detail.TenantId
-      admin_user_photos_forbidden_by_policy                       = var.core_components_parameters.admin_user_photos_forbidden_by_policy,
-      coe_environment_request_admin_app_url                       = var.core_components_parameters.coe_environment_request_admin_app_url,
+      admin_user_photos_forbidden_by_policy = var.core_components_parameters.admin_user_photos_forbidden_by_policy,
+      coe_environment_request_admin_app_url = var.core_components_parameters.coe_environment_request_admin_app_url,
     }
   }
 }
 
-
-//find creator kit in appsource
-data "powerplatform_tenant_application_packages" "creator_kit_app" {
-  publisher_name = "Microsoft Corp - Power CAT"
-  name           = "Creator Kit"
-}
-
-//install the creator kit in coe-kit-prod environment (todo install in coe-kit-test)
-//TODO: creator kit is not available in appsource in every region, consider using offline install
-//https://learn.microsoft.com/en-us/power-platform/guidance/creator-kit/setup#option-1-manually-install-the-solutions
-//TODO: instal satelite creator kit solutions (they do install togther with the main kit via appsource): https://learn.microsoft.com/en-us/power-platform/guidance/creator-kit/setup#step-2-install-the-reference-solutions-optional
-resource "powerplatform_environment_application_package_install" "creator_kit_app_install" {
-  environment_id = powerplatform_environment.coe-kit-prod.id
-  unique_name    = one(data.powerplatform_tenant_application_packages.creator_kit_app.applications).unique_name
-}
-
-//create coe-kit-prod environment
-resource "powerplatform_environment" "coe-kit-prod" {
+//create coe-kit environment
+resource "powerplatform_environment" "coe_kit_env" {
   location         = var.environment_parameters.env_location
   display_name     = var.environment_parameters.env_name
   environment_type = "Sandbox"
@@ -105,6 +107,29 @@ resource "powerplatform_environment" "coe-kit-prod" {
     security_group_id = "00000000-0000-0000-0000-000000000000"
   }
 }
+
+//install creator-kit-core solution
+resource "powerplatform_solution" "creator_kit_solution_install" {
+  environment_id = powerplatform_environment.coe_kit_env.id
+  solution_file  = module.creator_kit.creator_kit_solution_zip_path
+  solution_name  = "CreatorKitCore"
+}
+
+//install coe-core-components solution
+resource "powerplatform_solution" "coe_core_solution_install" {
+  environment_id = powerplatform_environment.coe_kit_env.id
+  solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
+  solution_name  = "CenterofExcellenceCoreComponents"
+  settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
+
+  depends_on = [powerplatform_solution.creator_kit_solution_install]
+}
+
+
+
+
+
+
 
 #TODO: uncomment with next provider' release to get tenantid param
 # data "powerplatform_rest_query" "org_details" {
@@ -124,11 +149,3 @@ resource "powerplatform_environment" "coe-kit-prod" {
 
 
 
-resource "powerplatform_solution" "solution" {
-  environment_id = powerplatform_environment.coe-kit-prod.id
-  solution_file  = module.helpers.center_of_excellence_core_components_solution_zip_path
-  solution_name  = "CenterofExcellenceCoreComponents"
-  settings_file  = module.helpers.center_of_excellence_core_components_settings_file_path
-
-  depends_on = [powerplatform_environment_application_package_install.creator_kit_app_install]
-}

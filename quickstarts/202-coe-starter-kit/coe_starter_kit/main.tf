@@ -1,8 +1,22 @@
+locals {
+  coe_start_kit_asset_url = [for i in data.github_release.coe_starter_kit_release.assets : i.browser_download_url if i.name == "CoEStarterKit.zip"]
+}
 
-//dowload the solutions
-resource "null_resource" "download_solutions" {
+data "github_release" "coe_starter_kit_release" {
+    repository  = "coe-starter-kit"
+    owner       = "microsoft"
+    retrieve_by = var.parameters.release.coe_starter_kit_get_latest_release == true ? "latest" : "tag"
+    release_tag = var.parameters.release.coe_starter_kit_specific_release_tag
+}
+
+
+resource "null_resource" "coe_starter_kit_download_solutions_zip" {
+  triggers = {
+    always_run = local.coe_start_kit_asset_url[0]
+  }
+
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-starter-kit.zip https://aka.ms/CoEStarterKitDownload"
+    command = "wget -O ${path.module}/coe-starter-kit.zip ${local.coe_start_kit_asset_url[0]}"
     when    = create
   }
 
@@ -11,10 +25,16 @@ resource "null_resource" "download_solutions" {
     command = "rm -f ${path.module}/coe-starter-kit.zip"
     when    = destroy
   }
+
+  depends_on = [ data.github_release.coe_starter_kit_release ]
 }
 
 //extract the solutions
-resource "null_resource" "extract_solutions_zip" {
+resource "null_resource" "coe_starter_kit_extract_solutions_zip" {
+  triggers = {
+    always_run = local.coe_start_kit_asset_url[0]
+  }
+
   provisioner "local-exec" {
     command = "unzip -o ${path.module}/coe-starter-kit.zip -d ${path.module}/coe-starter-kit-extracted"
     when    = create
@@ -26,18 +46,22 @@ resource "null_resource" "extract_solutions_zip" {
     when    = destroy
   }
 
-  depends_on = [null_resource.download_solutions]
+  depends_on = [null_resource.coe_starter_kit_download_solutions_zip]
 }
 
 //because CenterofExcellenceCoreComponents_X_X.managed is in a specific version, we have to rename it to a fixed name
 resource "null_resource" "rename_center_of_excellence_core_components_solution" {
+  triggers = {
+    always_run = local.coe_start_kit_asset_url[0]
+  }
+
   provisioner "local-exec" {
     command = <<-EOT
-      cd ${path.module}/coe-starter-kit-extracted && mv CenterofExcellenceCoreComponents*.zip CenterofExcellenceCoreComponents.zip
+      cd ${path.module}/coe-starter-kit-extracted && mv CenterofExcellenceCoreComponents_*.zip CenterofExcellenceCoreComponents.zip
     EOT
     when    = create
   }
-  depends_on = [null_resource.extract_solutions_zip]
+  depends_on = [null_resource.coe_starter_kit_extract_solutions_zip]
 }
 
 
@@ -47,7 +71,7 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
 //TODO: for env variables we need to expose them as script's input variables, unless something can be read from current 
 //script context such as `admin_CurrentEnvironment`
 resource "local_file" "solution_settings_file" {
-  filename = "${path.module}/CenterofExcellenceCoreComponents_solution_settings_prod.json"
+  filename = "${path.module}/CenterofExcellenceCoreComponents_solution_settings.json"
   content  = <<EOF
 {
   "EnvironmentVariables": [

@@ -1,8 +1,10 @@
-variable "solution_parameters" {
-  description = "github release link to the COE starter kit zip files"
+variable "release_parameters" {
+  description = "values for the github release parameters"
     type = object({
-        creator_kit_release_dowload_url = string,
-        coe_kit_release_dowload_url     = string,
+      coe_starter_kit_get_latest_release   = bool,
+      coe_starter_kit_specific_release_tag = string,
+      creator_kit_get_latest_release   = bool,
+      creator_kit_specific_release_tag = string,
     })
 }
 
