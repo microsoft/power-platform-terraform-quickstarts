@@ -5,6 +5,21 @@
 1. `terraform apply --var-file=prod.tfvars`
 1. `terraform destroy --var-file=prod.tfvars`
 
+## Prerequistes
+
+1. The bash shell script [boostrap.sh](../../bootstrap/README.md) has been run
+1. The logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
+
+```bash
+az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
+```
+
+1. Required linux commands as part of GitHUb DevContainer or [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install). For example
+
+    - [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+    - (Debian/Ubuntu): Run `sudo apt-get install jq`
+    - [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
+
 ## Example tfvars file
 
 ```hcl
@@ -19,6 +34,13 @@ release_parameters = {
 environment_parameters = {
   env_name     = "coe-kit-prod",
   env_location = "europe",
+}
+
+release_parameters = {
+    coe_starter_kit_get_latest_release = true,
+    coe_starter_kit_specific_release_tag = "",
+    creator_kit_get_latest_release = true,
+    creator_kit_specific_release_tag = ""
 }
 
 core_components_parameters = {
