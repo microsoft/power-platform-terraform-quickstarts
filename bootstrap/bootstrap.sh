@@ -36,7 +36,7 @@ if [ "$#" -eq 4 ]; then
         exit 1
     fi
 
-    az login
+    az login --use-device-code
     az account set --subscription $subscription_id
 
     echo "Using the following subscription:"
