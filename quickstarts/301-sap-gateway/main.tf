@@ -264,8 +264,8 @@ resource "azurerm_key_vault_secret" "key_vault_secret_recover_key" {
 }
 
 resource "random_string" "vm_user" {
-  length  = 12
-  special = true
+  length  = 64
+  special = false
   numeric = true
 }
 
@@ -287,7 +287,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_vm_user" {
 }
 
 resource "random_string" "vm_pwd" {
-  length  = 32
+  length  = 64
   special = true
   numeric = true
 }
