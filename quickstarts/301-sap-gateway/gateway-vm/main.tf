@@ -96,7 +96,7 @@ resource "azurerm_windows_virtual_machine" "vm-opgw" {
 
   # rest of the resource block
   size                                                   = "Standard_D4s_v5"
-  admin_username                                         = "sapadmin"
+  admin_username                                         = var.vm_user
   admin_password                                         = var.vm_pwd
   computer_name                                          = "vmopgw"
   enable_automatic_updates                               = true

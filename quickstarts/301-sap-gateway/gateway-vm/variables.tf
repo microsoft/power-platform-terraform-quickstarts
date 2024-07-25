@@ -20,6 +20,12 @@ variable "region" {
   type        = string
 }
 
+variable "vm_user" {
+  description = "The user name for the VM"
+  sensitive   = true
+  type        = string
+}
+
 variable "vm_pwd" {
   description = "The password for the VM"
   sensitive   = true
