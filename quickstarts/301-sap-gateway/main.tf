@@ -264,7 +264,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret_recover_key" {
 }
 
 resource "random_string" "vm_user" {
-  length  = 20
+  length  = 20 # minimum 1, maximum 20
   special = false
   numeric = true
 }
