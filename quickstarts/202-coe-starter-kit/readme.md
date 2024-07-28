@@ -3,6 +3,22 @@
 1. `terraform init`
 1. `terraform plan --var-file=prod.tfvars`
 1. `terraform apply --var-file=prod.tfvars`
+1. `terraform destroy --var-file=prod.tfvars`
+
+## Prerequistes
+
+1. The bash shell script [boostrap.sh](../../bootstrap/README.md) has been run
+1. The logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
+
+```bash
+az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
+```
+
+1. Required linux commands as part of GitHUb DevContainer or [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install). For example
+
+    - [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+    - (Debian/Ubuntu): Run `sudo apt-get install jq`
+    - [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
 
 ## Prerequistes
 
@@ -22,6 +38,14 @@ az login --allow-no-subscriptions --scope api://power-platform_provider_terrafor
 ## Example tfvars file
 
 ```hcl
+release_parameters = {
+  coe_starter_kit_get_latest_release   = true,
+  coe_starter_kit_specific_release_tag = "",
+
+  creator_kit_get_latest_release   = false,
+  creator_kit_specific_release_tag = "CreatorKit-May2024",
+}
+
 environment_parameters = {
   env_name     = "coe-kit-prod",
   env_location = "europe",
@@ -91,4 +115,65 @@ core_components_parameters = {
   admin_user_photos_forbidden_by_policy                       = "no",
   coe_environment_request_admin_app_url                       = "", //where is that? URL to the CoE Environment Request Admin Canvas App.
 }
+```
+
+## Using terraform for matrix testing
+
+Lets assume we need to test following CoE installations in the follwing installation order:
+
+| Step Name | Creator Kit Release | Coe Core Release |
+| -------------| ------------- | ------------- |
+| step-one.tfvars |CreatorKit-April2023 | CoEStarterKit-May2024 |
+| step-two.tfvars |CreatorKit-July2023 | CoEStarterKit-June2024 |
+| step-three.tfvars |CreatorKit-May2024 | CoEStarterKit-July2024 |
+
+In order to validate, that the releases mentioned in the above table will upgrade without issues, we can run them using terraform in the following order:
+
+```hcl
+terraform init
+terraform apply --var-file=step-one.tfvars
+terraform apply --var-file=step-two.tfvars
+terraform apply --var-file=step-three.tfvars
+terraform destroy --var-file=step-three.tfvars
+```
+
+### TFVARS files configuraion
+
+`step-one.tfvars`
+
+```hcl
+release_parameters = {
+  coe_starter_kit_get_latest_release   = false,
+  coe_starter_kit_specific_release_tag = "CoEStarterKit-May2024",
+  creator_kit_get_latest_release   = false,
+  creator_kit_specific_release_tag = "CreatorKit-April2023",
+}
+
+#rest of the tfvarfile remove for brevity
+```
+
+`step-two.tfvars`
+
+```hcl
+release_parameters = {
+  coe_starter_kit_get_latest_release   = false,
+  coe_starter_kit_specific_release_tag = "CoEStarterKit-June2024",
+  creator_kit_get_latest_release   = false,
+  creator_kit_specific_release_tag = "CreatorKit-July2023",
+}
+
+#rest of the tfvarfile remove for brevity
+```
+
+`step-three.tfvars`
+
+```hcl
+release_parameters = {
+  coe_starter_kit_get_latest_release   = false,
+  coe_starter_kit_specific_release_tag = "CoEStarterKit-July2024",
+  creator_kit_get_latest_release   = false,
+  creator_kit_specific_release_tag = "CreatorKit-May2024",
+}
+
+#rest of the tfvarfile remove for brevity
 ```

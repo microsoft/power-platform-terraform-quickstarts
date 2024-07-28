@@ -111,7 +111,7 @@ resource "powerplatform_environment" "coe_kit_env" {
 //install creator-kit-core solution
 resource "powerplatform_solution" "creator_kit_solution_install" {
   environment_id = powerplatform_environment.coe_kit_env.id
-  solution_file  = module.creator_kit.creator_kit_solution_zip_path
+  solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
   solution_name  = "CreatorKitCore"
 }
 

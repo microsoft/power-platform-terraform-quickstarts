@@ -1,5 +1,7 @@
 locals {
-  coe_creator_kit_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if i.name == "CreatorKit.zip"]
+  coe_creator_kit_core_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if startswith(i.name,"CreatorKitCore_")]
+  coe_creator_kit_ref_canvas_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if startswith(i.name,"CreatorKitReferencesCanvas_")]
+  coe_creator_kit_ref_mda_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if startswith(i.name,"CreatorKitReferencesMDA_")]
 }
 
 data "github_release" "coe_creator_kit_release" {
@@ -9,13 +11,13 @@ data "github_release" "coe_creator_kit_release" {
     release_tag = var.parameters.release.creator_kit_specific_release_tag
 }
 
-resource "null_resource" "coe_creator_kit_download_solutions_zip" {
+resource "null_resource" "coe_creator_kit_download_core_zip" {
   triggers = {
-    always_run = local.coe_creator_kit_asset_url[0]
+    always_run = local.coe_creator_kit_core_asset_url[0]
   }
 
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-creator-kit.zip ${local.coe_creator_kit_asset_url[0]}"
+    command = "wget -O ${path.module}/coe-creator-kit.zip ${local.coe_creator_kit_core_asset_url[0]}"
     when    = create
   }
 
@@ -28,37 +30,40 @@ resource "null_resource" "coe_creator_kit_download_solutions_zip" {
   depends_on = [ data.github_release.coe_creator_kit_release ]
 }
 
-//extract the solutions
-resource "null_resource" "coe_creator_kit_extract_solutions_zip" {
+resource "null_resource" "coe_creator_kit_download_ref_canvas_zip" {
   triggers = {
-    always_run = local.coe_creator_kit_asset_url[0]
+    always_run = local.coe_creator_kit_ref_canvas_asset_url[0]
   }
 
   provisioner "local-exec" {
-    command = "unzip -o ${path.module}/coe-creator-kit.zip -d ${path.module}/coe-creator-kit-extracted"
+    command = "wget -O ${path.module}/coe-creator-kit-reference-canvas.zip ${local.coe_creator_kit_ref_canvas_asset_url[0]}"
     when    = create
   }
 
-  //TODO: this assumes that we are running in a linux environment, consider adding support for windows
+  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -rf ${path.module}/coe-creator-kit-extracted"
+    command = "rm -f ${path.module}/coe-creator-kit-reference-canvas.zip"
     when    = destroy
   }
 
-  depends_on = [null_resource.coe_creator_kit_download_solutions_zip]
+  depends_on = [ data.github_release.coe_creator_kit_release ]
 }
 
-//because CreatorKitCore_XXXX.managed is in a specific version, we have to rename it to a fixed name
-resource "null_resource" "rename_center_of_excellence_core_components_solution" {
+resource "null_resource" "coe_creator_kit_download_ref_mda_zip" {
   triggers = {
-    always_run = local.coe_creator_kit_asset_url[0]
+    always_run = local.coe_creator_kit_ref_mda_asset_url[0]
   }
 
   provisioner "local-exec" {
-    command = <<-EOT
-      cd ${path.module}/coe-creator-kit-extracted && mv CreatorKitCore_*.zip CreatorKitCore.zip
-    EOT
+    command = "wget -O ${path.module}/coe-creator-kit-reference-mda.zip ${local.coe_creator_kit_ref_mda_asset_url[0]}"
     when    = create
   }
-  depends_on = [null_resource.coe_creator_kit_extract_solutions_zip]
+
+  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
+  provisioner "local-exec" {
+    command = "rm -f ${path.module}/coe-creator-kit-reference-mda.zip"
+    when    = destroy
+  }
+
+  depends_on = [ data.github_release.coe_creator_kit_release ]
 }
