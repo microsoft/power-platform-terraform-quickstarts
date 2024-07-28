@@ -8,32 +8,35 @@
 ## Prerequistes
 
 1. The bash shell script [boostrap.sh](../../bootstrap/README.md) has been run
+
+1. [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+
+1. Power Platform CLI (pac) has been downloaded and installed
+
+1. Cross platform version of [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell) has been downloaded and installed
+
+1. Azure Command CLI has been downloaded and installed
+
 1. The logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
 
 ```bash
 az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
 ```
 
-1. Required linux commands as part of GitHUb DevContainer or [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install). For example
+### Linux
 
-    - [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+Required linux commands as part of GitHUb DevContainer. For example
+
     - (Debian/Ubuntu): Run `sudo apt-get install jq`
     - [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
 
-## Prerequistes
+## Login
 
-1. The bash shell script [boostrap.sh](../../bootstrap/README.md) has been run
-1. The logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
+Assumes that environment as been logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
 
 ```bash
 az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
 ```
-
-1. Required linux commands as part of GitHUb DevContainer or [How to install Linux on Windows with WSL](https://learn.microsoft.com/en-us/windows/wsl/install). For example
-
-    - [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-    - (Debian/Ubuntu): Run `sudo apt-get install jq`
-    - [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
 
 ## Example tfvars file
 

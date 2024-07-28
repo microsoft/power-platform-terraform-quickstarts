@@ -17,14 +17,22 @@ resource "null_resource" "coe_creator_kit_download_core_zip" {
   }
 
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-creator-kit.zip ${local.coe_creator_kit_core_asset_url[0]}"
-    when    = create
+    command = "Invoke-WebRequest -Uri $env:CORE_ASSET_URL -OutFile \"$env:MODULE_PATH/coe-creator-kit.zip\""
+    when = create
+    interpreter = ["pwsh", "-Command"]
+    environment = {
+      MODULE_PATH = path.module
+      CORE_ASSET_URL =local.coe_creator_kit_core_asset_url[0]
+    }
   }
 
-  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -f ${path.module}/coe-creator-kit.zip"
+    command = "Remove-Item -Path\"$env:MODULE_PATH/coe-creator-kit.zip\" -Force"
     when    = destroy
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
   depends_on = [ data.github_release.coe_creator_kit_release ]
@@ -36,14 +44,22 @@ resource "null_resource" "coe_creator_kit_download_ref_canvas_zip" {
   }
 
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-creator-kit-reference-canvas.zip ${local.coe_creator_kit_ref_canvas_asset_url[0]}"
-    when    = create
+    command = "Invoke-WebRequest -Uri $env:CANVAS_ASSET_URL -OutFile \"$env:MODULE_PATH/coe-creator-kit-reference-canvas.zip\""
+    when = create
+    interpreter = ["pwsh", "-Command"]
+    environment = {
+      MODULE_PATH = path.module
+      CANVAS_ASSET_URL = local.coe_creator_kit_ref_canvas_asset_url[0]
+    }
   }
 
-  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -f ${path.module}/coe-creator-kit-reference-canvas.zip"
+    command = "Remove-Item -Path \"$env:MODULE_PATH/coe-creator-kit-reference-canvas.zip\" -Force"
     when    = destroy
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
   depends_on = [ data.github_release.coe_creator_kit_release ]
@@ -55,14 +71,19 @@ resource "null_resource" "coe_creator_kit_download_ref_mda_zip" {
   }
 
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-creator-kit-reference-mda.zip ${local.coe_creator_kit_ref_mda_asset_url[0]}"
+    command = "Invoke-WebRequest -Uri $env:MDA_ASSET_URL -OutFile \"$env:MODULE_PATH/coe-creator-kit-reference-mda.zip\""
     when    = create
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+      MDA_ASSET_URL = local.coe_creator_kit_ref_mda_asset_url[0]
+    }
   }
 
-  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -f ${path.module}/coe-creator-kit-reference-mda.zip"
+    command = "Remove-Item -Path \"$env:MODULE_PATH/coe-creator-kit-reference-mda.zip\" -Force"
     when    = destroy
+    interpreter = ["pwsh","-Command"]
   }
 
   depends_on = [ data.github_release.coe_creator_kit_release ]
