@@ -125,12 +125,6 @@ resource "powerplatform_solution" "coe_core_solution_install" {
   depends_on = [powerplatform_solution.creator_kit_solution_install]
 }
 
-
-
-
-
-
-
 #TODO: uncomment with next provider' release to get tenantid param
 # data "powerplatform_rest_query" "org_details" {
 #   scope                = "${powerplatform_environment.env.dataverse.url}/.default"
@@ -138,8 +132,6 @@ resource "powerplatform_solution" "coe_core_solution_install" {
 #   method               = "GET"
 #   expected_http_status = [200]
 # }
-
-
 
 //TODO: setup DLP policies and assing to environments
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies

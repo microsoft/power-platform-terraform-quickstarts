@@ -16,14 +16,23 @@ resource "null_resource" "coe_starter_kit_download_solutions_zip" {
   }
 
   provisioner "local-exec" {
-    command = "wget -O ${path.module}/coe-starter-kit.zip ${local.coe_start_kit_asset_url[0]}"
+    command = "Invoke-WebRequest -Uri $env:COE_ASSET_URL -OutFile \"$env:MODULE_PATH/coe-starter-kit.zip\""
     when    = create
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+      COE_ASSET_URL = local.coe_start_kit_asset_url[0]
+    }
   }
 
   //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -f ${path.module}/coe-starter-kit.zip"
+    command = "Remove-Item -Path \"$env:MODULE_PATH/coe-starter-kit.zip\" -Force"
     when    = destroy
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
   depends_on = [ data.github_release.coe_starter_kit_release ]
@@ -36,14 +45,21 @@ resource "null_resource" "coe_starter_kit_extract_solutions_zip" {
   }
 
   provisioner "local-exec" {
-    command = "unzip -o ${path.module}/coe-starter-kit.zip -d ${path.module}/coe-starter-kit-extracted"
+    command = "Expand-Archive -Path \"$env:MODULE_PATH/coe-starter-kit.zip\" -DestinationPath \"$env:MODULE_PATH/coe-starter-kit-extracted\" -Force"
     when    = create
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
-  //TODO: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
-    command = "rm -rf ${path.module}/coe-starter-kit-extracted"
+    command = "Remove-Item -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\" -Recurse -Force"
     when    = destroy
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
   depends_on = [null_resource.coe_starter_kit_download_solutions_zip]
@@ -56,10 +72,12 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
   }
 
   provisioner "local-exec" {
-    command = <<-EOT
-      cd ${path.module}/coe-starter-kit-extracted && mv CenterofExcellenceCoreComponents_*.zip CenterofExcellenceCoreComponents.zip
-    EOT
+    command = "Set-Location -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\"; Rename-Item -Path \"CenterofExcellenceCoreComponents_*.zip\" -NewName \"CenterofExcellenceCoreComponents.zip\""
     when    = create
+    interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
   depends_on = [null_resource.coe_starter_kit_extract_solutions_zip]
 }
