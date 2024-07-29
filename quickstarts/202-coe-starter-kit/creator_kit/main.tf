@@ -84,6 +84,9 @@ resource "null_resource" "coe_creator_kit_download_ref_mda_zip" {
     command = "Remove-Item -Path \"$env:MODULE_PATH/coe-creator-kit-reference-mda.zip\" -Force"
     when    = destroy
     interpreter = ["pwsh","-Command"]
+    environment = {
+      MODULE_PATH = path.module
+    }
   }
 
   depends_on = [ data.github_release.coe_creator_kit_release ]
