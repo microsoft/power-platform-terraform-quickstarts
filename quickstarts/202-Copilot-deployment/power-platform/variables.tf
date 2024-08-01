@@ -1,9 +1,3 @@
-variable "environment" {
-  description = "Environment for the resources (e.g., dev, prod)"
-  type        = string
-  default     = "dev"
-}
-
 variable "project" {
   description = "Project name or identifier"
   type        = string
@@ -16,10 +10,9 @@ variable "powerplatform_location" {
   default     = "unitedstates"
 }
 
-variable "azure_location" {
-  description = "Azure resources location"
+variable "environment_display_name" {
+  description = "Power Platform environment display name"
   type        = string
-  default     = "Central US"
 }
 
 variable "environment_type" {
@@ -38,6 +31,11 @@ variable "currency_code" {
   description = "Currency code for the Power Platform environment"
   type        = string
   default     = "USD"
+}
+
+variable "copilot_name" {
+  description = "Name of the Copilot"
+  type        = string
 }
 
 variable "environment_access_group_id" {
