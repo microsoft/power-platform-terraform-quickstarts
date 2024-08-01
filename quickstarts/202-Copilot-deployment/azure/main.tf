@@ -80,6 +80,7 @@ resource "azurerm_resource_group" "Copilot-Deployment-Quickstart-RG" {
 }
 
 module "openai" {
+  #checkov:skip=CKV_TF_1: "Ensure Terraform module sources use a commit hash"
   source = "Azure/openai/azurerm"
   version = ">=0.1.3"
   account_name = azurecaf_name.copilot.result
