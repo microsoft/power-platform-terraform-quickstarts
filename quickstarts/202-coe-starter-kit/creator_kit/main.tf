@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    github = {
+      source = "integrations/github"
+      configuration_aliases = [ github.gh ]
+    }
+  }
+}
+
 locals {
   coe_creator_kit_core_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if startswith(i.name,"CreatorKitCore_")]
   coe_creator_kit_ref_canvas_asset_url = [for i in data.github_release.coe_creator_kit_release.assets : i.browser_download_url if startswith(i.name,"CreatorKitReferencesCanvas_")]
@@ -27,7 +36,7 @@ resource "null_resource" "coe_creator_kit_download_core_zip" {
   }
 
   provisioner "local-exec" {
-    command = "Remove-Item -Path\"$env:MODULE_PATH/coe-creator-kit.zip\" -Force"
+    command = "Remove-Item -Path \"$env:MODULE_PATH/coe-creator-kit.zip\" -Force"
     when    = destroy
     interpreter = ["pwsh","-Command"]
     environment = {

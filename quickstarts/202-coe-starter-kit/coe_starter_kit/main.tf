@@ -1,3 +1,25 @@
+terraform {
+  required_providers {
+    powerplatform = {
+      source  = "microsoft/power-platform"
+      configuration_aliases = [ powerplatform.pp ]
+    }
+    github = {
+      source = "integrations/github"
+      configuration_aliases = [ github.gh ]
+    }
+  }
+}
+
+#get tenantid param
+data "powerplatform_rest_query" "org_details" {
+  provider = powerplatform.pp
+  scope                = "${var.parameters.env.env_url}/.default"
+  url                  = "${var.parameters.env.env_url}/api/data/v9.2/RetrieveCurrentOrganization(AccessType=@p1)?@p1=Microsoft.Dynamics.CRM.EndpointAccessType'Default'"
+  method               = "GET"
+  expected_http_status = [200]
+}
+
 locals {
   coe_start_kit_asset_url = [for i in data.github_release.coe_starter_kit_release.assets : i.browser_download_url if i.name == "CoEStarterKit.zip"]
 }
@@ -8,7 +30,6 @@ data "github_release" "coe_starter_kit_release" {
     retrieve_by = var.parameters.release.coe_starter_kit_get_latest_release == true ? "latest" : "tag"
     release_tag = var.parameters.release.coe_starter_kit_specific_release_tag
 }
-
 
 resource "null_resource" "coe_starter_kit_download_solutions_zip" {
   triggers = {
@@ -81,7 +102,6 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
   }
   depends_on = [null_resource.coe_starter_kit_extract_solutions_zip]
 }
-
 
 //this file is generated using:
 //pac solution create-settings --solution-zip .\CenterofExcellenceCoreComponents_4_32_2_managed.zip --settings-file out.json
@@ -965,7 +985,7 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "SchemaName": "admin_TenantID",
-      "Value": "${var.parameters.core.admin_tenant_id}",
+      "Value": "${jsondecode(data.powerplatform_rest_query.org_details.output.body).Detail.TenantId}",
       "Name": {
         "Default": "TenantID",
         "ByLcid": {

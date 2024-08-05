@@ -2,21 +2,29 @@ terraform {
   required_providers {
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "2.5.0-preview"
+      version = "2.7.0-preview"
+    }
+    github = {
+      source = "integrations/github"
     }
   }
 }
 
+
 provider "powerplatform" {
+  alias = "pp"
   use_cli = true
 }
 
 provider "github" {
-
+  alias = "gh"
 }
 
 module "creator_kit" {
   source = "./creator_kit"
+  providers = {
+    github.gh = github.gh
+  }
   parameters = {
     release = {
       creator_kit_get_latest_release   = var.release_parameters.creator_kit_get_latest_release,
@@ -27,6 +35,10 @@ module "creator_kit" {
 
 module "coe_starter_kit" {
   source = "./coe_starter_kit"
+  providers = {
+    powerplatform.pp = powerplatform.pp
+    github.gh = github.gh
+  }
   parameters = {
     release = {
       coe_starter_kit_get_latest_release   = var.release_parameters.coe_starter_kit_get_latest_release,
@@ -34,6 +46,7 @@ module "coe_starter_kit" {
     }
     env = {
       env_id = powerplatform_environment.coe_kit_env.id
+      env_url = powerplatform_environment.coe_kit_env.dataverse.url
     }
     core = {
       admin_admine_mail_preferred_language                        = var.core_components_parameters.admin_admine_mail_preferred_language,
@@ -88,16 +101,15 @@ module "coe_starter_kit" {
       admin_power_platform_user_group_id                          = var.core_components_parameters.admin_power_platform_user_group_id,
       admin_production_environment                                = var.core_components_parameters.admin_production_environment,
       admin_sync_flow_errors_delete_after_x_days                  = var.core_components_parameters.admin_sync_flow_errors_delete_after_x_days,
-      admin_tenant_id                                             = var.core_components_parameters.admin_tenant_id,
-      //admin_tenant_id                                             = jsondecode(data.powerplatform_rest_query.org_details.output.body).Detail.TenantId
       admin_user_photos_forbidden_by_policy = var.core_components_parameters.admin_user_photos_forbidden_by_policy,
       coe_environment_request_admin_app_url = var.core_components_parameters.coe_environment_request_admin_app_url,
     }
   }
 }
 
-//create coe-kit environment
+# //create coe-kit environment
 resource "powerplatform_environment" "coe_kit_env" {
+  provider = powerplatform.pp
   location         = var.environment_parameters.env_location
   display_name     = var.environment_parameters.env_name
   environment_type = "Sandbox"
@@ -109,29 +121,23 @@ resource "powerplatform_environment" "coe_kit_env" {
 }
 
 //install creator-kit-core solution
-resource "powerplatform_solution" "creator_kit_solution_install" {
-  environment_id = powerplatform_environment.coe_kit_env.id
-  solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
-  solution_name  = "CreatorKitCore"
-}
-
-//install coe-core-components solution
-resource "powerplatform_solution" "coe_core_solution_install" {
-  environment_id = powerplatform_environment.coe_kit_env.id
-  solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
-  solution_name  = "CenterofExcellenceCoreComponents"
-  settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
-
-  depends_on = [powerplatform_solution.creator_kit_solution_install]
-}
-
-#TODO: uncomment with next provider' release to get tenantid param
-# data "powerplatform_rest_query" "org_details" {
-#   scope                = "${powerplatform_environment.env.dataverse.url}/.default"
-#   url                  = "${powerplatform_environment.env.dataverse.url}/api/data/v9.2/RetrieveCurrentOrganization(AccessType=@p1)?@p1=Microsoft.Dynamics.CRM.EndpointAccessType'Default'"
-#   method               = "GET"
-#   expected_http_status = [200]
+# resource "powerplatform_solution" "creator_kit_solution_install" {
+#   environment_id = powerplatform_environment.coe_kit_env.id
+#   solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
+#   solution_name  = "CreatorKitCore"
 # }
+
+# //install coe-core-components solution
+# resource "powerplatform_solution" "coe_core_solution_install" {
+#   environment_id = powerplatform_environment.coe_kit_env.id
+#   solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
+#   solution_name  = "CenterofExcellenceCoreComponents"
+#   settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
+
+#   depends_on = [powerplatform_solution.creator_kit_solution_install]
+# }
+
+
 
 //TODO: setup DLP policies and assing to environments
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies

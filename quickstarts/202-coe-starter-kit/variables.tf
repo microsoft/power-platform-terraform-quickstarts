@@ -71,7 +71,6 @@ variable core_components_parameters {
         admin_power_platform_user_group_id = string,
         admin_production_environment = string,
         admin_sync_flow_errors_delete_after_x_days = string,
-        admin_tenant_id = string,
         admin_user_photos_forbidden_by_policy = string,
         coe_environment_request_admin_app_url = string,
     })
