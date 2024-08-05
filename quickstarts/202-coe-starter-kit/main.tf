@@ -48,6 +48,11 @@ module "coe_starter_kit" {
       env_id = powerplatform_environment.coe_kit_env.id
       env_url = powerplatform_environment.coe_kit_env.dataverse.url
     }
+    conn = {
+      should_create_connections = var.connections_parameters.should_create_connections
+      connection_share_with_object_id = var.connections_parameters.connection_share_with_object_id
+      connection_share_permissions = var.connections_parameters.connection_share_permissions
+    }
     core = {
       admin_admine_mail_preferred_language                        = var.core_components_parameters.admin_admine_mail_preferred_language,
       admin_admin_mail                                            = var.core_components_parameters.admin_admin_mail,
@@ -121,21 +126,23 @@ resource "powerplatform_environment" "coe_kit_env" {
 }
 
 //install creator-kit-core solution
-# resource "powerplatform_solution" "creator_kit_solution_install" {
-#   environment_id = powerplatform_environment.coe_kit_env.id
-#   solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
-#   solution_name  = "CreatorKitCore"
-# }
+resource "powerplatform_solution" "creator_kit_solution_install" {
+  provider = powerplatform.pp
+  environment_id = powerplatform_environment.coe_kit_env.id
+  solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
+  solution_name  = "CreatorKitCore"
+}
 
-# //install coe-core-components solution
-# resource "powerplatform_solution" "coe_core_solution_install" {
-#   environment_id = powerplatform_environment.coe_kit_env.id
-#   solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
-#   solution_name  = "CenterofExcellenceCoreComponents"
-#   settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
+//install coe-core-components solution
+resource "powerplatform_solution" "coe_core_solution_install" {
+  provider = powerplatform.pp
+  environment_id = powerplatform_environment.coe_kit_env.id
+  solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
+  solution_name  = "CenterofExcellenceCoreComponents"
+  settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
 
-#   depends_on = [powerplatform_solution.creator_kit_solution_install]
-# }
+  depends_on = [powerplatform_solution.creator_kit_solution_install]
+}
 
 
 

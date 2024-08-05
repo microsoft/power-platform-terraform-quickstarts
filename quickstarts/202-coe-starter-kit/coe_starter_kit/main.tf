@@ -1033,10 +1033,10 @@ resource "local_file" "solution_settings_file" {
       }
     }
   ],
-   "ConnectionReferences": [
+    "ConnectionReferences": [
     {
       "LogicalName": "admin_CoEBYODLDataverse",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoEBYODLDataverse"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     },
     {
@@ -1046,92 +1046,92 @@ resource "local_file" "solution_settings_file" {
     },
     {
       "LogicalName": "admin_CoECoreDataverse",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverse"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     },
     {
       "LogicalName": "admin_CoECoreDataverse2",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverse2"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     },
     {
       "LogicalName": "admin_CoECoreDataverseEnvRequest",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverseEnvRequest"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     },
     {
       "LogicalName": "admin_CoECoreDataverseForApps",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverseForApps"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     },
     {
       "LogicalName": "admin_CoECoreHTTPWithAzureAD",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreHTTPWithAzureAD"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_webcontents"
     },
     {
       "LogicalName": "admin_CoECoreO365Groups",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Groups"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365groups"
     },
     {
       "LogicalName": "admin_CoECoreO365Outlook",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Outlook"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365"
     },
     {
       "LogicalName": "admin_CoECoreO365Users",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Users"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
     },
     {
       "LogicalName": "admin_CoECoreOffice365Users",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreOffice365Users"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
     },
     {
       "LogicalName": "admin_CoECorePowerAppsAdmin",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsAdmin"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
     },
     {
       "LogicalName": "admin_CoECorePowerAppsAdmin2",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsAdmin2"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
     },
     {
       "LogicalName": "admin_CoECorePowerAppsMakers",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsMakers"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforappmakers"
     },
     {
       "LogicalName": "admin_CoECorePowerAutomateAdmin",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAutomateAdmin"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_microsoftflowforadmins"
     },
     {
       "LogicalName": "admin_CoECorePowerAutomateManagement",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAutomateManagement"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_flowmanagement"
     },
     {
       "LogicalName": "admin_CoECorePowerPlatformforAdmins",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerPlatformforAdmins"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins"
     },
     {
       "LogicalName": "admin_CoECorePowerPlatformforAdminsEnvRequest",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerPlatformforAdminsEnvRequest"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins"
     },
     {
       "LogicalName": "admin_CoECoreTeams",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreTeams"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_teams"
     },
     {
       "LogicalName": "admin_sharedcommondataserviceforapps_98924",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_sharedcommondataserviceforapps_98924"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
     }
   ]

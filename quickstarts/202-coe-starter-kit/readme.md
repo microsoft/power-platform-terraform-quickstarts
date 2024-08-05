@@ -19,9 +19,14 @@
 
 1. The logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
 
+> [!NOTE]
+> Currently to create Power Platform connections you have to use service principal authentication.
+
 ```bash
-az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
+az login --service-principal -u 01234567-1111-2222-3333-444455556666 -p abcdef1234354567890 --tenant 01234567-1111-2222-3333-444455556666
 ```
+
+
 
 ### Linux
 

@@ -16,6 +16,15 @@ variable "environment_parameters" {
     })
 }
 
+variable "connections_parameters" {
+    description = "values for the CenterofExcellence solution connections"
+    type = object({
+        should_create_connections = bool,
+        connection_share_with_object_id = string,
+        connection_share_permissions = string,
+    })
+}
+
 variable core_components_parameters {
     description = "values for the CenterofExcellenceCoreComponents solution"
     type = object({

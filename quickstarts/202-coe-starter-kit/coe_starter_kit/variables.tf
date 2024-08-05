@@ -8,6 +8,11 @@ variable "parameters" {
       env_id = string, 
       env_url = string,
     })
+    conn = object({
+      should_create_connections = bool,
+      connection_share_with_object_id = string,
+      connection_share_permissions = string,
+    })
     core = object({
       admin_admine_mail_preferred_language = string,
       admin_admin_mail =   string,
