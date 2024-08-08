@@ -12,7 +12,7 @@ terraform {
 
 
 provider "powerplatform" {
-  alias = "pp"
+  alias   = "pp"
   use_cli = true
 }
 
@@ -37,7 +37,7 @@ module "coe_starter_kit" {
   source = "./coe_starter_kit"
   providers = {
     powerplatform.pp = powerplatform.pp
-    github.gh = github.gh
+    github.gh        = github.gh
   }
   parameters = {
     release = {
@@ -45,13 +45,14 @@ module "coe_starter_kit" {
       coe_starter_kit_specific_release_tag = var.release_parameters.coe_starter_kit_specific_release_tag,
     }
     env = {
-      env_id = powerplatform_environment.coe_kit_env.id
+      env_id  = powerplatform_environment.coe_kit_env.id
       env_url = powerplatform_environment.coe_kit_env.dataverse.url
     }
     conn = {
-      should_create_connections = var.connections_parameters.should_create_connections
+      should_create_connections       = var.connections_parameters.should_create_connections
+      connection_create_mode          = var.connections_parameters.connection_create_mode
       connection_share_with_object_id = var.connections_parameters.connection_share_with_object_id
-      connection_share_permissions = var.connections_parameters.connection_share_permissions
+      connection_share_permissions    = var.connections_parameters.connection_share_permissions
     }
     core = {
       admin_admine_mail_preferred_language                        = var.core_components_parameters.admin_admine_mail_preferred_language,
@@ -106,15 +107,15 @@ module "coe_starter_kit" {
       admin_power_platform_user_group_id                          = var.core_components_parameters.admin_power_platform_user_group_id,
       admin_production_environment                                = var.core_components_parameters.admin_production_environment,
       admin_sync_flow_errors_delete_after_x_days                  = var.core_components_parameters.admin_sync_flow_errors_delete_after_x_days,
-      admin_user_photos_forbidden_by_policy = var.core_components_parameters.admin_user_photos_forbidden_by_policy,
-      coe_environment_request_admin_app_url = var.core_components_parameters.coe_environment_request_admin_app_url,
+      admin_user_photos_forbidden_by_policy                       = var.core_components_parameters.admin_user_photos_forbidden_by_policy,
+      coe_environment_request_admin_app_url                       = var.core_components_parameters.coe_environment_request_admin_app_url,
     }
   }
 }
 
 # //create coe-kit environment
 resource "powerplatform_environment" "coe_kit_env" {
-  provider = powerplatform.pp
+  provider         = powerplatform.pp
   location         = var.environment_parameters.env_location
   display_name     = var.environment_parameters.env_name
   environment_type = "Sandbox"
@@ -127,7 +128,7 @@ resource "powerplatform_environment" "coe_kit_env" {
 
 //install creator-kit-core solution
 resource "powerplatform_solution" "creator_kit_solution_install" {
-  provider = powerplatform.pp
+  provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
   solution_name  = "CreatorKitCore"
@@ -135,7 +136,7 @@ resource "powerplatform_solution" "creator_kit_solution_install" {
 
 //install coe-core-components solution
 resource "powerplatform_solution" "coe_core_solution_install" {
-  provider = powerplatform.pp
+  provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
   solution_name  = "CenterofExcellenceCoreComponents"

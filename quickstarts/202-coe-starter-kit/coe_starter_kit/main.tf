@@ -46,7 +46,6 @@ resource "null_resource" "coe_starter_kit_download_solutions_zip" {
     }
   }
 
-  //TOOD: this assumes that we are running in a linux environment, consider adding support for windows
   provisioner "local-exec" {
     command = "Remove-Item -Path \"$env:MODULE_PATH/coe-starter-kit.zip\" -Force"
     when    = destroy
@@ -93,7 +92,7 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
   }
 
   provisioner "local-exec" {
-    command = "Set-Location -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\"; Rename-Item -Path \"CenterofExcellenceCoreComponents_*.zip\" -NewName \"CenterofExcellenceCoreComponents.zip\""
+    command = "Set-Location -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\"; Get-Childitem \"CenterofExcellenceCoreComponents_*.zip\" |  ForEach-Object {  Move-Item $_ $_.Name.Replace($_.Name, \"CenterofExcellenceCoreComponents.zip\") -Force }"
     when    = create
     interpreter = ["pwsh","-Command"]
     environment = {
@@ -103,11 +102,179 @@ resource "null_resource" "rename_center_of_excellence_core_components_solution" 
   depends_on = [null_resource.coe_starter_kit_extract_solutions_zip]
 }
 
+
+//TODO add comment expalining where that came from and how to update it if you need new connections referenced going into your new released solution
+//Those connections are hardcoded and represent the connections that are created in the solution by extracting them from solution.zip file using the following command:
+//pac solution create-settings --solution-zip .\CenterofExcellenceCoreComponents_X_XX_X_managed.zip --settings-file out.json
+//
+//If you need new connections to be referenced in the new solution, you need to update this list by running the above command with the new solution.zip file and updating the list below
+//Field description:
+//name: the name of the connector 
+//logicalName: the name of the connection reference in the solution
+//display_name: the display name of the connection (is used only if you create connections using powerplatform_connection resource, not test engine)
+//connection_parameters: the auth connection parameters of the connection (is used only if you create connections using powerplatform_connection resource, not test engine)
+//connection_parameters_set: the auth connection parameters set of the connection (is used only if you create connections using powerplatform_connection resource, not test engine)
+locals {
+  office365_users_connections = [
+     {
+      name = "shared_office365users"
+      logicalName = "admin_CoECoreO365Users"
+      display_name = "CoE Core - O365 Users Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_office365users"
+      logicalName = "admin_CoECoreOffice365Users"
+      display_name = "CoE Core - Office 365 Users Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+  ]
+  powerplatform_admin_connections = [
+    {
+      name ="shared_powerplatformforadmins"
+      logicalName = "admin_CoECorePowerPlatformforAdmins"
+      display_name = "CoE Core - Power Platform for Admins (Env Request) Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name ="shared_powerplatformforadmins"
+      logicalName = "admin_CoECorePowerPlatformforAdminsEnvRequest"
+      display_name = "CoE Core - Power Apps Admin Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+  ]
+   powerapps_admin_connections = [
+    {
+      name ="shared_powerappsforadmins"
+      logicalName = "admin_CoECorePowerAppsAdmin"
+      display_name = "CoE Core - Power Apps for Admins Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name ="shared_powerappsforadmins"
+      logicalName = "admin_CoECorePowerAppsAdmin2"
+      display_name = "CoE Core - Power Apps for Admins 2 Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+  ]
+  dataverse_connections = [
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_CoECoreDataverseEnvRequest"
+      display_name = "CoE Core - Dataverse (Env Request) Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_CoECoreDataverseForApps"
+      display_name = "CoE Core - Dataverse Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_CoECoreDataverse"
+      display_name = "CoE Core - Dataverse For Apps Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_CoECoreDataverse2"
+      display_name = "CoE Core - Dataverse2 Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_sharedcommondataserviceforapps_98924"
+      display_name = "CoE Core - Dataverse for Environment Request Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_commondataserviceforapps"
+      logicalName = "admin_CoEBYODLDataverse"
+      display_name = "CoE BYODL - Dataverse Connection"
+      connection_parameters = jsonencode({"token:grantType":"code"})
+      connection_parameters_set = null
+    },
+  ]
+  single_connections = [
+    {
+      name = "shared_office365"
+      logicalName = "admin_CoECoreO365Outlook"
+      display_name = "CoE Core - O365 Outlook Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_powerappsforappmakers"
+      logicalName = "admin_CoECorePowerAppsMakers"
+      display_name = "CoE Core - PowerApps for App Makers Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_teams"
+      logicalName = "admin_CoECoreTeams"
+      display_name = "CoE Core - Teams Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_flowmanagement"
+      logicalName = "admin_CoECorePowerAutomateManagement"
+      display_name = "CoE Core - Power Automate Management Connection"
+      connection_parameters = null
+      connection_parameters_set = jsonencode({"name":"firstParty","values":{"token":{"value":"https://global.consent.azure-apim.net/redirect/flowmanagement"}}})
+    },
+    {
+      name = "shared_webcontents"
+      logicalName = "admin_CoECoreHTTPWithAzureAD"
+      display_name = "CoE Core - HTTP With Azure AD Connection"
+      connection_parameters = jsonencode({"token:ResourceUri":"TODO URI","baseResourceUrl":"TODO BASE URL","privacySetting":"None"})
+      connection_parameters_set = null
+    },
+    #TODO test why we get error when creating this connection
+    #status: 500, message: {"error":{"code":"InternalServerError","message":"Encountered internal server error. The correlation Id is '0d01fad6-e954-4fd5-991e-e3beed13140e'."}}
+    #https://make.preview.powerapps.com/environments/de6879bd-5f69-e218-8a2f-a657ba5e0c05/connections
+    # {
+    #   name = "shared_dataflow"
+    #   logicalName = "admin_CoEBYODLPowerQuery"
+    #   display_name = "CoE BYODL - Power Query Connection"
+    #   connection_parameters = null//jsonencode({})
+    #   connection_parameters_set = null
+    # },
+    {
+      name = "shared_office365groups"
+      logicalName = "admin_CoECoreO365Groups"
+      display_name = "CoE Core - O365 Groups Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+    {
+      name = "shared_microsoftflowforadmins"
+      logicalName = "admin_CoECorePowerAutomateAdmin"
+      display_name = "CoE Core - Power Automate Admin Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
+  ]
+
+  all_connections = concat(local.office365_users_connections,local.powerapps_admin_connections, local.powerplatform_admin_connections, local.dataverse_connections, local.single_connections)
+}
+
+
 //this file is generated using:
 //pac solution create-settings --solution-zip .\CenterofExcellenceCoreComponents_4_32_2_managed.zip --settings-file out.json
-//TODO: for connections we need a connectionid of each existing connection
-//TODO: for env variables we need to expose them as script's input variables, unless something can be read from current 
-//script context such as `admin_CurrentEnvironment`
 resource "local_file" "solution_settings_file" {
   filename = "${path.module}/CenterofExcellenceCoreComponents_solution_settings.json"
   content  = <<EOF
@@ -1033,108 +1200,7 @@ resource "local_file" "solution_settings_file" {
       }
     }
   ],
-    "ConnectionReferences": [
-    {
-      "LogicalName": "admin_CoEBYODLDataverse",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoEBYODLDataverse"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    },
-    {
-      "LogicalName": "admin_CoEBYODLPowerQuery",
-      "ConnectionId": "",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_dataflows"
-    },
-    {
-      "LogicalName": "admin_CoECoreDataverse",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverse"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    },
-    {
-      "LogicalName": "admin_CoECoreDataverse2",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverse2"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    },
-    {
-      "LogicalName": "admin_CoECoreDataverseEnvRequest",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverseEnvRequest"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    },
-    {
-      "LogicalName": "admin_CoECoreDataverseForApps",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreDataverseForApps"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    },
-    {
-      "LogicalName": "admin_CoECoreHTTPWithAzureAD",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreHTTPWithAzureAD"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_webcontents"
-    },
-    {
-      "LogicalName": "admin_CoECoreO365Groups",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Groups"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365groups"
-    },
-    {
-      "LogicalName": "admin_CoECoreO365Outlook",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Outlook"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365"
-    },
-    {
-      "LogicalName": "admin_CoECoreO365Users",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreO365Users"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
-    },
-    {
-      "LogicalName": "admin_CoECoreOffice365Users",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreOffice365Users"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerAppsAdmin",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsAdmin"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerAppsAdmin2",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsAdmin2"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerAppsMakers",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAppsMakers"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforappmakers"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerAutomateAdmin",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAutomateAdmin"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_microsoftflowforadmins"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerAutomateManagement",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerAutomateManagement"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_flowmanagement"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerPlatformforAdmins",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerPlatformforAdmins"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins"
-    },
-    {
-      "LogicalName": "admin_CoECorePowerPlatformforAdminsEnvRequest",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECorePowerPlatformforAdminsEnvRequest"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins"
-    },
-    {
-      "LogicalName": "admin_CoECoreTeams",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_CoECoreTeams"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_teams"
-    },
-    {
-      "LogicalName": "admin_sharedcommondataserviceforapps_98924",
-      "ConnectionId": "${var.parameters.conn.should_create_connections == true ? powerplatform_connection.connection_object["admin_sharedcommondataserviceforapps_98924"].id : ""}",
-      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-    }
-  ]
+  ${var.parameters.conn.connection_create_mode == "terraform" ? local.terraform_connections_output : local.test_engine_connections_output}
 }
 EOF
 }

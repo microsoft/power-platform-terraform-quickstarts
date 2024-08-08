@@ -1,3 +1,5 @@
-coe_starter_kit/**
-creator_kit/**
-coe-coe_starter_kit.zip
+coe_starter_kit/*.json
+coe_starter_kit/*.zip
+coe_starter_kit/coe-starter-kit-extracted/**
+creator_kit/*.zip
+creator_kit/*.json

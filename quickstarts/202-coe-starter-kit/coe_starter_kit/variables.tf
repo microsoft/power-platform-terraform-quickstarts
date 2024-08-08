@@ -10,6 +10,7 @@ variable "parameters" {
     })
     conn = object({
       should_create_connections = bool,
+      connection_create_mode = string,
       connection_share_with_object_id = string,
       connection_share_permissions = string,
     })
