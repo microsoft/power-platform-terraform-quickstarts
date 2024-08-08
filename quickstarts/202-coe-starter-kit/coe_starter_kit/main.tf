@@ -243,16 +243,13 @@ locals {
       connection_parameters = jsonencode({"token:ResourceUri":"TODO URI","baseResourceUrl":"TODO BASE URL","privacySetting":"None"})
       connection_parameters_set = null
     },
-    #TODO test why we get error when creating this connection
-    #status: 500, message: {"error":{"code":"InternalServerError","message":"Encountered internal server error. The correlation Id is '0d01fad6-e954-4fd5-991e-e3beed13140e'."}}
-    #https://make.preview.powerapps.com/environments/de6879bd-5f69-e218-8a2f-a657ba5e0c05/connections
-    # {
-    #   name = "shared_dataflow"
-    #   logicalName = "admin_CoEBYODLPowerQuery"
-    #   display_name = "CoE BYODL - Power Query Connection"
-    #   connection_parameters = null//jsonencode({})
-    #   connection_parameters_set = null
-    # },
+    {
+      name = "shared_dataflows"
+      logicalName = "admin_CoEBYODLPowerQuery"
+      display_name = "CoE BYODL - Power Query Connection"
+      connection_parameters = jsonencode({})
+      connection_parameters_set = null
+    },
     {
       name = "shared_office365groups"
       logicalName = "admin_CoECoreO365Groups"

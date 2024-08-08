@@ -57,7 +57,7 @@ locals {
     },
     {
       "LogicalName": "admin_CoEBYODLPowerQuery",
-      "ConnectionId": "",
+      "ConnectionId": "${var.parameters.conn.should_create_connections == true && var.parameters.conn.connection_create_mode == "terraform" ? powerplatform_connection.connection_object["admin_CoEBYODLPowerQuery"].id : ""}",
       "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_dataflows"
     },
     {
