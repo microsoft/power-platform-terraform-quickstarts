@@ -240,7 +240,7 @@ locals {
       name = "shared_webcontents"
       logicalName = "admin_CoECoreHTTPWithAzureAD"
       display_name = "CoE Core - HTTP With Azure AD Connection"
-      connection_parameters = jsonencode({"token:ResourceUri":"TODO URI","baseResourceUrl":"TODO BASE URL","privacySetting":"None"})
+      connection_parameters = jsonencode({"token:ResourceUri":"https://graph.microsoft.com","baseResourceUrl":"https://graph.microsoft.com","privacySetting":"None"})
       connection_parameters_set = null
     },
     {
