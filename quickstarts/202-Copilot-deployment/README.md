@@ -6,7 +6,7 @@ This Terraform module is an end-to-end example for connecting a low-code Copilot
 ## Prerequisites
 
 - Entra ID Tenant
-- Power Platform environment
+- A service principal configured per the instructions in the [user documentation of the Power Platform Terraform provider](https://microsoft.github.io/terraform-provider-power-platform/guides/app_registration/), with an added API permission for Power Platform's 'PowerApps.Apps.Play' permission.
 - Sufficient [Azure OpenAI Service quota](https://learn.microsoft.com/en-us/azure/ai-services/openai/quotas-limits) for the model(s) you intend to deploy
 
 ## Example Files
@@ -21,11 +21,19 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - **azurerm (`hashicorp/azurerm`):** `>=3.113.0`
 
-- **powerplatform (`microsoft/power-platform`):** `2.6.2-preview`
+- **powerplatform (`microsoft/power-platform`):** `2.7.0-preview`
+
+## Output Values
+
+| Name | Description |
+|------|-------------|
+| `dev_environment` |  |
 
 ## Child Modules
 
 - `azure` from `./azure`
+
+- `azure-configure` from `./azure-configure`
 
 - `power-platform` from `./power-platform`
 
@@ -34,7 +42,7 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 Execute example with the following commands:
 
 ```bash
-az login --allow-no-subscriptions --scope https://api.bap.microsoft.com/.default
+az login --service-principal --username <your service principal's app ID> --password <your service principal's secret> --tenant <your tenant's GUID>
 
 terraform init
 

@@ -13,6 +13,7 @@ variable "powerplatform_location" {
 variable "environment_display_name" {
   description = "Power Platform environment display name"
   type        = string
+  default = "Copilot Quickstart"
 }
 
 variable "environment_type" {
@@ -38,7 +39,48 @@ variable "copilot_name" {
   type        = string
 }
 
+variable "connection_display_name" {
+  description = "Display name of the connection"
+  type        = string
+  default = "Copilot Quickstart Connection"
+}
+
 variable "environment_access_group_id" {
   description = "The id of the environment Entra security access group"
+  type        = string
+}
+
+variable "oai_resource_name" {
+  description = "The name of the deployed OpenAI resource"
+  type = string
+}
+
+variable "oai_api_key" {
+  description = "The API key for the deployed OpenAI resource"
+  type = string
+}
+
+variable "search_endpoint_uri" {
+  description = "The search endpoint URL for the deployed OpenAI resource"
+  type = string
+}
+
+variable "search_api_key" {
+  description = "The search API key for the deployed OpenAI resource"
+  type = string
+}
+
+variable "admin_id" {
+  description = "The object ID of the admin user"
+  type        = string
+}
+
+variable "service_principal_object_id" {
+  description = "The OBJECT ID of the service principal"
+  type        = string
+}
+
+variable "service_principal_app_id" {
+  description = "The application ID of the service principal"
   type        = string
 }
