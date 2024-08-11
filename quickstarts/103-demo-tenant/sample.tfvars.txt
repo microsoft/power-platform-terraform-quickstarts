@@ -1,0 +1,3 @@
+# Sample values for the group name and description
+group_name        = "Makers"
+group_description = "Group for low code makers"
