@@ -81,6 +81,8 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - `azurecaf_name.key_vault_secret_vm_pwd` from `azurecaf`
 
+- `azurecaf_name.key_vault_secret_vm_user` from `azurecaf`
+
 - `azurecaf_name.nic` from `azurecaf`
 
 - `azurecaf_name.nsg` from `azurecaf`
@@ -103,6 +105,8 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - `azurerm_key_vault_secret.key_vault_secret_vm_pwd` from `azurerm`
 
+- `azurerm_key_vault_secret.key_vault_secret_vm_user` from `azurerm`
+
 - `azurerm_network_interface.nic` from `azurerm`
 
 - `azurerm_network_interface_security_group_association.rgassociation` from `azurerm`
@@ -122,6 +126,8 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 - `random_string.key_vault_suffix` from `random`
 
 - `random_string.vm_pwd` from `random`
+
+- `random_string.vm_user` from `random`
 
 ## Data Sources
 
