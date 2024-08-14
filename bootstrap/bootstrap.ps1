@@ -68,7 +68,7 @@ if ($PSCmdlet.MyInvocation.BoundParameters.Count -eq 2) {
     Push-Location ./tenant-configuration
 
     # Disable AzureRM backend in the main.tf file
-    (Get-Content main.tf) -replace '^[\s]*backend "azurerm" {}', '#backend "azurerm" {}' | Set-Content main.tf
+    (Get-Content main.tf) -replace '^\s*backend "azurerm" \{\}', '#backend "azurerm" {}' | Set-Content main.tf
 
     Write-Host "Terraform init..."
     # Call terraform init with backend.tfvars as backend config file
