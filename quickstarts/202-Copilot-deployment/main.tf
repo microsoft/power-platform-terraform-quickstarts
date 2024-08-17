@@ -23,25 +23,36 @@ provider "azurerm" {
   features {}
 }
 
-module "azure" {
-  source  = "./azure"
+module "resource-names" {
+  source = "./resource-names"
+}
+
+module "azure-control-plane" {
+  source  = "./azure-control-plane"
+  copilot_name = module.resource-names.copilot_name
+  resource_group = module.resource-names.resource_group
+  ai_search = module.resource-names.ai_search
+  data_storage = module.resource-names.data_storage
+  data_container = module.resource-names.data_container
+}
+
+module "azure-data-plane" {
+  source = "./azure-data-plane"
+  storage_container_name = module.azure-control-plane.storage_container_name
+  storage_account_id = module.azure-control-plane.storage_account_id
+  search_endpoint_uri = module.azure-control-plane.search_endpoint_uri
+  search_api_key = module.azure-control-plane.search_api_key
+  search_datasource_name = module.resource-names.ai_search_datasource
+  storage_account_name = module.azure-control-plane.storage_account_name
+  storage_account_key = module.azure-control-plane.storage_account_key
 }
 
 module "power-platform" {
   source = "./power-platform"
-  environment_display_name = module.azure.power-platform_environment_name
-  copilot_name = module.azure.copilot_name
-  oai_resource_name = module.azure.oai_resource_name
-  oai_api_key = module.azure.oai_api_key
-  search_endpoint_uri = module.azure.search_endpoint_uri
-  search_api_key = module.azure.search_api_key
-}
-
-module "azure-configure" {
-  source = "./azure-configure"
-  storage_container_name = module.azure.storage_container_name
-  storage_account_id = module.azure.storage_account_id
-  search_endpoint_uri = module.azure.search_endpoint_uri
-  dataverse_url = module.power-platform.dataverse_url
-  search_api_key = module.azure.search_api_key
+  environment_display_name = module.resource-names.power_platform-environment
+  copilot_name = module.resource-names.copilot_name
+  oai_resource_name = module.azure-control-plane.oai_resource_name
+  oai_api_key = module.azure-control-plane.oai_api_key
+  search_endpoint_uri = module.azure-control-plane.search_endpoint_uri
+  search_api_key = module.azure-control-plane.search_api_key
 }

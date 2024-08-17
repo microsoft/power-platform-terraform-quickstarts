@@ -1,46 +1,35 @@
 terraform {
   required_providers {
-    restapi = {
-      source = "Mastercard/restapi"
-      version = ">=1.19.1"
-    }
     powerplatform = {
       source = "microsoft/power-platform"
       version = "2.7.0-preview"
     }
+    # restful = {
+    #   source = "magodo/restful"
+    #   version = ">=0.16.1"
+    # }
   }
 }
+
+# provider "restful" {
+#   base_url = var.search_endpoint_uri
+#   security = {}
+# }
 
 provider "powerplatform" {
   use_cli = true
 }
 
-provider "restapi" {
-  uri                  = var.search_endpoint_uri
-  write_returns_object = true
-  debug                = true
-
-  headers = {
-    "api-key"      = var.search_api_key,
-    "Content-Type" = "application/json"
-  }
-
-  create_method  = "POST"
-  update_method  = "PUT"
-  destroy_method = "DELETE"
-}
-
 locals {
     datasource_json = {
-        name = "copilot-quickstart-ai-search-data-source"
-        description = "Azure AI-searchable storage location"
         type        = "azureblob"
-        container = {
-            name = var.storage_container_name
-        }   
         credentials = {
-            connectionString = "ResourceId=${var.storage_account_id};" 
+            connectionString = "DefaultEndpointsProtocol=https;AccountName=${var.storage_account_name};AccountKey=${var.storage_account_key};EndpointSuffix=core.windows.net" 
         }
+        container = {
+          name = var.storage_container_name
+        } 
+        name = var.search_datasource_name
     }
     # This is a basic sample index, it should be customized to the relevant scenario.
     index_json = {
@@ -90,31 +79,47 @@ locals {
 
 #---- 1 - Set up storage on the AI Search resource ----
 
-resource "restapi_object" "search_datasource" {
-  path = "/datasources"
-  query_string = "api-version=2023-11-01"
-  data = jsonencode(local.datasource_json)
-  id_attribute = "datasource_response"
+resource "powerplatform_rest" "search_datasource" {
+  create = {
+    scope = "https://search.azure.com/.default"
+    url = "${var.search_endpoint_uri}/datasources?api-version=2023-11-01"
+    method = "POST"
+    expected_http_status = [201]
+    body = jsonencode(local.datasource_json)
+    headers = [{
+      name = "api-key"
+      value = var.search_api_key
+    }]
+  }
 }
 
-#---- 2 - Set up the index on the AI Search resource ----
+# resource "restful_operation" "search_datasource" {
+#   path = "/datasources"
+#   query = {
+#     api-version = ["2023-11-01"]
+#   }
+#   method = "POST"
+#   body = jsonencode(local.datasource_json)
+# }
 
-resource "restapi_object" "search_index" {
-  path = "/indexes"
-  query_string = "api-version=2023-11-01"
-  data = jsonencode(local.index_json)
-  id_attribute = "index_response"
-}
+# #---- 2 - Set up the index on the AI Search resource ----
 
-#---- 3 - Set up the indexer on the AI Search resource ----
-# TODO: fix errors on 1 and 2 above so this can continue
-resource "restapi_object" "search_indexer" {
-  depends_on = [restapi_object.search_datasource, restapi_object.search_index]
-  path = "/indexers"
-  query_string = "api-version=2023-11-01"
-  data = jsonencode(local.indexer_json)
-  id_attribute = "indexer_response"
-}
+# resource "restapi_object" "search_index" {
+#   path = "/indexes"
+#   query_string = "api-version=2023-11-01"
+#   data = jsonencode(local.index_json)
+#   id_attribute = "index_response"
+# }
+
+# #---- 3 - Set up the indexer on the AI Search resource ----
+# # TODO: fix errors on 1 and 2 above so this can continue
+# resource "restapi_object" "search_indexer" {
+#   depends_on = [restapi_object.search_datasource, restapi_object.search_index]
+#   path = "/indexers"
+#   query_string = "api-version=2023-11-01"
+#   data = jsonencode(local.indexer_json)
+#   id_attribute = "indexer_response"
+# }
 
 # Tried this approach first but it felt relatively clunky
 # resource "powerplatform_rest" "search_indexer" {

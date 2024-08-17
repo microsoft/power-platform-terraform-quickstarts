@@ -74,13 +74,3 @@ variable "admin_id" {
   description = "The object ID of the admin user"
   type        = string
 }
-
-variable "service_principal_object_id" {
-  description = "The OBJECT ID of the service principal"
-  type        = string
-}
-
-variable "service_principal_app_id" {
-  description = "The application ID of the service principal"
-  type        = string
-}
