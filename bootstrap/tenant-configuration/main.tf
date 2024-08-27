@@ -169,10 +169,12 @@ resource "null_resource" "ppadmin_role_assignment" {
   }
   provisioner "local-exec" {
     when    = create
-    command = "${path.module}/grant-ppadmin.sh --client_id ${self.triggers.client_id} --action create"
+    command = "${path.module}/grant-ppadmin.ps1 --client_id ${self.triggers.client_id} --action create"
+    interpreter = ["pwsh", "-Command"]
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "${path.module}/grant-ppadmin.sh --client_id ${self.triggers.client_id} --action destroy"
+    command = "${path.module}/grant-ppadmin.ps1 --client_id ${self.triggers.client_id} --action destroy"
+    interpreter = ["pwsh", "-Command"]
   }
 }
