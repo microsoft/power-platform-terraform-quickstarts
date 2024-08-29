@@ -1,5 +1,3 @@
-Sure, I can help with that. Here is the equivalent PowerShell (pwsh) script:
-
 param (
     [string]$client_id,
     [string]$action
@@ -20,9 +18,8 @@ if ($action -ne "create" -and $action -ne "destroy") {
     exit 1
 }
 
-$access_token = az account get-access-token --scope https://service.powerapps.com//.default --query accessToken --output tsv
-$api_version = "2020-10-01"
-$url = "https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/adminApplications/$client_id?api-version=$api_version"
+$access_token = az account get-access-token --scope https://service.powerapps.com/.default --query accessToken --output tsv
+$url = "https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/adminApplications/$client_id`?api-version=2024-05-01"
 
 if ($action -eq "create") {
     Invoke-RestMethod -Method Put -Uri $url -Headers @{Authorization = "Bearer $access_token"; Accept = "application/json"; "Content-Length" = "0"}
