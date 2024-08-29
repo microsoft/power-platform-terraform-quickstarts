@@ -60,6 +60,16 @@ resource "azurerm_storage_account" "Quickstart-Data-Storage" {
   account_replication_type = "GRS"
   min_tls_version          = "TLS1_2"
   public_network_access_enabled = false
+  allow_nested_items_to_be_public = false
+  queue_properties  {
+    logging {
+        delete                = true
+        read                  = true
+        write                 = true
+        version               = "1.0"
+        retention_policy_days = 14
+    }
+  }
 }
 
 # Container in the storage account
@@ -77,4 +87,7 @@ resource "azurerm_search_service" "Quickstart-Data-Search" {
   sku                 = "basic"
   replica_count = 3
   public_network_access_enabled = false
+  identity {
+    type = "SystemAssigned"
+  }
 }
