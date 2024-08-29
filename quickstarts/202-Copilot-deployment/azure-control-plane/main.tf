@@ -57,7 +57,9 @@ resource "azurerm_storage_account" "Quickstart-Data-Storage" {
   resource_group_name      = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
   location                 = var.azure_location
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = "GRS"
+  min_tls_version          = "TLS1_2"
+  public_network_access_enabled = false
 }
 
 # Container in the storage account
@@ -73,4 +75,6 @@ resource "azurerm_search_service" "Quickstart-Data-Search" {
   resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
   location            = var.azure_location
   sku                 = "basic"
+  replica_count = 3
+  public_network_access_enabled = false
 }
