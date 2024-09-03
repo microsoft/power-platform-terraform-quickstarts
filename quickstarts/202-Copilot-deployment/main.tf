@@ -50,6 +50,7 @@ module "azure-data-plane" {
 module "power-platform" {
   source = "./power-platform"
   environment_display_name = module.resource-names.power_platform-environment
+  environment_access_group_id = module.azure-control-plane.environment_access_group_id
   copilot_name = module.resource-names.copilot_name
   oai_resource_name = module.azure-control-plane.oai_resource_name
   oai_api_key = module.azure-control-plane.oai_api_key

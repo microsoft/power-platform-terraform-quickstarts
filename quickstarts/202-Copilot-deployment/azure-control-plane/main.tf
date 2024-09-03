@@ -51,6 +51,54 @@ module "openai" {
 #---- 3 - Create storage and search resources ----
 # To be connected to the model in the Power Platform module
 
+data "azurerm_client_config" "current" {}
+
+#Key Vault
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_key_vault" "placeholder_key_vault" {
+  name                = "placeholder-kv"
+  location            = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.location
+  resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "standard"
+
+  purge_protection_enabled = true
+}
+
+#KV Access Policy
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_key_vault_access_policy" "placeholder_kv_access_policy" {
+  key_vault_id = azurerm_key_vault.placeholder_key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get"]
+}
+
+#Key
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_key_vault_key" "placeholder_kv_key" {
+  name         = "tfex-key"
+  key_vault_id = azurerm_key_vault.example.id
+  key_type     = "RSA"
+  key_size     = 2048
+  key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+
+  depends_on = [
+    azurerm_key_vault_access_policy.client
+  ]
+}
+
+#Managed Key
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_storage_account_customer_managed_key" "placeholder_cmk" {
+  storage_account_id = azurerm_storage_account.Data.id
+  key_vault_id       = azurerm_key_vault.placeholder_key_vault.id
+  key_name           = azurerm_key_vault_key.placeholder_kv_key.name
+}
+
+
 # Storage account
 resource "azurerm_storage_account" "Quickstart-Data-Storage" {
   name                     = var.data_storage
@@ -79,6 +127,40 @@ resource "azurerm_storage_account" "Quickstart-Data-Storage" {
   sas_policy {
     expiration_period = "90.00:00:00"
     expiration_action = "Log"
+  }
+}
+
+#Virtual Network
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_virtual_network" "placeholder_virtual_network" {
+  name                = "placeholder-example-vnet"
+  location            = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.location
+  resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  address_space       = ["10.0.0.0/16"]
+}
+
+#Subnet
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_subnet" "placeholder_subnet" {
+  name = "placeholder_example_private_endpoint"
+  resource_group_name  = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  virtual_network_name = azurerm_virtual_network.placeholder_virtual_network.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
+#Private endpoint
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_private_endpoint" "placeholder_private_endpoint" {
+  name                 = "placeholder_example_private_endpoint"
+  location             = azurerm_storage_account.Quickstart-Data-Storage.location
+  resource_group_name  = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  subnet_id            = azurerm_subnet.placeholder_subnet.id
+
+  private_service_connection {
+    name                           = "placeholder_example_psc"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_storage_account.Quickstart-Data-Storage.id
+    subresource_names              = ["blob"]
   }
 }
 
