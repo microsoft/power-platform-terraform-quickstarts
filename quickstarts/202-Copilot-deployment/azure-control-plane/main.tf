@@ -63,6 +63,11 @@ resource "azurerm_key_vault" "placeholder_key_vault" {
   sku_name            = "standard"
 
   purge_protection_enabled = true
+  public_network_access_enabled = false
+  network_acls {
+    default_action = "Deny"
+    bypass = "AzureServices"
+  }
 }
 
 #KV Access Policy
@@ -80,20 +85,22 @@ resource "azurerm_key_vault_access_policy" "placeholder_kv_access_policy" {
 #TODO: This is a stub, needs to be updated for AIRI resource
 resource "azurerm_key_vault_key" "placeholder_kv_key" {
   name         = "tfex-key"
-  key_vault_id = azurerm_key_vault.example.id
+  key_vault_id = azurerm_key_vault.placeholder_key_vault.id
   key_type     = "RSA"
   key_size     = 2048
   key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
 
   depends_on = [
-    azurerm_key_vault_access_policy.client
+    azurerm_key_vault_access_policy.placeholder_kv_access_policy
   ]
+
+  expiration_date = timeadd(formatdate("YYYY-MM-01'T'00:00:00Z", timestamp()), "90d")
 }
 
 #Managed Key
 #TODO: This is a stub, needs to be updated for AIRI resource
 resource "azurerm_storage_account_customer_managed_key" "placeholder_cmk" {
-  storage_account_id = azurerm_storage_account.Data.id
+  storage_account_id = azurerm_storage_account.Quickstart-Data-Storage.id
   key_vault_id       = azurerm_key_vault.placeholder_key_vault.id
   key_name           = azurerm_key_vault_key.placeholder_kv_key.name
 }
@@ -146,6 +153,19 @@ resource "azurerm_subnet" "placeholder_subnet" {
   resource_group_name  = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
   virtual_network_name = azurerm_virtual_network.placeholder_virtual_network.name
   address_prefixes     = ["10.0.1.0/24"]
+}
+
+#Network Security Group and association
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_network_security_group" "placeholder_nsg" {
+  name                = "placeholder-nsg"
+  location            = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.location
+  resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+}
+
+resource "azurerm_subnet_network_security_group_association" "placeholder_nsg_association" {
+  subnet_id                 = azurerm_subnet.placeholder_subnet.id
+  network_security_group_id = azurerm_network_security_group.placeholder_nsg.id
 }
 
 #Private endpoint
