@@ -21,7 +21,12 @@ $Psversion = (Get-Host).Version
 
 if($Psversion.Major -ge 7)
 {
-    
+    #Installing Gateway
+    Write-Output "Installing Gateway"
+    Install-Module -Name DataGateway
+    Import-Module DataGateway.Profile
+    Install-DataGateway -AcceptConditions 
+
     #Retrieve the secret from Key Vault
     Write-Output "Retrieve the secrete from Key Vault"
     $Response = Invoke-RestMethod -Uri 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -Method GET -Headers @{Metadata="true"}
@@ -40,12 +45,8 @@ if($Psversion.Major -ge 7)
     Write-Output "Gateway Login"
     Connect-DataGatewayServiceAccount -ApplicationId $ApplicationId -ClientSecret $securePassword -Tenant $TenantId
 
-    #Installing Gateway
-    Write-Output "Installing Gateway"
-    Install-DataGateway -AcceptConditions 
-
     #Configuring Gateway
-    $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq "OPDGW-SAPAzureIntegration"}).Id
+    $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq $GatewayName}).Id
 
     if (![string]::IsNullOrEmpty($GatewayObjectId)) {
         Write-Output "Remove Cluster"
