@@ -86,7 +86,7 @@ resource "azurerm_key_vault_access_policy" "placeholder_kv_access_policy" {
 resource "azurerm_key_vault_key" "placeholder_kv_key" {
   name         = "tfex-key"
   key_vault_id = azurerm_key_vault.placeholder_key_vault.id
-  key_type     = "RSA"
+  key_type     = "RSA-HSM"
   key_size     = 2048
   key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
 
@@ -180,7 +180,7 @@ resource "azurerm_private_endpoint" "placeholder_private_endpoint" {
     name                           = "placeholder_example_psc"
     is_manual_connection           = false
     private_connection_resource_id = azurerm_storage_account.Quickstart-Data-Storage.id
-    subresource_names              = ["blob"]
+    subresource_names              = ["vault"]
   }
 }
 
