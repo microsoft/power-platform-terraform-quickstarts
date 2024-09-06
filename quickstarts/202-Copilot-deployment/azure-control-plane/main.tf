@@ -61,7 +61,7 @@ resource "azurerm_key_vault" "placeholder_key_vault" {
   resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
-
+  
   purge_protection_enabled = true
   public_network_access_enabled = false
   network_acls {
@@ -182,6 +182,25 @@ resource "azurerm_private_endpoint" "placeholder_private_endpoint" {
     private_connection_resource_id = azurerm_storage_account.Quickstart-Data-Storage.id
     subresource_names              = ["vault"]
   }
+}
+
+#Log analytics workspace
+#TODO: This is a stub, needs to be updated for AIRI resource
+resource "azurerm_log_analytics_workspace" "placeholder_analytics_workspace" {
+  name                = "placeholder-analytics-workspace"
+  location            = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.location
+  resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+resource "azurerm_log_analytics_storage_insights" "placeholder_analytics_storage_insights" {
+  name                = "placeholder-storageinsightconfig"
+  resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
+  workspace_id        = azurerm_log_analytics_workspace.placeholder_analytics_workspace.id
+
+  storage_account_id  = azurerm_storage_account.Quickstart-Data-Storage.id
+  storage_account_key = azurerm_storage_account.Quickstart-Data-Storage.primary_access_key
+  blob_container_names= ["blobExample_ok"]
 }
 
 # Container in the storage account
