@@ -59,11 +59,9 @@ resource "azurerm_key_vault" "placeholder_key_vault" {
   name                = "placeholder-kv"
   location            = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.location
   resource_group_name = azurerm_resource_group.Copilot-Deployment-Quickstart-RG.name
-  tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
-  
+  tenant_id           = data.azurerm_client_config.current.tenant_id
   purge_protection_enabled = true
-  public_network_access_enabled = false
   network_acls {
     default_action = "Deny"
     bypass = "AzureServices"
@@ -179,7 +177,7 @@ resource "azurerm_private_endpoint" "placeholder_private_endpoint" {
   private_service_connection {
     name                           = "placeholder_example_psc"
     is_manual_connection           = false
-    private_connection_resource_id = azurerm_storage_account.Quickstart-Data-Storage.id
+    private_connection_resource_id = azurerm_key_vault.placeholder_key_vault.id
     subresource_names              = ["vault"]
   }
 }
