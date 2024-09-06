@@ -62,9 +62,11 @@ resource "azurerm_key_vault" "placeholder_key_vault" {
   sku_name            = "standard"
   tenant_id           = data.azurerm_client_config.current.tenant_id
   purge_protection_enabled = true
+  public_network_access_enabled = false
   network_acls {
     default_action = "Deny"
     bypass = "AzureServices"
+    ip_rules = ["192.168.0.0/24", "10.0.0.0/16"]
   }
 }
 
