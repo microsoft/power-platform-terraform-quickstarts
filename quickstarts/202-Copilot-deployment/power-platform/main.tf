@@ -57,29 +57,29 @@ data "powerplatform_data_records" "business_units" {
   select = ["businessunitid"]
 }
 
-# TODO come up with a plan for 2+ runs better than "comment it out"
-# # Add a user record and connect that record to the desired role(s)
-# resource "powerplatform_data_record" "service_principal_user" {
-#   table_logical_name = "systemuser"
-#   environment_id     = powerplatform_environment.dev.id
-#   columns = {
-#     applicationid = var.service_principal_app_id
-#     businessunitid = {
-#       table_logical_name = "businessunit"
-#       data_record_id     = data.powerplatform_data_records.business_units.rows[0].businessunitid
-#     }
-#     systemuserroles_association = [{table_logical_name = "role", data_record_id = data.powerplatform_data_records.environment_maker_role.rows[0].roleid}]
-#   }
-# }
+# TODO come up with a plan for create AND update that's better than "comment this out"
+# Add a user record and connect that record to the desired role(s)
+resource "powerplatform_data_record" "service_principal_user" {
+  table_logical_name = "systemuser"
+  environment_id     = powerplatform_environment.dev.id
+  columns = {
+    applicationid = var.admin_id
+    businessunitid = {
+      table_logical_name = "businessunit"
+      data_record_id     = data.powerplatform_data_records.business_units.rows[0].businessunitid
+    }
+    systemuserroles_association = [{table_logical_name = "role", data_record_id = data.powerplatform_data_records.environment_maker_role.rows[0].roleid}]
+  }
+}
 
-# resource "powerplatform_user" "principal_user" {
-#   environment_id = powerplatform_environment.dev.id
-#   security_roles = [
-#     "d58407f2-48d5-e711-a82c-000d3a37c848"
-#   ]
-#   aad_id = var.service_principal_app_id
-#   disable_delete = false
-# }
+resource "powerplatform_user" "principal_user" {
+  environment_id = powerplatform_environment.dev.id
+  security_roles = [
+    "d58407f2-48d5-e711-a82c-000d3a37c848"
+  ]
+  aad_id = var.admin_id
+  disable_delete = false
+}
 
 #---- 4 - Set up Power Platform connector ----
 
@@ -119,6 +119,7 @@ resource "powerplatform_connection_share" "share_with_admin" {
 #---- 5 - Set up Dataverse record for the Copilot ----
 
 resource "powerplatform_data_record" "copilot" {
+  depends_on = [ powerplatform_user.principal_user ]
   environment_id     = powerplatform_environment.dev.id
   table_logical_name = "bot"
   columns = {

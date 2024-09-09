@@ -4,17 +4,8 @@ terraform {
       source = "microsoft/power-platform"
       version = "2.7.0-preview"
     }
-    # restful = {
-    #   source = "magodo/restful"
-    #   version = ">=0.16.1"
-    # }
   }
 }
-
-# provider "restful" {
-#   base_url = var.search_endpoint_uri
-#   security = {}
-# }
 
 provider "powerplatform" {
   use_cli = true
