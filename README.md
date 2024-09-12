@@ -43,7 +43,6 @@ The example terraform modules are intended to be run by GitHub Actions, however 
 * [101-hello-power-platform](./quickstarts/101-hello-power-platform/README.md)
 * [102-github-pipeline](./quickstarts/102-github-pipeline/README.md)
 * [201-D365-finance-environment](./quickstarts/201-D365-finance-environment/README.md)
-* [202-Copilot-deployment](./quickstarts/202-Copilot-deployment/README.md)
 * [300-pac-checkov](./quickstarts/300-pac-checkov/README.md)
 * [301-sap-gateway](./quickstarts/301-sap-gateway/README.md)
 
