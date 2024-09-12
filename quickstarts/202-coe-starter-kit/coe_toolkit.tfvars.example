@@ -2,7 +2,7 @@
 
 release_parameters = {
   coe_starter_kit_get_latest_release   = false,
-  coe_starter_kit_specific_release_tag = "CoEStarterKit-July2024",
+  coe_starter_kit_specific_release_tag = "CoEStarterKit-September2024",
   creator_kit_get_latest_release       = false,
   creator_kit_specific_release_tag     = "CreatorKit-May2024",
 }
@@ -10,13 +10,14 @@ release_parameters = {
 environment_parameters = {
   env_name     = "coe-kit-prod",
   env_location = "unitedstates",
+  env_type = "Sandbox"
 }
 connections_parameters = {
   should_create_connections = true,
   //we have two modes for creating connections: "terraform" and "test_engine"
   //if terraform is selected, the connection will be created using loginc in terraform_connections.tf 
-  //if test_engine is selected, the connection will be created using test_engine_connections.tf. The test engine output file will be stored in ./coe_starter_kit/test_engine_connections.json
-  connection_create_mode = "terraform",
+  //if test_engine is selected, the connection will be created using test_engine_connections.tf. It will use the generated test engine connections.json file
+  connection_create_mode = "test_engine",
   //if you want to see connections in makers portal, you have to share them with a user/group
   //if left empty, no connection will be shared
   //this is used only when connection_create_mode is "terraform"
@@ -42,7 +43,7 @@ core_components_parameters = {
   admin_capacity_alert_percentage                             = "0.8",
   admin_coe_system_user_id                                    = "", //which user is that? we can query this on import
   admin_command_center_application_client_id                  = "", //app registered to fetch M365 Service Messages //where is that?
-  admin_command_center_client_azure_secret                    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/coe-kit/providers/Microsoft.KeyVault/vaults/coe-kv1/secrets/foo",
+  admin_command_center_client_azure_secret                    = "",
   admin_command_center_client_secret                          = "",
   admin_community_url                                         = "http://contoso.sharepoint.com/sites/COE",
   admin_company_name                                          = "Contoso",

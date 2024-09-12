@@ -118,7 +118,7 @@ resource "powerplatform_environment" "coe_kit_env" {
   provider         = powerplatform.pp
   location         = var.environment_parameters.env_location
   display_name     = var.environment_parameters.env_name
-  environment_type = "Sandbox"
+  environment_type = var.environment_parameters.env_type
   dataverse = {
     language_code     = 1033
     currency_code     = "USD"
@@ -134,6 +134,18 @@ resource "powerplatform_solution" "creator_kit_solution_install" {
   solution_name  = "CreatorKitCore"
 }
 
+module "create_connections" {
+  source = "./connections"
+  parameters = {
+    release = {
+      build_from_source = true,
+      source_branches = "integration,grant-archibald-ms/power-apps-portal-348",
+      connections_exist = fileexists("connections/connections.json"),
+      environment_id = powerplatform_environment.coe_kit_env.id
+    }
+  }
+}
+
 //install coe-core-components solution
 resource "powerplatform_solution" "coe_core_solution_install" {
   provider       = powerplatform.pp
@@ -144,8 +156,6 @@ resource "powerplatform_solution" "coe_core_solution_install" {
 
   depends_on = [powerplatform_solution.creator_kit_solution_install]
 }
-
-
 
 //TODO: setup DLP policies and assing to environments
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies

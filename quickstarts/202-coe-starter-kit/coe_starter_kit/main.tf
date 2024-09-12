@@ -33,11 +33,11 @@ data "github_release" "coe_starter_kit_release" {
 
 resource "null_resource" "coe_starter_kit_download_solutions_zip" {
   triggers = {
-    always_run = local.coe_start_kit_asset_url[0]
+    always_run = length(local.coe_start_kit_asset_url) > 0 ? local.coe_start_kit_asset_url[0] : ""
   }
 
   provisioner "local-exec" {
-    command = "Invoke-WebRequest -Uri $env:COE_ASSET_URL -OutFile \"$env:MODULE_PATH/coe-starter-kit.zip\""
+    command = "Invoke-WebRequest -Uri https://aka.ms/CoEStarterKitDownload -OutFile \"$env:MODULE_PATH/coe-starter-kit.zip\""
     when    = create
     interpreter = ["pwsh","-Command"]
     environment = {
@@ -61,7 +61,7 @@ resource "null_resource" "coe_starter_kit_download_solutions_zip" {
 //extract the solutions
 resource "null_resource" "coe_starter_kit_extract_solutions_zip" {
   triggers = {
-    always_run = local.coe_start_kit_asset_url[0]
+    always_run = length(local.coe_start_kit_asset_url) > 0 ? local.coe_start_kit_asset_url[0] : ""
   }
 
   provisioner "local-exec" {
@@ -88,11 +88,11 @@ resource "null_resource" "coe_starter_kit_extract_solutions_zip" {
 //because CenterofExcellenceCoreComponents_X_X.managed is in a specific version, we have to rename it to a fixed name
 resource "null_resource" "rename_center_of_excellence_core_components_solution" {
   triggers = {
-    always_run = local.coe_start_kit_asset_url[0]
+    always_run = "${timestamp()}"
   }
 
   provisioner "local-exec" {
-    command = "Set-Location -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\"; Get-Childitem \"CenterofExcellenceCoreComponents_*.zip\" |  ForEach-Object {  Move-Item $_ $_.Name.Replace($_.Name, \"CenterofExcellenceCoreComponents.zip\") -Force }"
+    command = "Set-Location -Path \"$env:MODULE_PATH/coe-starter-kit-extracted\"; Get-Childitem -Recurse \"CenterofExcellenceCoreComponents_*.zip\" |  ForEach-Object {  Move-Item $_ $_.Name.Replace($_.Name, \"CenterofExcellenceCoreComponents.zip\") -Force }"
     when    = create
     interpreter = ["pwsh","-Command"]
     environment = {
@@ -1197,7 +1197,7 @@ resource "local_file" "solution_settings_file" {
       }
     }
   ],
-  ${var.parameters.conn.connection_create_mode == "terraform" ? local.terraform_connections_output : local.test_engine_connections_output}
+  "ConnectionReferences": ${var.parameters.conn.connection_create_mode == "terraform" ? local.terraform_connections_output : local.test_engine_connections_output}
 }
 EOF
 }
