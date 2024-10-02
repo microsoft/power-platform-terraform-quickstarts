@@ -21,11 +21,10 @@ $Psversion = (Get-Host).Version
 
 if($Psversion.Major -ge 7)
 {
-    #Installing Gateway
-    Write-Output "Installing Gateway"
-    Install-Module -Name DataGateway
+    #Installing Gateway Module
+    Write-Output "Installing Gateway Module"
+    Install-Module -Name DataGateway -Force
     Import-Module DataGateway.Profile
-    Install-DataGateway -AcceptConditions 
 
     #Retrieve the secret from Key Vault
     Write-Output "Retrieve the secrete from Key Vault"
@@ -41,6 +40,10 @@ if($Psversion.Major -ge 7)
     $RecoverKey = $RecoverKey.value | ConvertTo-SecureString -AsPlainText -Force;
     $userIDToAddasAdmin = $userAdmin
 
+    #Installing On-Premises Data Gateway
+    Write-Output "Installing On-Premises Data Gateway"
+    Install-DataGateway -AcceptConditions
+
     #Gateway Login
     Write-Output "Gateway Login"
     Connect-DataGatewayServiceAccount -ApplicationId $ApplicationId -ClientSecret $securePassword -Tenant $TenantId
@@ -49,7 +52,7 @@ if($Psversion.Major -ge 7)
     $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq $GatewayName}).Id
 
     if (![string]::IsNullOrEmpty($GatewayObjectId)) {
-        Write-Output "Remove Cluster"
+        Write-Output "Remove Cluster $GatewayObjectId"
         Remove-DataGatewayCluster -GatewayClusterId $GatewayObjectId
     }
     
