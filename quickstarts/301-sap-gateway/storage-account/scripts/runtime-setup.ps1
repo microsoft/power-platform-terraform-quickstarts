@@ -21,12 +21,12 @@ $Psversion = (Get-Host).Version
 
 if($Psversion.Major -ge 7)
 {
-    #Installing Gateway Module
+     #Installing Gateway Modules
     Write-Output "Installing Gateway Module"
     Install-Module -Name DataGateway -Force
     Import-Module DataGateway.Profile
-    Install-Module -Name DataGateway
-
+    Update-Module -Name DataGateway
+    
     #Retrieve the secret from Key Vault
     Write-Output "Retrieve the secrete from Key Vault"
     $Response = Invoke-RestMethod -Uri 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -Method GET -Headers @{Metadata="true"}
@@ -41,16 +41,18 @@ if($Psversion.Major -ge 7)
     $RecoverKey = $RecoverKey.value | ConvertTo-SecureString -AsPlainText -Force;
     $userIDToAddasAdmin = $userAdmin
 
-    #Installing On-Premises Data Gateway
-    Write-Output "Installing On-Premises Data Gateway"
-    Install-DataGateway -AcceptConditions
-
     #Gateway Login
     Write-Output "Gateway Login"
     Connect-DataGatewayServiceAccount -ApplicationId $ApplicationId -ClientSecret $securePassword -Tenant $TenantId
 
+    #Installing On-Premises Data Gateway
+    Write-Output "Installing On-Premises Data Gateway"
+    Install-DataGateway -AcceptConditions
+
     #Configuring Gateway
+    Write-Output "Configuring Gateway"
     $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq $GatewayName}).Id
+    Write-Output "GatewayObjectId found: $GatewayObjectId"
 
     if (![string]::IsNullOrEmpty($GatewayObjectId)) {
         Write-Output "Remove Cluster $GatewayObjectId"
@@ -65,7 +67,6 @@ if($Psversion.Major -ge 7)
     #Add User as Admin
     Write-Output "Add User as Admin"
     Add-DataGatewayClusterUser -GatewayClusterId $GatewayObjectId -PrincipalObjectId $userIDToAddasAdmin -AllowedDataSourceTypes $null -Role Admin -RegionKey westus3
-
 #####################################################################################
     Write-Output "Installing SHIR - Self-hosted Integration Runtime."
 
