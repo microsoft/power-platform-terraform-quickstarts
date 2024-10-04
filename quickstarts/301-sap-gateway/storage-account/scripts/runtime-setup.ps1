@@ -25,6 +25,7 @@ if($Psversion.Major -ge 7)
     Write-Output "Installing Gateway Module"
     Install-Module -Name DataGateway -Force
     Import-Module DataGateway.Profile
+    Install-Module -Name DataGateway
 
     #Retrieve the secret from Key Vault
     Write-Output "Retrieve the secrete from Key Vault"
