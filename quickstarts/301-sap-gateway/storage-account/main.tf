@@ -29,6 +29,7 @@ resource "azurerm_storage_account" "storage_account" {
   public_network_access_enabled   = true //this feature needs to be changed to be false once the setup is completed.
   allow_nested_items_to_be_public = true //this feature needs to be changed to be false once the setup is completed.
   shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
+  local_user_enabled              = false
 
   identity {
     type = "SystemAssigned"
