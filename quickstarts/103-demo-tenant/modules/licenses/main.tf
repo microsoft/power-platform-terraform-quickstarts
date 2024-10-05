@@ -9,21 +9,42 @@ data "http" "group_assigned_plans" {
   request_headers = {
     Authorization = "Bearer ${data.external.access_token.result.accessToken}"
   }
+  depends_on = [data.external.access_token]
+}
+
+# Convert the list of license SKUs to a comma-separated string
+locals {
+  license_skus_string = join(",", var.license_skus)
+  group_assigned_plans_list = jsondecode(data.http.group_assigned_plans.response_body).value
 }
 
 # Determine which SKUs are missing from the group's assigned licenses
-locals {
-  missing_skus = [for sku in var.license_skus : sku if !(contains([for plan in jsondecode(data.http.group_assigned_plans.response_body).value : plan.skuId], sku))]
+data "null_data_source" "missing_skus" {
+  inputs = {
+    license_skus_string = local.license_skus_string
+    group_assigned_plans = jsonencode(local.group_assigned_plans_list)
+  }
+
+  depends_on = [data.http.group_assigned_plans]
 }
 
-# Assign missing licenses to the group using a null resource and local-exec provisioner
-resource "null_resource" "assign_license" {
-  count = length(local.missing_skus) > 0 ? 1 : 0
+data "null_data_source" "missing_skus_processed" {
+  inputs = {
+    missing_skus = join(",", [for sku in split(",", data.null_data_source.missing_skus.inputs.license_skus_string) : sku if !(contains([for plan in jsondecode(data.null_data_source.missing_skus.inputs.group_assigned_plans) : plan.skuId], sku))])
+  }
+}
 
+# Execute the script if there are missing SKUs
+resource "null_resource" "assign_license" {
   provisioner "local-exec" {
-    command = <<EOT
-      pwsh ./assign_license.ps1 -groupId ${var.group_id} -licenseSkus ${join(",", local.missing_skus)}
-    EOT
+    command = "./assign_license.ps1 -groupId '${var.group_id}' -licenseSkus '${data.null_data_source.missing_skus_processed.inputs.missing_skus}'"
+    interpreter = ["pwsh","-Command"]
     on_failure = fail
   }
+
+  depends_on = [data.null_data_source.missing_skus_processed]
+}
+
+output "missing_skus" {
+  value = split(",", data.null_data_source.missing_skus_processed.inputs.missing_skus)
 }
