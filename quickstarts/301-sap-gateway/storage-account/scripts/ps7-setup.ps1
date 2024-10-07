@@ -1,5 +1,5 @@
 # Define the download URL for the MSI installer.
-$downloadUrl = "https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/PowerShell-7.3.9-win-x64.msi"
+$downloadUrl = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/PowerShell-7.4.5-win-x64.msi"
 
 # Define the path where the installer will be downloaded.
 $installerPath = "$env:TEMP\PowerShell.msi"

@@ -76,16 +76,22 @@ module "runtime-setup" {
   depends_on = [module.ps7-setup, module.java-runtime-setup, module.sapnco_install]
 }
 
-resource "azurecaf_name" "vm-opgw" {
-  name          = var.base_name
-  resource_type = "azurerm_windows_virtual_machine"
-  prefixes      = [var.prefix]
-  random_length = 3
-  clean_input   = true
+# There is an issue in the resource for naming Key Vaults that is preventing to proper naming
+# Name and prefixes are not working properly, with random part
+resource "random_string" "vm-opgw-suffix" {
+  length  = 5
+  upper   = false
+  numeric = false
+  special = false
+}
+
+#concatenate the base name with the random suffix
+locals {
+  vm_opgw_name = "${var.base_name}-${random_string.vm-opgw-suffix.result}"
 }
 
 resource "azurerm_windows_virtual_machine" "vm-opgw" {
-  name                  = azurecaf_name.vm-opgw.result
+  name                  = local.vm_opgw_name
   location              = var.region
   resource_group_name   = var.resource_group_name
   network_interface_ids = [var.nic_id]
