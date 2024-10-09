@@ -2,6 +2,9 @@
   "name": "Terraform",
   "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
   "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {
+      
+    },
     "ghcr.io/devcontainers/features/go:1": {
 			"version": "latest"
 		},
