@@ -27,7 +27,7 @@ The subnet ID is available at the JSON view of the virtual network, in the param
 
 ### Storage Account Preparation
 
-Before you execute the script, you need to upload the SAP .NET Connector MSI file the folder `./storage-account/sapnco-msi` and rename to `sapnco.msi` (check below for more information).
+Before you execute the script, you need to upload the SAP .NET Connector executable file the folder `./storage-account/sapnco` and rename to `sapnco.exe` (check below for more information).
 
 ### SHIR Nodes Preparation
 
@@ -41,7 +41,7 @@ The example files can be found in `quickstarts/301-sap-gateway`
 
 The Terraform plugins or "providers" that this IaC deployment requires are:
 
-- **azurecaf (`aztfmod/azurecaf`):** `>=1.2.26`
+- **azurecaf (`aztfmod/azurecaf`):** `>=1.2.28`
 
 - **azurerm (`hashicorp/azurerm`):** `>=3.74.0`
 
