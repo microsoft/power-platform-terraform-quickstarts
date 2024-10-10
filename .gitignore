@@ -55,4 +55,4 @@ tfchecov.sh
 *.locl.hcl
 
 # SAP installation files
-sapnco.msi
+sapnco.exe
