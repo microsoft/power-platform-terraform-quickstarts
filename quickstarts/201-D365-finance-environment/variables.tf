@@ -1,16 +1,3 @@
-variable "client_id" {
-  description = "The client ID of the service principal (app registration)"
-  type        = string
-}
-variable "secret" {
-  description = "The client secret of the service principal (app registration)"
-  sensitive   = true
-  type        = string
-}
-variable "tenant_id" {
-  description = "The Entra (AAD) tenant id of service principal or user"
-  type        = string
-}
 variable "d365_finance_environment_name" {
   description = "The name of the D365 Finance environment, such as 'd365fin-dev1"
   type        = string
@@ -22,7 +9,6 @@ variable "d365_finance_environment_name" {
 variable "location" {
   description = "The region where the environment will be deployed, such as 'unitedstates'"
   type        = string
-  #This default will eventually be removed when other regions become supported.
 }
 variable "language_code" {
   description = "The desired Language Code for the environment, such as '1033' (U.S. english)"
@@ -48,4 +34,8 @@ variable "domain" {
     condition     = length(var.domain) <= 32
     error_message = "The length of the domain property cannot exceed 32 characters for D365 Finance environment deployments."
   }
+}
+variable "security_group_id" {
+  description = "The security group ID for the environment, such as '00000000-0000-0000-0000-000000000000'"
+  type        = string
 }

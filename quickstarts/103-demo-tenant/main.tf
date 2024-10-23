@@ -66,6 +66,7 @@ module "groups" {
   user_ids = module.users.user_ids
   group_name        = var.group_name
   group_description = var.group_description
+  depends_on = [module.users]
 }
 
 # Module to assign licenses to groups
@@ -73,6 +74,7 @@ module "licenses" {
   source = "./modules/licenses"
   group_id = module.groups.group_id
   license_skus = local.license_skus
+  depends_on = [module.groups]
 }
 
 locals {
@@ -85,4 +87,5 @@ module "environments" {
   users = local.users
   domain = data.external.domain_name.result.result
   full_module_path = local.full_module_path
+  depends_on = [module.licenses]
 }

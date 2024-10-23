@@ -1,3 +1,9 @@
+variable "use_azurerm" {
+  description = "Set to true to use the azurerm provider"
+  type        = bool
+  default     = false
+}
+
 terraform {
   required_providers {
     azuread = {
@@ -5,6 +11,7 @@ terraform {
     }
     azurerm = {
       source = "hashicorp/azurerm"
+      version = "=4.0.1"
     }
     random = {
       source = "hashicorp/random"
@@ -13,22 +20,25 @@ terraform {
       source = "hashicorp/null"
     }
   }
-
-backend "azurerm" {}
 }
 
 provider "azurerm" {
+  resource_provider_registrations = "none"
   features {}
 }
 
 provider "azuread" {
 }
 
+# Conditional resource to control azurerm provider usage
+resource "null_resource" "azurerm_provider" {
+  triggers = {
+    use_azurerm = var.use_azurerm
+  }
+}
+
 # Get a reference to the current Azure AD configuration so that we can read the tenant ID
 data "azuread_client_config" "current" {}
-
-data "azurerm_subscription" "current" {
-}
 
 # Get a reference to the Power Platform API's pre-existing service principal
 resource "azuread_service_principal" "power_platform_api" {
@@ -53,8 +63,6 @@ resource "azuread_service_principal" "dynamics_service" {
 resource "azuread_application" "ppadmin_application" {
   display_name = "Power Platform Admin Service"
   owners       = [data.azuread_client_config.current.object_id]
-
-
 
   required_resource_access {
     resource_app_id = resource.azuread_service_principal.power_platform_api.client_id
@@ -94,13 +102,11 @@ resource "azuread_application" "ppadmin_application" {
       id   = resource.azuread_service_principal.dynamics_service.oauth2_permission_scope_ids["user_impersonation"]
       type = "Scope"
     }
-
   }
 
   identifier_uris = ["api://power-platform_provider_terraform"]
 
   api {
-
     oauth2_permission_scope {
       admin_consent_description  = "Allows connection to backend services of Power Platform Terraform Provider"
       admin_consent_display_name = "Power Platform Terraform Provider Access"
@@ -112,8 +118,6 @@ resource "azuread_application" "ppadmin_application" {
       value                      = "user_impersonation"
     }
   }
-
-
 }
 
 resource "azuread_application_pre_authorized" "ppadmin_application_allow_azure_cli" {
@@ -138,41 +142,57 @@ resource "azuread_application_password" "ppadmin_secret" {
 }
 
 data "azurerm_storage_account" "tf_state_storage_account" {
-  count               = var.storage_account_name != "<default>" ? 1 : 0
+  count               = var.use_azurerm ? 1 : 0
   name                = var.storage_account_name
   resource_group_name = var.resource_group_name
+  depends_on = [null_resource.azurerm_provider]
 }
 
 # Grant the Power Platfom Admin Service Storage Blob Contributor role on the Terraform state storage account
 resource "azurerm_role_assignment" "ppadmin_storage_role_assignment" {
-  count                = var.storage_account_name != "<default>" ? 1 : 0
-  scope                = data.azurerm_storage_account.tf_state_storage_account[count.index].id
+  count               = var.use_azurerm ? 1 : 0
+  scope                = data.azurerm_storage_account.tf_state_storage_account[0].id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azuread_service_principal.ppadmin_principal.object_id
+  lifecycle {
+    ignore_changes = [scope]
+  }
+  depends_on = [null_resource.azurerm_provider]
 }
 
 data "azurerm_role_definition" "contributor" {
   name = "Contributor"
 }
 
-# Grant the Power Platfom Admin Service SContributor role on the Azure Subscription
+# Grant the Power Platfom Admin Service Contributor role on the Azure Subscription
 resource "azurerm_role_assignment" "ppadmin_subscription_role_assignment" {
-  scope              = data.azurerm_subscription.current.id
+  count              = var.use_azurerm ? 1 : 0
+  scope              = data.azurerm_subscription.current[0].id
   role_definition_id = data.azurerm_role_definition.contributor.id
   principal_id       = azuread_service_principal.ppadmin_principal.object_id
+  lifecycle {
+    ignore_changes = [scope]
+  }
+  depends_on = [null_resource.azurerm_provider]
 }
 
-#Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs
+data "azurerm_subscription" "current" {
+  count = var.use_azurerm ? 1 : 0
+}
+
+# Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs
 resource "null_resource" "ppadmin_role_assignment" {
   triggers = {
     client_id = azuread_application.ppadmin_application.client_id
   }
   provisioner "local-exec" {
     when    = create
-    command = "${path.module}/grant-ppadmin.sh --client_id ${self.triggers.client_id} --action create"
+    command = "${path.module}/grant-ppadmin.ps1 ${self.triggers.client_id} create"
+    interpreter = ["pwsh", "-Command"]
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "${path.module}/grant-ppadmin.sh --client_id ${self.triggers.client_id} --action destroy"
+    command = "${path.module}/grant-ppadmin.ps1 ${self.triggers.client_id} destroy"
+    interpreter = ["pwsh", "-Command"]
   }
 }

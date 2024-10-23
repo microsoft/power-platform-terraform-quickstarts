@@ -8,11 +8,11 @@ output "client_secret" {
 }
 
 output "subscription_id" {
-  value = data.azurerm_subscription.current.subscription_id
+  value = var.use_azurerm ? data.azurerm_subscription.current[0].subscription_id : null
 }
 
 output "tenant_id" {
-  value = data.azurerm_subscription.current.tenant_id
+  value = var.use_azurerm ? data.azurerm_subscription.current[0].tenant_id : null
 }
 
 output "storage_account_name" {

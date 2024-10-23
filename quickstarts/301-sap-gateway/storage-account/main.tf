@@ -29,6 +29,7 @@ resource "azurerm_storage_account" "storage_account" {
   public_network_access_enabled   = true //this feature needs to be changed to be false once the setup is completed.
   allow_nested_items_to_be_public = true //this feature needs to be changed to be false once the setup is completed.
   shared_access_key_enabled       = true //this feature needs to be changed to be false once the setup is completed.
+  local_user_enabled              = false
 
   identity {
     type = "SystemAssigned"
@@ -77,11 +78,11 @@ resource "azurerm_storage_blob" "storage_blob_java_runtime" {
 }
 
 resource "azurerm_storage_blob" "storage_blob_sapnco_install" {
-  name                   = "sapnco.msi"
+  name                   = "sapnco.exe"
   storage_account_name   = azurerm_storage_account.storage_account.name
   storage_container_name = azurerm_storage_container.storage_container_installs.name
   type                   = "Block"
-  source                 = "./storage-account/sapnco-msi/sapnco.msi"
+  source                 = "./storage-account/sapnco/sapnco.exe"
 }
 
 resource "azurerm_storage_blob" "storage_blob_runtime_setup" {

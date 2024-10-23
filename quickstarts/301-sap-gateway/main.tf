@@ -6,12 +6,13 @@ terraform {
     }
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = ">=1.2.26"
+      version = ">=1.2.28"
     }
   }
 }
 
 provider "azurerm" {
+  subscription_id = var.subscription_id_gw
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
@@ -126,6 +127,7 @@ resource "azurerm_public_ip" "publicip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
+  sku                 = "Basic"
   tags                = var.tags
 }
 

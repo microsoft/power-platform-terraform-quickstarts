@@ -21,6 +21,11 @@ $Psversion = (Get-Host).Version
 
 if($Psversion.Major -ge 7)
 {
+     #Installing Gateway Modules
+    Write-Output "Installing Gateway Module"
+    Install-Module -Name DataGateway -Force
+    Import-Module DataGateway.Profile
+    Update-Module -Name DataGateway
     
     #Retrieve the secret from Key Vault
     Write-Output "Retrieve the secrete from Key Vault"
@@ -40,15 +45,17 @@ if($Psversion.Major -ge 7)
     Write-Output "Gateway Login"
     Connect-DataGatewayServiceAccount -ApplicationId $ApplicationId -ClientSecret $securePassword -Tenant $TenantId
 
-    #Installing Gateway
-    Write-Output "Installing Gateway"
-    Install-DataGateway -AcceptConditions 
+    #Installing On-Premises Data Gateway
+    Write-Output "Installing On-Premises Data Gateway"
+    Install-DataGateway -AcceptConditions
 
     #Configuring Gateway
-    $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq "OPDGW-SAPAzureIntegration"}).Id
+    Write-Output "Configuring Gateway"
+    $GatewayObjectId = (Get-DataGatewayCluster | Where-Object {$_.Name -eq $GatewayName}).Id
+    Write-Output "GatewayObjectId found: $GatewayObjectId"
 
     if (![string]::IsNullOrEmpty($GatewayObjectId)) {
-        Write-Output "Remove Cluster"
+        Write-Output "Remove Cluster $GatewayObjectId"
         Remove-DataGatewayCluster -GatewayClusterId $GatewayObjectId
     }
     
@@ -60,7 +67,6 @@ if($Psversion.Major -ge 7)
     #Add User as Admin
     Write-Output "Add User as Admin"
     Add-DataGatewayClusterUser -GatewayClusterId $GatewayObjectId -PrincipalObjectId $userIDToAddasAdmin -AllowedDataSourceTypes $null -Role Admin -RegionKey westus3
-
 #####################################################################################
     Write-Output "Installing SHIR - Self-hosted Integration Runtime."
 
