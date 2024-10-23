@@ -131,7 +131,6 @@ resource "powerplatform_solution" "creator_kit_solution_install" {
   provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
-  solution_name  = "CreatorKitCore"
 }
 
 module "create_connections" {
@@ -151,7 +150,6 @@ resource "powerplatform_solution" "coe_core_solution_install" {
   provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
-  solution_name  = "CenterofExcellenceCoreComponents"
   settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
 
   depends_on = [powerplatform_solution.creator_kit_solution_install]
@@ -159,9 +157,3 @@ resource "powerplatform_solution" "coe_core_solution_install" {
 
 //TODO: setup DLP policies and assing to environments
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies
-
-//TODO: setup connections using script and maybe test engine?
-//https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup-core-components#create-connections
-
-
-
