@@ -150,8 +150,6 @@ resource "powerplatform_solution" "coe_core_solution_install" {
 //TODO: setup DLP policies and assing to environments
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies
 
-//TODO: setup connections using script and maybe test engine?
-//https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup-core-components#create-connections
 
 
 
