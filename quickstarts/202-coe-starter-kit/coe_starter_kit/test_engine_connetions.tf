@@ -1,6 +1,6 @@
 data "local_file" "test_engine_connections_file" {
-  count = fileexists("${path.module}/../PowerApps-TestEngine/bin/Debug/PowerAppsTestEngine/connections.json") ? 1 : 0
-  filename = "${path.module}/../PowerApps-TestEngine/bin/Debug/PowerAppsTestEngine/connections.json"
+  count = fileexists("${path.module}/../powerapps-testengine/bin/Debug/PowerAppsTestEngine/connections.json") ? 1 : 0
+  filename = "${path.module}/../powerapps-testengine/bin/Debug/PowerAppsTestEngine/connections.json"
 }
 
 locals {

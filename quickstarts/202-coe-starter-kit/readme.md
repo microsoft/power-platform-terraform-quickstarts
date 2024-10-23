@@ -26,45 +26,59 @@
 az login --service-principal -u 01234567-1111-2222-3333-444455556666 -p abcdef1234354567890 --tenant 01234567-1111-2222-3333-444455556666
 ```
 
-
-
 ### Linux
 
 Required linux commands as part of GitHUb DevContainer. For example
 
-    - (Debian/Ubuntu): Run `sudo apt-get install jq`
-    - [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
+- (Debian/Ubuntu): Run `sudo apt-get install jq`
+- [Install the Azure CLI on Linux](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux)
 
 ## Login
 
 Assumes that environment as been logged in with api scope. For example to login with device code and specify the required tenant the following command could be used
 
 ```bash
-az login --allow-no-subscriptions --scope api://power-platform_provider_terraform/.default --use-device-code --tenant 01234567-1111-2222-3333-444455556666
+az login --service-principal -u 01234567-1111-2222-3333-444455556666 -p abcdef1234354567890 --tenant 01234567-1111-2222-3333-444455556666
 ```
 
-## Example tfvars file
+Follow github provider documentation for [authentication options](https://registry.terraform.io/providers/integrations/github/latest/docs#authentication)
+
+## Example coe_toolkit.tfvars file
 
 ```hcl
 release_parameters = {
-  coe_starter_kit_get_latest_release   = true,
-  coe_starter_kit_specific_release_tag = "",
+  //if set to 'true' then the newest release will be dowloaded from github and used, the release tag parameter should be then empty
+  coe_starter_kit_get_latest_release   = false,
+  coe_starter_kit_specific_release_tag = "CoEStarterKit-September2024",
 
-  creator_kit_get_latest_release   = false,
-  creator_kit_specific_release_tag = "CreatorKit-May2024",
+  //if set to 'true' then the newest release will be dowloaded from github and used, the release tag parameter should be then empty
+  creator_kit_get_latest_release       = false,
+  creator_kit_specific_release_tag     = "CreatorKit-May2024",
 }
 
 environment_parameters = {
+  should_create_dlp_policy = true
   env_name     = "coe-kit-prod",
   env_location = "europe",
+  env_type = "Sandbox"
 }
 
-release_parameters = {
-    coe_starter_kit_get_latest_release = true,
-    coe_starter_kit_specific_release_tag = "",
-    creator_kit_get_latest_release = true,
-    creator_kit_specific_release_tag = ""
+connections_parameters = {
+  should_create_connections = true,
+  //we have two modes for creating connections: "terraform" and "test_engine"
+  //if terraform is selected, the connection will be created using loginc in terraform_connections.tf 
+  //if test_engine is selected, the connection will be created using test_engine_connections.tf. It will use the generated test engine connections.json file
+  connection_create_mode = "terraform", //test_engine | terraform
+  //if you want to see connections in makers portal, you have to share them with a user/group
+  //if left empty, no connection will be shared
+  //this is used only when connection_create_mode is "terraform"
+  connection_share_with_object_id = "00000000-0000-0000-0000-000000000000",
+  //share permission according to resource configuration: https://microsoft.github.io/terraform-provider-power-platform/resources/connection_share/
+  //CanView", "CanViewWithShare", "CanEdit"
+  //this is used only when connection_create_mode is "terraform"
+  connection_share_permissions = "CanEdit"
 }
+
 
 core_components_parameters = {
   admin_admine_mail_preferred_language                        = "en-US",
