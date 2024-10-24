@@ -2,8 +2,11 @@
   "name": "Terraform",
   "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
   "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "latest"
+    },
     "ghcr.io/devcontainers/features/powershell:1": {
-      
+      "version": "latest"
     },
     "ghcr.io/devcontainers/features/go:1": {
 			"version": "latest"
@@ -17,7 +20,7 @@
     "ghcr.io/devcontainers-contrib/features/gh-cli": {
       "version": "latest"
     },
-    "ghcr.io/devcontainers/features/python:1.6.4" : {
+    "ghcr.io/devcontainers/features/python:1.6.5" : {
       "toolsToinstall": "checkov"
     }
   },

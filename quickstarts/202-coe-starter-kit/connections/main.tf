@@ -4,8 +4,8 @@ resource "null_resource" "build_from_source" {
   provisioner "local-exec" {
     interpreter = ["pwsh", "-Command"]
     command = <<EOT
-      git clone https://github.com/microsoft/PowerApps-TestEngine.git
-      cd PowerApps-TestEngine/src
+      git clone https://github.com/microsoft/powerapps-testengine.git
+      cd powerapps-testengine/src
       $sourceBranches = "${var.parameters.release.source_branches}".Split(',')
       $tenantId = az account show --query tenantId --output tsv
       if ($sourceBranches.Length -eq 0) {

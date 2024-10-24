@@ -1197,7 +1197,7 @@ resource "local_file" "solution_settings_file" {
       }
     }
   ],
-  "ConnectionReferences": ${var.parameters.conn.connection_create_mode == "terraform" ? local.terraform_connections_output : local.test_engine_connections_output}
+  ${var.parameters.conn.connection_create_mode == "terraform" ? local.terraform_connections_output : local.test_engine_connections_output}
 }
 EOF
 }

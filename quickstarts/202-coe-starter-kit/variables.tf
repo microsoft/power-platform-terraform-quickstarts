@@ -11,6 +11,7 @@ variable "release_parameters" {
 variable "environment_parameters" {
   description = "values for the dataverse environment"
   type = object({
+    should_create_dlp_policy = bool,
     env_name     = string,
     env_location = string,
     env_type = string

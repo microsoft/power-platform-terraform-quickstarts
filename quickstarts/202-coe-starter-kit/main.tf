@@ -2,10 +2,11 @@ terraform {
   required_providers {
     powerplatform = {
       source  = "microsoft/power-platform"
-      version = "2.7.0-preview"
+      version = ">=3.1.0"
     }
     github = {
       source = "integrations/github"
+      version = "~> 6.0"
     }
   }
 }
@@ -113,7 +114,7 @@ module "coe_starter_kit" {
   }
 }
 
-# //create coe-kit environment
+//create coe-kit environment
 resource "powerplatform_environment" "coe_kit_env" {
   provider         = powerplatform.pp
   location         = var.environment_parameters.env_location
@@ -128,40 +129,52 @@ resource "powerplatform_environment" "coe_kit_env" {
 
 //install creator-kit-core solution
 resource "powerplatform_solution" "creator_kit_solution_install" {
+  timeouts = {
+    create = "45m"
+    update = "45m"
+    delete = "45m"
+  }
+  
   provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.creator_kit.creator_kit_core_solution_zip_path
-  solution_name  = "CreatorKitCore"
 }
 
-module "create_connections" {
-  source = "./connections"
-  parameters = {
-    release = {
-      build_from_source = true,
-      source_branches = "integration,grant-archibald-ms/power-apps-portal-348",
-      connections_exist = fileexists("connections/connections.json"),
-      environment_id = powerplatform_environment.coe_kit_env.id
-    }
-  }
-}
+# module "create_connections" {
+#   source = "./connections"
+#   parameters = {
+#     release = {
+#       build_from_source = true,
+#       source_branches = "integration,grant-archibald-ms/power-apps-portal-348",
+#       connections_exist = fileexists("connections/connections.json"),
+#       environment_id = powerplatform_environment.coe_kit_env.id
+#     }
+#   }
+# }
 
 //install coe-core-components solution
 resource "powerplatform_solution" "coe_core_solution_install" {
+  timeouts = {
+    create = "45m"
+    update = "45m"
+    delete = "45m"
+  }
+
   provider       = powerplatform.pp
   environment_id = powerplatform_environment.coe_kit_env.id
   solution_file  = module.coe_starter_kit.center_of_excellence_core_components_solution_zip_path
-  solution_name  = "CenterofExcellenceCoreComponents"
   settings_file  = module.coe_starter_kit.center_of_excellence_core_components_settings_file_path
 
   depends_on = [powerplatform_solution.creator_kit_solution_install]
 }
 
-//TODO: setup DLP policies and assing to environments
+//Creating DLP policy for the COE environment according to documentation:
 //https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup#validate-data-loss-prevention-dlp-policies
-
-//TODO: setup connections using script and maybe test engine?
-//https://learn.microsoft.com/en-us/power-platform/guidance/coe/setup-core-components#create-connections
-
-
-
+module "dlp_policy" {
+  source = "./dlp_policy"
+  providers = {
+    powerplatform.pp = powerplatform.pp
+  }
+  should_create_dlp_policy = var.environment_parameters.should_create_dlp_policy
+  environment_id = powerplatform_environment.coe_kit_env.id
+}
