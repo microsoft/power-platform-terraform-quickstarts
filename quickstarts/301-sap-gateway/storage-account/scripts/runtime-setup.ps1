@@ -72,7 +72,7 @@ if($Psversion.Major -ge 7)
 
     # Define the download URL for the MSI installer.
     # Please, update the version number to the latest version.
-    $downloadUrl = "https://download.microsoft.com/download/E/4/7/E4771905-1079-445B-8BF9-8A1A075D8A10/IntegrationRuntime_5.32.8600.2.msi"
+    $downloadUrl = "https://download.microsoft.com/download/E/4/7/E4771905-1079-445B-8BF9-8A1A075D8A10/IntegrationRuntime_5.43.8935.2.msi"
 
     # Define the path where the installer will be downloaded.
     $installerPath = "C:\sapint\IntegrationRuntime.msi"
