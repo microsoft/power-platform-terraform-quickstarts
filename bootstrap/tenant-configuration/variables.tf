@@ -14,3 +14,13 @@ variable "client_id" {
   description = "The client ID of the service principal to use for authenticating to Azure."
   default     = "00000000-0000-0000-0000-000000000000"
 }
+variable "subscription_id" {
+  type        = string
+  description = "The subscription id that the install relates to."
+  default     = "00000000-0000-0000-0000-000000000000"
+}
+variable "use_azurerm" {
+  description = "Set to true to use the azurerm provider"
+  type        = bool
+  default     = false
+}

@@ -1,18 +1,12 @@
-variable "use_azurerm" {
-  description = "Set to true to use the azurerm provider"
-  type        = bool
-  default     = false
-}
-
 terraform {
   required_providers {
     azuread = {
       source = "hashicorp/azuread"
     }
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "=4.0.1"
-    }
+##    azurerm = {
+##      source = "hashicorp/azurerm"
+##      version = ">= 4.0.1"
+##    }
     random = {
       source = "hashicorp/random"
     }
@@ -22,19 +16,13 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  resource_provider_registrations = "none"
-  features {}
-}
+##provider "azurerm" {
+##  subscription_id = local.azurerm_provider.subscription_id
+##  features {}
+##  count = var.use_azurerm ? 1 : 0
+##}
 
 provider "azuread" {
-}
-
-# Conditional resource to control azurerm provider usage
-resource "null_resource" "azurerm_provider" {
-  triggers = {
-    use_azurerm = var.use_azurerm
-  }
 }
 
 # Get a reference to the current Azure AD configuration so that we can read the tenant ID
@@ -141,44 +129,44 @@ resource "azuread_application_password" "ppadmin_secret" {
   application_id = azuread_application.ppadmin_application.id
 }
 
-data "azurerm_storage_account" "tf_state_storage_account" {
-  count               = var.use_azurerm ? 1 : 0
-  name                = var.storage_account_name
-  resource_group_name = var.resource_group_name
-  depends_on = [null_resource.azurerm_provider]
-}
+##data "azurerm_storage_account" "tf_state_storage_account" {
+##  count               = var.use_azurerm ? 1 : 0
+##  name                = var.storage_account_name
+##  resource_group_name = var.resource_group_name
+##  depends_on = [null_resource.azurerm_provider]
+##}
 
 # Grant the Power Platfom Admin Service Storage Blob Contributor role on the Terraform state storage account
-resource "azurerm_role_assignment" "ppadmin_storage_role_assignment" {
-  count               = var.use_azurerm ? 1 : 0
-  scope                = data.azurerm_storage_account.tf_state_storage_account[0].id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azuread_service_principal.ppadmin_principal.object_id
-  lifecycle {
-    ignore_changes = [scope]
-  }
-  depends_on = [null_resource.azurerm_provider]
-}
+##resource "azurerm_role_assignment" "ppadmin_storage_role_assignment" {
+##  count               = var.use_azurerm ? 1 : 0
+##  scope                = data.azurerm_storage_account.tf_state_storage_account[0].id
+##  role_definition_name = "Storage Blob Data Contributor"
+##  principal_id         = azuread_service_principal.ppadmin_principal.object_id
+##  lifecycle {
+##    ignore_changes = [scope]
+##  }
+##  depends_on = [null_resource.azurerm_provider]
+##}
 
-data "azurerm_role_definition" "contributor" {
-  name = "Contributor"
-}
+##data "azurerm_role_definition" "contributor" {
+##  name = "Contributor"
+##}
 
 # Grant the Power Platfom Admin Service Contributor role on the Azure Subscription
-resource "azurerm_role_assignment" "ppadmin_subscription_role_assignment" {
-  count              = var.use_azurerm ? 1 : 0
-  scope              = data.azurerm_subscription.current[0].id
-  role_definition_id = data.azurerm_role_definition.contributor.id
-  principal_id       = azuread_service_principal.ppadmin_principal.object_id
-  lifecycle {
-    ignore_changes = [scope]
-  }
-  depends_on = [null_resource.azurerm_provider]
-}
+##resource "azurerm_role_assignment" "ppadmin_subscription_role_assignment" {
+##  count              = var.use_azurerm ? 1 : 0
+##  scope              = data.azurerm_subscription.current[0].id
+##  role_definition_id = data.azurerm_role_definition.contributor.id
+##  principal_id       = azuread_service_principal.ppadmin_principal.object_id
+##  lifecycle {
+##    ignore_changes = [scope]
+##  }
+##  depends_on = [null_resource.azurerm_provider]
+##}
 
-data "azurerm_subscription" "current" {
-  count = var.use_azurerm ? 1 : 0
-}
+##data "azurerm_subscription" "current" {
+##  count = var.use_azurerm ? 1 : 0
+##}
 
 # Grant the Power Platform Admin Service application the permissions it needs to manage Power Platform via the BAPI APIs
 resource "null_resource" "ppadmin_role_assignment" {
