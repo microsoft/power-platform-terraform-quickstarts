@@ -39,11 +39,11 @@ You will have to set the following [secrets in your repository](https://docs.git
 To run the pipeline, you will have to create a new branch based on your main branch, push it, and create a pull request. The pipeline will run the `Terraform Plan` step on every push to the repository.
 The pipeline will authenticate using OpenID Connect and will require setting federation between the GitHub repository and the Entra ID tenant. With federation configured, no additional credentials are required to execute pipeline steps against Azure or Power Platform.
 
-![Pipeline](./.img/pipeline1.png)
+![Pipeline](.img/pipeline1.png)
 
 The Terraform Plan output will also be added to your pull request as a comment:
 
-![Pipeline](./.img/plan_output.png)
+![Pipeline](.img/plan_output.png)
 
 ## Detailed Behavior
 
@@ -53,7 +53,7 @@ The pipeline example was created to demonstrate how to deploy Power Platform env
 
 - `Terraform Apply`: is responsible for applying the changes to the infrastructure. The changes are applied only if the plan was reviewed and approved. This step will run on every push `main` branch.
 
-![Pipeline](./.img/pipeline2.png)
+![Pipeline](.img/pipeline2.png)
 
 ## Limitations and Considerations
 
