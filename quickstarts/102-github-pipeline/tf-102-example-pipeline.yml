@@ -15,14 +15,15 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
-  ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
-  ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
-  TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
-  TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
-  POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
-  POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
-  TARGET_DIR: ${{ github.workspace }}/examples/102-github-pipeline
+  ARM_USE_OIDC: true
+  ARM_CLIENT_ID: "${{ secrets.PPADMIN_CLIENT_ID }}"
+  ARM_TENANT_ID: "${{ secrets.PPADMIN_TENANT_ID }}"
+  POWER_PLATFORM_USE_OIDC: true
+  POWER_PLATFORM_CLIENT_ID: ${{ secrets.PPADMIN_CLIENT_ID }}
+  POWER_PLATFORM_TENANT_ID: ${{ secrets.PPADMIN_TENANT_ID }}
+  TF_STATE_STORAGE_ACCOUNT_NAME: ${{ secrets.TF_STATE_STORAGE_ACCOUNT_NAME }}
+  TF_STATE_RESOURCE_GROUP_NAME: ${{ secrets.TF_STATE_RESOURCE_GROUP_NAME }}
+  TARGET_DIR: ${{ github.workspace }}/quickstarts/102-github-pipeline
 
 jobs:
   terraform-plan:
