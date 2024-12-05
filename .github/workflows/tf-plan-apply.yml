@@ -26,7 +26,7 @@ env:
   POWER_PLATFORM_SECRET: ${{ secrets.PPADMIN_CLIENT_SECRET }}
   POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
   TF_VAR_azure_subscription_id: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
-  TARGET_DIR: ${{ github.workspace }}/examples/101-hello-power-platform
+  TARGET_DIR: ${{ github.workspace }}/quickstarts/101-hello-power-platform
 
 jobs:
   terraform-plan:
