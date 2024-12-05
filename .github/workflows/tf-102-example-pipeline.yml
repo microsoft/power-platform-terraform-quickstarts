@@ -15,13 +15,13 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
-  ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
-  ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
-  TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
-  TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
-  POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
-  POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
+ # ARM_CLIENT_ID: "${{ vars.PPADMIN_CLIENT_ID }}"
+ # ARM_TENANT_ID: "${{ vars.PPADMIN_TENANT_ID }}"
+ # ARM_SUBSCRIPTION_ID: "${{ vars.PPADMIN_SUBSCRIPTION_ID }}"
+ # TF_STATE_STORAGE_ACCOUNT_NAME: ${{ vars.TF_STATE_STORAGE_ACCOUNT_NAME }}
+ # TF_STATE_RESOURCE_GROUP_NAME: ${{ vars.TF_STATE_RESOURCE_GROUP_NAME }}
+ # POWER_PLATFORM_CLIENT_ID: ${{ vars.PPADMIN_CLIENT_ID }}
+ # POWER_PLATFORM_TENANT_ID: ${{ vars.PPADMIN_TENANT_ID }}
   TARGET_DIR: ${{ github.workspace }}/examples/102-github-pipeline
 
 jobs:
@@ -54,8 +54,8 @@ jobs:
         terraform_wrapper: false
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
+   # - name: Terraform Init
+   #   run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -143,8 +143,8 @@ jobs:
           terraform_wrapper: false
   
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
+     # - name: Terraform Init
+     #   run: terraform -chdir=$TARGET_DIR init -backend-config="storage_account_name=$TF_STATE_STORAGE_ACCOUNT_NAME" -backend-config="resource_group_name=$TF_STATE_RESOURCE_GROUP_NAME"
 
       # Download saved plan from artifacts  
       - name: Download Terraform Plan
