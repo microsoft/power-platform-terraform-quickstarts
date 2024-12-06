@@ -32,7 +32,7 @@ data "powerplatform_[your data source name]" "example_data_source" {
 
 ## Definition of Done
 
-- [ ] Example in the /examples/quickstarts folder
+- [ ] Example in the /quickstarts folder
 - [ ] Example documentation in README.md.tmpl
 - [ ] Updated auto-generated provider docs with `make quickstarts`
 - [ ] Confirmation that you have manually tested this
