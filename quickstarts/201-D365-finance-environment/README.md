@@ -13,7 +13,7 @@ It utilizes the deployment model outlined at: [Unified admin experience for fina
 
 ## Example Files
 
-The example files can be found in `examples/quickstarts/201-D365-finance-environment`
+The example files can be found in `quickstarts/quickstarts/201-D365-finance-environment`
 
 ## Terraform Version Constraints
 
