@@ -21,7 +21,7 @@ The Terraform plugins or "providers" that this IaC deployment requires are:
 
 - **null (`hashicorp/null`):** (any version)
 
-- **powerplatform (`microsoft/power-platform`):** `>=2.0.2-preview`
+- **powerplatform (`microsoft/power-platform`):** `>=3.3.0`
 
 - **random (`hashicorp/random`):** (any version)
 
