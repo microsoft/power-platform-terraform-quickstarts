@@ -65,6 +65,7 @@ if ($PSCmdlet.MyInvocation.BoundParameters.Count -eq 2) {
 
 } elseif ($PSCmdlet.MyInvocation.BoundParameters.Count -eq 0) {
     az login --allow-no-subscriptions --use-device-code
+    
     Push-Location ./tenant-configuration
 
     # Disable AzureRM backend in the main.tf file

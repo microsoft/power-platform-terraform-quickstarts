@@ -36,8 +36,10 @@ if [ "$#" -eq 4 ]; then
         exit 1
     fi
 
-    az login --use-device-code
-    az account set --subscription $subscription_id
+    if [ ! `az account show --query user.name --output tsv` ]; then
+        az login
+        az account set --subscription $subscription_id
+    fi
 
     echo "Using the following subscription:"
     az account show
