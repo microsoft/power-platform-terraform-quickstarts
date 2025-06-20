@@ -43,7 +43,7 @@ jobs:
     # Perform a security scan of the terraform code using checkov
     - name: Run Checkov action
       id: checkov
-      uses: bridgecrewio/checkov-action@360818f2ad44468d3294cfddae854a8c9036dfee # master
+      uses: bridgecrewio/checkov-action@a56708f128cd2585d16f86fc984698f09f18e6d6 # master
       with: 
         framework: terraform
 
