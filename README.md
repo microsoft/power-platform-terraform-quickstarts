@@ -1,6 +1,9 @@
 <!-- This document is auto-generated. Do not edit directly. Make changes to README.md.tmpl instead. -->
 # Power Platform Terraform Quickstarts
 
+> [!Important]
+> The repository has been archived.  Refer to the official [Power Platform Terraform Provider documentation](https://registry.terraform.io/providers/microsoft/power-platform/latest/docs) and examples included in [terraform-provider-power-platform](https://github.com/microsoft/terraform-provider-power-platform/tree/main/examples) GitHub repo for the most up to date examples.
+
 This repository contains example terraform modules that can be used to quickly deploy Power Platform environments and other Azure resources.  The modules are intended to demonstrate some common scenarios where managing Power Platform resources along side Azure, [Entra](https://entra.microsoft.com), or other resources can be facilitated with the [Terraform Provider for Power Platform](https://github.com/microsoft/terraform-provider-power-platform).  The modules are examples and are not intended to be used in production environments without modification.
 
 This repository contains scripts quickly build out a new tenant and configure it to allow you to deploy and manage Power Platform environments along side other Azure resources. The scripts assume that you are starting with a completely new tenant with an empty Azure subscription.  This is a template repository that is intended to let you fork and customize the Power Platform/Azure resources to accommodate your own needs.
